@@ -1,6 +1,6 @@
 using System;
 
-namespace WebApp.Models
+namespace ITechArt.Surveys.WebApp.Models
 {
     public class ErrorViewModel
     {

@@ -5,9 +5,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using WebApp.Models;
+using ITechArt.Surveys.WebApp.Models;
 
-namespace WebApp.Controllers
+namespace ITechArt.Surveys.WebApp.Controllers
 {
     public class HomeController : Controller
     {
