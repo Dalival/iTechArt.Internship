@@ -20,5 +20,11 @@ namespace ITechArt.Surveys.Repositories
             
             base.OnModelCreating(modelBuilder);
         }
+        
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseLazyLoadingProxies();
+            base.OnConfiguring(optionsBuilder);
+        }
     }
 }
