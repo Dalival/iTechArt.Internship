@@ -9,6 +9,8 @@ namespace ITechArt.Surveys.DomainModel
         
         public string Description { get; set; }
         
+        public Survey Survey { get; set; }
+        
         public List<IQuestion> Questions { get; set; }
     }
 }
