@@ -1,0 +1,14 @@
+﻿using System;
+using System.Collections.Generic;
+
+namespace ITechArt.Surveys.DomainModel
+{
+    public class Survey : BaseModel
+    {
+        public string Name { get; set; }
+        
+        public DateTime EditTime { get; set; }
+        
+        public List<Section> Sections { get; set; }
+    }
+}
