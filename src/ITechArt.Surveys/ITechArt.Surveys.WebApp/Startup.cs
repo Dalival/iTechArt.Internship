@@ -8,6 +8,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
+using AutoMapper.Configuration;
+using ITechArt.Repositories;
+using ITechArt.Surveys.Repositories;
+using Microsoft.EntityFrameworkCore;
+using IConfiguration = Microsoft.Extensions.Configuration.IConfiguration;
 
 namespace ITechArt.Surveys.WebApp
 {
@@ -23,7 +29,23 @@ namespace ITechArt.Surveys.WebApp
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var connectionString = Configuration.GetValue<string>("connectionString");
+            services.AddDbContext<SurveysDbContext>(x => x.UseSqlServer(connectionString));
+
+            services.AddScoped<SurveyRepository>(x => new SurveyRepository(x.GetService<SurveysDbContext>()));
+
+            AddMapper(services);
+            
             services.AddControllersWithViews();
+        }
+
+        private void AddMapper(IServiceCollection services)
+        {
+            var configExp = new MapperConfigurationExpression();
+            // there will be configuration like configExp.CreateMap<>().ForMember() ...
+            
+            var mapperConfig = new MapperConfiguration(configExp);
+            services.AddScoped<Mapper>(x => new Mapper(mapperConfig));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
