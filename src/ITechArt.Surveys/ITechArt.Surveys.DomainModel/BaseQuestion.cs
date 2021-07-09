@@ -1,4 +1,6 @@
-﻿namespace ITechArt.Surveys.DomainModel
+﻿using ITechArt.Repositories;
+
+namespace ITechArt.Surveys.DomainModel
 {
     public class BaseQuestion : BaseModel, IQuestion
     {

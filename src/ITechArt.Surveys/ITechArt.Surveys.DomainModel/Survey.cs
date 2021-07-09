@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using ITechArt.Repositories;
 
 namespace ITechArt.Surveys.DomainModel
 {

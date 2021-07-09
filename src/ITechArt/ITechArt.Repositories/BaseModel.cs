@@ -1,4 +1,4 @@
-﻿namespace ITechArt.Surveys.DomainModel
+﻿namespace ITechArt.Repositories
 {
     public abstract class BaseModel
     {

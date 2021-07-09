@@ -1,21 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using ITechArt.Surveys.DomainModel;
-using ITechArt.Surveys.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace ITechArt.Repositories
 {
-    public abstract class BaseRepository<TModel> where TModel : BaseModel
+    public abstract class BaseRepository<TContext, TModel>
+        where TContext : DbContext
+        where TModel : BaseModel
     {
-        protected SurveysDbContext _DbContext;
+        protected TContext _dbContext;
         protected DbSet<TModel> _dbSet;
 
-        public BaseRepository(SurveysDbContext dbContext)
+        public BaseRepository(TContext dbContext)
         {
-            _DbContext = dbContext;
-            _dbSet = _DbContext.Set<TModel>();
+            _dbContext = dbContext;
+            _dbSet = _dbContext.Set<TModel>();
         }
 
         public List<TModel> GetAll()
@@ -23,7 +23,7 @@ namespace ITechArt.Repositories
             return _dbSet.ToList();
         }
 
-        public virtual TModel Get(long id)
+        public virtual TModel Get(int id)
         {
             return _dbSet.SingleOrDefault(x => x.Id == id);
         }
@@ -36,11 +36,11 @@ namespace ITechArt.Repositories
 
                 if (old != null)
                 {
-                    _DbContext.Entry(old).State = EntityState.Detached;
+                    _dbContext.Entry(old).State = EntityState.Detached;
                 }
                 
                 //doesn't work for some reason
-                //_DbContext.Entry(model).State = EntityState.Modified;
+                //_dbContext.Entry(model).State = EntityState.Modified;
                 _dbSet.Update(model);
             }
             else
@@ -48,10 +48,10 @@ namespace ITechArt.Repositories
                 _dbSet.Add(model);
             }
 
-            _DbContext.SaveChanges();
+            _dbContext.SaveChanges();
         }
 
-        public void Remove(long id)
+        public void Remove(int id)
         {
             var model = Get(id);
             Remove(model);
@@ -59,8 +59,8 @@ namespace ITechArt.Repositories
 
         public void Remove(TModel model)
         {
-            _DbContext.Remove(model);
-            _DbContext.SaveChanges();
+            _dbContext.Remove(model);
+            _dbContext.SaveChanges();
         }
     }
 }
