@@ -12,6 +12,9 @@ namespace ITechArt.Surveys.Repositories
         // there will be a lot of tables. One table for each type of questions
         //public DbSet<IQuestion> Questions { get; set; }
 
+        public SurveysDbContext(DbContextOptions options)
+            : base(options) { }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Survey>()

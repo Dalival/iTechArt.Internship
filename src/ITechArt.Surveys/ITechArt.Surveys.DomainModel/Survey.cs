@@ -10,6 +10,6 @@ namespace ITechArt.Surveys.DomainModel
         
         public DateTime EditTime { get; set; }
         
-        public List<Section> Sections { get; set; }
+        public virtual List<Section> Sections { get; set; }
     }
 }

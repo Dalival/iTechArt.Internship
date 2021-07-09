@@ -8,6 +8,6 @@ namespace ITechArt.Surveys.DomainModel
         
         public bool IsNecessary { get; set; }
         
-        public Section Section { get; set; }
+        public virtual Section Section { get; set; }
     }
 }

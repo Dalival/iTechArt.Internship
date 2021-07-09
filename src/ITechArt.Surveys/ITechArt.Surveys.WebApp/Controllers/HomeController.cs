@@ -25,7 +25,12 @@ namespace ITechArt.Surveys.WebApp.Controllers
 
         public IActionResult Index()
         {
-            var counter = _repository.Counters.GetAll().First();
+            var counter = new Counter();
+            if (!_repository.Counters.GetAll().Any())
+            {
+                _repository.Counters.Save(counter);
+            }
+            counter = _repository.Counters.GetAll().First();
             counter.Value++;
             var model = new CounterViewModel
             {
