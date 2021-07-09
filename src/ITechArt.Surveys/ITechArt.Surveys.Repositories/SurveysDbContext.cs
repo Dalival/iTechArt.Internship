@@ -6,11 +6,13 @@ namespace ITechArt.Surveys.Repositories
 {
     public class SurveysDbContext : DbContext
     {
+        public DbSet<Counter> Counters { get; set; }
+        
         public DbSet<Survey> Surveys { get; set; }
         
         public DbSet<Section> Sections { get; set; }
         
         // there will be a lot of tables. One table for each type of questions
-        public DbSet<IQuestion> Questions { get; set; }
+        //public DbSet<IQuestion> Questions { get; set; }
     }
 }

@@ -6,6 +6,7 @@ namespace ITechArt.Surveys.Repositories
     public class UnitOfWork : IDisposable
     {
         private SurveysDbContext _dbContext;
+        public CounterRepository Counters { get; set; }
         public SurveyRepository Surveys { get; set; }
         public SectionRepository Sections { get; set; }
  
@@ -13,11 +14,13 @@ namespace ITechArt.Surveys.Repositories
 
         public UnitOfWork(SurveysDbContext dbContext,
             SurveyRepository surveys,
-            SectionRepository sections)
+            SectionRepository sections,
+            CounterRepository counters)
         {
             _dbContext = dbContext;
             Surveys = surveys;
             Sections = sections;
+            Counters = counters;
         }
         
         public void Dispose()

@@ -15,9 +15,7 @@ namespace ITechArt.Surveys.WebApp.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly UnitOfWork _repository;
-
-        private static int _counter = 0;
-
+        
         public HomeController(ILogger<HomeController> logger,
             UnitOfWork repository)
         {
@@ -26,12 +24,14 @@ namespace ITechArt.Surveys.WebApp.Controllers
         }
 
         public IActionResult Index()
-        { 
-            _counter++;
+        {
+            var counter = _repository.Counters.GetAll().First();
+            counter.Value++;
             var model = new CounterViewModel
             {
-                Counter = _counter
+                Counter = counter.Value
             };
+            _repository.Counters.Save(counter);
 
             return View(model);
         }
