@@ -3,14 +3,16 @@ using ITechArt.Surveys.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ITechArt.Surveys.Repositories.Migrations
 {
     [DbContext(typeof(SurveysDbContext))]
-    partial class SurveysDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210713125631_RemoveAllExceptCounter")]
+    partial class RemoveAllExceptCounter
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
