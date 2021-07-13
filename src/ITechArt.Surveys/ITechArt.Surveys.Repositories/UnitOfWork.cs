@@ -2,13 +2,15 @@
 
 namespace ITechArt.Surveys.Repositories
 {
-    // I don't know do I need IDisposable
     public class UnitOfWork : IDisposable
     {
-        private SurveysDbContext _dbContext;
+        private readonly SurveysDbContext _dbContext;
+        
+        private bool _disposed = false;
+
+        
         public CounterRepository Counters { get; }
  
-        private bool _disposed = false;
 
         public UnitOfWork(SurveysDbContext dbContext,
             CounterRepository counters)
@@ -17,11 +19,13 @@ namespace ITechArt.Surveys.Repositories
             Counters = counters;
         }
         
+        
         public void Dispose()
         {
             Dispose(true);
             GC.SuppressFinalize(this);
         }
+        
         
         protected virtual void Dispose(bool disposing)
         {

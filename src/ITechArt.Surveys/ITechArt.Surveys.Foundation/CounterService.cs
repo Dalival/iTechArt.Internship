@@ -8,10 +8,12 @@ namespace ITechArt.Surveys.Foundation
     {
         private readonly UnitOfWork _unitOfWork;
 
+        
         public CounterService(UnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
+        
         
         public Counter IncrementAndGetCounter()
         {

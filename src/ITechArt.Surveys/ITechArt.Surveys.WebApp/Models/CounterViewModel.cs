@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace ITechArt.Surveys.WebApp.Models
+﻿namespace ITechArt.Surveys.WebApp.Models
 {
     public class CounterViewModel
     {

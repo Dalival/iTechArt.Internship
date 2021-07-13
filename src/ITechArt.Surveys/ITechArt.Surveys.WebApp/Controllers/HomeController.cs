@@ -1,13 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
-using ITechArt.Surveys.DomainModel;
 using ITechArt.Surveys.Foundation;
-using ITechArt.Surveys.Repositories;
 using ITechArt.Surveys.WebApp.Models;
 
 namespace ITechArt.Surveys.WebApp.Controllers
@@ -17,12 +11,14 @@ namespace ITechArt.Surveys.WebApp.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly CounterService _counterService;
         
+        
         public HomeController(ILogger<HomeController> logger,
             CounterService counterService)
         {
             _logger = logger;
             _counterService = counterService;
         }
+        
 
         public IActionResult Index()
         {

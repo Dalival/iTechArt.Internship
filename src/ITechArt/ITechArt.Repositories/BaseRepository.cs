@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,11 +11,13 @@ namespace ITechArt.Repositories
         protected TContext _dbContext;
         protected DbSet<TModel> _dbSet;
 
+        
         public BaseRepository(TContext dbContext)
         {
             _dbContext = dbContext;
             _dbSet = _dbContext.Set<TModel>();
         }
+        
 
         public List<TModel> GetAll()
         {
