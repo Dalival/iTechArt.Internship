@@ -14,29 +14,29 @@ namespace ITechArt.Surveys.WebApp.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly UnitOfWork _repository;
+        private readonly UnitOfWork _unitOfWork;
         
         public HomeController(ILogger<HomeController> logger,
-            UnitOfWork repository)
+            UnitOfWork unitOfWork)
         {
             _logger = logger;
-            _repository = repository;
+            _unitOfWork = unitOfWork;
         }
 
         public IActionResult Index()
         {
             var counter = new Counter();
-            if (!_repository.Counters.GetAll().Any())
+            if (!_unitOfWork.Counters.GetAll().Any())
             {
-                _repository.Counters.Save(counter);
+                _unitOfWork.Counters.Save(counter);
             }
-            counter = _repository.Counters.GetAll().First();
+            counter = _unitOfWork.Counters.GetAll().First();
             counter.Value++;
             var model = new CounterViewModel
             {
                 Counter = counter.Value
             };
-            _repository.Counters.Save(counter);
+            _unitOfWork.Counters.Save(counter);
 
             return View(model);
         }
