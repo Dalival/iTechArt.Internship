@@ -1,15 +1,14 @@
-﻿using System.Linq;
+﻿using ITechArt.Repositories;
 using ITechArt.Surveys.DomainModel;
-using ITechArt.Surveys.Repositories;
 
 namespace ITechArt.Surveys.Foundation
 {
     public class CounterService
     {
-        private readonly UnitOfWork _unitOfWork;
+        private readonly IUnitOfWork _unitOfWork;
 
         
-        public CounterService(UnitOfWork unitOfWork)
+        public CounterService(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
@@ -18,12 +17,17 @@ namespace ITechArt.Surveys.Foundation
         public Counter IncrementAndGetCounter()
         {
             var counter = new Counter();
-            if (_unitOfWork.Counters.GetAll().Any())
+            if (_unitOfWork.GetRepository<Counter>().SingleOrDefault() != null)
             {
-                counter = _unitOfWork.Counters.GetAll().First();
+                counter = _unitOfWork.GetRepository<Counter>().SingleOrDefault();
+            }
+            else
+            {
+                _unitOfWork.GetRepository<Counter>().Add(counter);
             }
             counter.Value++;
-            _unitOfWork.Counters.Save(counter);
+            _unitOfWork.GetRepository<Counter>().Update(counter);
+            _unitOfWork.Commit();
 
             return counter;
         }

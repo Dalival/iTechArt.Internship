@@ -5,9 +5,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using AutoMapper;
 using AutoMapper.Configuration;
+using ITechArt.Repositories;
 using ITechArt.Surveys.Repositories;
 using Microsoft.EntityFrameworkCore;
 using IConfiguration = Microsoft.Extensions.Configuration.IConfiguration;
+using ITechArt.Surveys.Foundation;
 
 namespace ITechArt.Surveys.WebApp
 {
@@ -15,7 +17,7 @@ namespace ITechArt.Surveys.WebApp
     {
         public IConfiguration Configuration { get; }
 
-        
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -28,12 +30,8 @@ namespace ITechArt.Surveys.WebApp
             var connectionString = Configuration.GetValue<string>("connectionString");
             services.AddDbContext<SurveysDbContext>(x => x.UseSqlServer(connectionString));
 
-            services.AddScoped<CounterRepository>(x =>
-                new CounterRepository(x.GetService<SurveysDbContext>()));
-
-            services.AddScoped<UnitOfWork>(x =>
-                new UnitOfWork(x.GetService<SurveysDbContext>(),
-                               x.GetService<CounterRepository>()));
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<CounterService>();
 
             AddMapper(services);
 
@@ -53,6 +51,7 @@ namespace ITechArt.Surveys.WebApp
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
@@ -67,8 +66,8 @@ namespace ITechArt.Surveys.WebApp
                     pattern: "{controller=Home}/{action=Index}/{id?}");
             });
         }
-        
-        
+
+
         private void AddMapper(IServiceCollection services)
         {
             var configExp = new MapperConfigurationExpression();

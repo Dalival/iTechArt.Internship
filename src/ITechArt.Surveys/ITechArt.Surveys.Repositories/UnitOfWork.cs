@@ -1,40 +1,51 @@
 ﻿using System;
+using System.Collections.Generic;
+using ITechArt.Repositories;
 
 namespace ITechArt.Surveys.Repositories
 {
-    public class UnitOfWork : IDisposable
+    public class UnitOfWork : IUnitOfWork<SurveysDbContext>
     {
-        private readonly SurveysDbContext _dbContext;
-        
-        private bool _disposed = false;
+        private Dictionary<(Type type, string name), object> _repositories;
 
         
-        public CounterRepository Counters { get; }
- 
+        public SurveysDbContext Context { get; }
 
-        public UnitOfWork(SurveysDbContext dbContext,
-            CounterRepository counters)
+        
+        public UnitOfWork(SurveysDbContext context)
         {
-            _dbContext = dbContext;
-            Counters = counters;
+            Context = context;
         }
         
+        
+        public IRepository<TEntity> GetRepository<TEntity>()
+            where TEntity : class
+        {
+            return (IRepository<TEntity>) GetOrAddRepository(typeof(TEntity), new Repository<TEntity>(Context));
+        }
         
         public void Dispose()
         {
-            Dispose(true);
-            GC.SuppressFinalize(this);
+            Context?.Dispose();
+        }
+
+        public void Commit()
+        {
+            Context.SaveChanges();
         }
         
         
-        protected virtual void Dispose(bool disposing)
+        internal object GetOrAddRepository(Type type, object repo)
         {
-            if (_disposed) return;
-            if (disposing)
+            _repositories ??= new Dictionary<(Type type, string name), object>();
+
+            if (_repositories.TryGetValue((type, repo.GetType().FullName),
+                out var repository))
             {
-                _dbContext.Dispose();
+                return repository;
             }
-            _disposed = true;
+            _repositories.Add((type, repo.GetType().FullName), repo);
+            return repo;
         }
     }
 }
