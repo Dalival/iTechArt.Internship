@@ -32,19 +32,11 @@ namespace ITechArt.Surveys.WebApp
             var connectionString = Configuration.GetValue<string>("connectionString");
             services.AddDbContext<SurveysDbContext>(x => x.UseSqlServer(connectionString));
 
-            services.AddScoped<SurveyRepository>(x =>
-                new SurveyRepository(x.GetService<SurveysDbContext>()));
-
-            services.AddScoped<SectionRepository>(x =>
-                new SectionRepository(x.GetService<SurveysDbContext>()));
-
             services.AddScoped<CounterRepository>(x =>
                 new CounterRepository(x.GetService<SurveysDbContext>()));
 
             services.AddScoped<UnitOfWork>(x =>
                 new UnitOfWork(x.GetService<SurveysDbContext>(),
-                               x.GetService<SurveyRepository>(),
-                               x.GetService<SectionRepository>(),
                                x.GetService<CounterRepository>()));
 
             AddMapper(services);

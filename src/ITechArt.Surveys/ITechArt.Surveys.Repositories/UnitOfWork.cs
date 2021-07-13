@@ -6,20 +6,14 @@ namespace ITechArt.Surveys.Repositories
     public class UnitOfWork : IDisposable
     {
         private SurveysDbContext _dbContext;
-        public CounterRepository Counters { get; set; }
-        public SurveyRepository Surveys { get; set; }
-        public SectionRepository Sections { get; set; }
+        public CounterRepository Counters { get; }
  
         private bool _disposed = false;
 
         public UnitOfWork(SurveysDbContext dbContext,
-            SurveyRepository surveys,
-            SectionRepository sections,
             CounterRepository counters)
         {
             _dbContext = dbContext;
-            Surveys = surveys;
-            Sections = sections;
             Counters = counters;
         }
         
