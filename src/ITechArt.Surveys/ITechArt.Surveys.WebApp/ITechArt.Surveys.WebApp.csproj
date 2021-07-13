@@ -22,6 +22,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\ITechArt\ITechArt.Repositories\ITechArt.Repositories.csproj" />
+    <ProjectReference Include="..\ITechArt.Surveys.Foundation\ITechArt.Surveys.Foundation.csproj" />
     <ProjectReference Include="..\ITechArt.Surveys.Repositories\ITechArt.Surveys.Repositories.csproj" />
   </ItemGroup>
 
