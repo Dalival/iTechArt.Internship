@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace ITechArt.Repositories
 {
     public interface IRepository<T> : IDisposable
         where T : class, IDbModel
     {
-        T Get(int id);
+        Task<T> Get(int id);
         IReadOnlyCollection<T> GetAll();
     
         void Add(T entity);

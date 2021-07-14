@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 
 namespace ITechArt.Repositories
@@ -22,7 +23,8 @@ namespace ITechArt.Repositories
         public IRepository<TEntity> GetRepository<TEntity>()
             where TEntity : class, IDbModel
         {
-            return (IRepository<TEntity>) GetOrAddRepository(typeof(TEntity), new Repository<TEntity>(Context));
+            return (IRepository<TEntity>) GetOrAddRepository(typeof(TEntity), 
+                new Repository<TEntity>(Context));
         }
 
         public void Dispose()
@@ -30,9 +32,9 @@ namespace ITechArt.Repositories
             Context?.Dispose();
         }
 
-        public void Commit()
+        public async Task Commit()
         {
-            Context.SaveChanges();
+            await Context.SaveChangesAsync();
         }
 
 

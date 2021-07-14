@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 
 namespace ITechArt.Repositories
@@ -19,9 +21,9 @@ namespace ITechArt.Repositories
         }
 
 
-        public T Get(int id)
+        public async Task<T> Get(int id)
         {
-            return _dbSet.SingleOrDefault(x => x.Id == id);
+            return await _dbSet.SingleOrDefaultAsync(x => x.Id == id);
         }
 
         public IReadOnlyCollection<T> GetAll()
