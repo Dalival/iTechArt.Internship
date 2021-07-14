@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using ITechArt.Repositories;
 
-namespace ITechArt.Surveys.Repositories
+namespace ITechArt.Repositories
 {
     public class UnitOfWork : IUnitOfWork<SurveysDbContext>
     {
