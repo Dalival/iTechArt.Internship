@@ -1,4 +1,5 @@
-﻿using ITechArt.Repositories;
+﻿using System.Linq;
+using ITechArt.Repositories;
 using ITechArt.Surveys.DomainModel;
 
 namespace ITechArt.Surveys.Foundation
@@ -18,9 +19,9 @@ namespace ITechArt.Surveys.Foundation
         {
             var counterRepository = _unitOfWork.GetRepository<Counter>();
             var counter = new Counter();
-            if (counterRepository.SingleOrDefault() != null)
+            if (counterRepository.GetAll().Any())
             {
-                counter = counterRepository.SingleOrDefault();
+                counter = counterRepository.GetAll().First();
             }
             else
             {

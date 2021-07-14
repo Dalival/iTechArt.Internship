@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
+using System.Runtime.CompilerServices;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Query;
 
 namespace ITechArt.Repositories
 {
     public class Repository<T> : IRepository<T>
-        where T : class
+        where T : class, IDbModel
     {
         private readonly DbContext _dbContext;
         private readonly DbSet<T> _dbSet;
@@ -19,37 +17,18 @@ namespace ITechArt.Repositories
             _dbContext = dbContext;
             _dbSet = _dbContext.Set<T>();
         }
-        
 
-        public T SingleOrDefault(Expression<Func<T, bool>> predicate = null,
-            Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
-            Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null,
-            bool enableTracking = true,
-            bool ignoreQueryFilters = false)
+
+        public T Get(int id)
         {
-            IQueryable<T> query = _dbSet;
+            return _dbSet.SingleOrDefault(x => x.Id == id);
+        }
 
-            if (!enableTracking)
-            {
-                query = query.AsNoTracking();
-            }
-
-            if (include != null)
-            {
-                query = include(query);
-            }
-
-            if (predicate != null)
-            {
-                query = query.Where(predicate);
-            }
-
-            if (ignoreQueryFilters)
-            {
-                query = query.IgnoreQueryFilters();
-            }
-
-            return orderBy != null ? orderBy(query).FirstOrDefault() : query.FirstOrDefault();
+        public IReadOnlyCollection<T> GetAll()
+        {
+            var builder = new ReadOnlyCollectionBuilder<T>(_dbSet);
+            
+            return builder.ToReadOnlyCollection();
         }
 
         public void Add(T entity)

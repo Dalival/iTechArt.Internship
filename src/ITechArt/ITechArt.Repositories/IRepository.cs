@@ -1,19 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using Microsoft.EntityFrameworkCore.Query;
 
 namespace ITechArt.Repositories
 {
     public interface IRepository<T> : IDisposable
-        where T : class
+        where T : class, IDbModel
     {
-        T SingleOrDefault(Expression<Func<T, bool>> predicate = null,
-            Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
-            Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null,
-            bool enableTracking = true,
-            bool ignoreQueryFilters = false);
+        T Get(int id);
+        IReadOnlyCollection<T> GetAll();
     
         void Add(T entity);
         void Add(params T[] entities);

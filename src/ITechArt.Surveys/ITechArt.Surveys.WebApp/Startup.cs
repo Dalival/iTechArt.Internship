@@ -30,7 +30,7 @@ namespace ITechArt.Surveys.WebApp
             var connectionString = Configuration.GetValue<string>("connectionString");
             services.AddDbContext<SurveysDbContext>(x => x.UseSqlServer(connectionString));
 
-            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IUnitOfWork, UnitOfWork<SurveysDbContext>>();
             services.AddScoped<CounterService>();
 
             AddMapper(services);

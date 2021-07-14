@@ -1,19 +1,12 @@
 ﻿using System;
-using Microsoft.EntityFrameworkCore;
 
 namespace ITechArt.Repositories
 {
     public interface IUnitOfWork : IDisposable
     {
-        IRepository<TEntity> GetRepository<TEntity>()
-            where TEntity : class;
-        
-        void Commit();
-    }
+         IRepository<TEntity> GetRepository<TEntity>()
+            where TEntity : class, IDbModel;
 
-    public interface IUnitOfWork<TContext> : IUnitOfWork
-        where TContext : DbContext
-    {
-        TContext Context { get; }
+        void Commit();
     }
 }

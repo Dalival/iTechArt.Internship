@@ -1,6 +1,8 @@
-﻿namespace ITechArt.Surveys.DomainModel
+﻿using ITechArt.Repositories;
+
+namespace ITechArt.Surveys.DomainModel
 {
-    public class Counter
+    public class Counter : IDbModel
     {
         public int Id { get; set; }
         
