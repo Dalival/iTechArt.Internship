@@ -35,17 +35,17 @@ namespace ITechArt.Surveys.Repositories
         }
         
         
-        internal object GetOrAddRepository(Type type, object repo)
+        internal object GetOrAddRepository(Type type, object repository)
         {
             _repositories ??= new Dictionary<(Type type, string name), object>();
 
-            if (_repositories.TryGetValue((type, repo.GetType().FullName),
-                out var repository))
+            if (_repositories.TryGetValue((type, repository.GetType().FullName),
+                out var newRepository))
             {
-                return repository;
+                return newRepository;
             }
-            _repositories.Add((type, repo.GetType().FullName), repo);
-            return repo;
+            _repositories.Add((type, repository.GetType().FullName), repository);
+            return repository;
         }
     }
 }

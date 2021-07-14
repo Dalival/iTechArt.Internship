@@ -16,17 +16,18 @@ namespace ITechArt.Surveys.Foundation
         
         public Counter IncrementAndGetCounter()
         {
+            var counterRepository = _unitOfWork.GetRepository<Counter>();
             var counter = new Counter();
-            if (_unitOfWork.GetRepository<Counter>().SingleOrDefault() != null)
+            if (counterRepository.SingleOrDefault() != null)
             {
-                counter = _unitOfWork.GetRepository<Counter>().SingleOrDefault();
+                counter = counterRepository.SingleOrDefault();
             }
             else
             {
-                _unitOfWork.GetRepository<Counter>().Add(counter);
+                counterRepository.Add(counter);
             }
             counter.Value++;
-            _unitOfWork.GetRepository<Counter>().Update(counter);
+            counterRepository.Update(counter);
             _unitOfWork.Commit();
 
             return counter;
