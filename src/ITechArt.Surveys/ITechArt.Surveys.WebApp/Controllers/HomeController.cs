@@ -22,9 +22,10 @@ namespace ITechArt.Surveys.WebApp.Controllers
 
         public IActionResult Index()
         {
+            var counterFromDatabase = _counterService.IncrementAndGetCounter();
             var model = new CounterViewModel()
             {
-                Counter = _counterService.IncrementAndGetCounter().Value
+                CounterValue = counterFromDatabase.Value
             };
 
             return View(model);
