@@ -364,5 +364,3 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
-/TMS.Net07.Lesson1/SpaceWeb/wwwroot/TempFile
-src/ITechArt.Surveys/ITechArt.Surveys.WebApp/appsettings.json
