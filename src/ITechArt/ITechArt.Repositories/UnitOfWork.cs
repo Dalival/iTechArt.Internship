@@ -16,6 +16,7 @@ namespace ITechArt.Repositories
         public UnitOfWork(TContext context)
         {
             Context = context;
+            _repositories = new Dictionary<Type, object>();
         }
 
 
@@ -39,8 +40,6 @@ namespace ITechArt.Repositories
 
         internal object GetOrAddRepository(Type type, object repository)
         {
-            _repositories ??= new Dictionary<Type, object>();
-
             if (_repositories.TryGetValue(type, out var existedRepository))
             {
                 return existedRepository;
