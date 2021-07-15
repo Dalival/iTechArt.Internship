@@ -12,7 +12,7 @@ namespace ITechArt.Repositories
         private readonly DbContext _dbContext;
         private readonly DbSet<T> _dbSet;
 
-        
+
         public Repository(DbContext dbContext)
         {
             _dbContext = dbContext;
@@ -39,8 +39,8 @@ namespace ITechArt.Repositories
         {
             _dbSet.AddRange(entities);
         }
-        
-        public void Add(IEnumerable<T> entities)
+
+        public void Add(IReadOnlyCollection<T> entities)
         {
             _dbSet.AddRange(entities);
         }
@@ -54,8 +54,8 @@ namespace ITechArt.Repositories
         {
             _dbSet.RemoveRange(entities);
         }
-        
-        public void Delete(IEnumerable<T> entities)
+
+        public void Delete(IReadOnlyCollection<T> entities)
         {
             _dbSet.RemoveRange(entities);
         }
@@ -69,12 +69,12 @@ namespace ITechArt.Repositories
         {
             _dbSet.UpdateRange(entities);
         }
-        
-        public void Update(IEnumerable<T> entities)
+
+        public void Update(IReadOnlyCollection<T> entities)
         {
             _dbSet.UpdateRange(entities);
         }
-        
+
         public void Dispose()
         {
             _dbContext?.Dispose();
