@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading.Tasks;
 
 namespace ITechArt.Repositories
 {
@@ -8,6 +7,6 @@ namespace ITechArt.Repositories
          IRepository<TEntity> GetRepository<TEntity>()
             where TEntity : class, IDbModel;
 
-        Task Commit();
+        void Commit();
     }
 }

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 
 namespace ITechArt.Repositories
@@ -8,7 +7,7 @@ namespace ITechArt.Repositories
     public class UnitOfWork<TContext> : IUnitOfWork
         where TContext : DbContext
     {
-        private Dictionary<(Type type, string name), object> _repositories;
+        private Dictionary<Type, object> _repositories;
 
 
         public TContext Context { get; }
@@ -32,23 +31,22 @@ namespace ITechArt.Repositories
             Context?.Dispose();
         }
 
-        public async Task Commit()
+        public void Commit()
         {
-            await Context.SaveChangesAsync();
+            Context.SaveChanges();
         }
 
 
         internal object GetOrAddRepository(Type type, object repository)
         {
-            _repositories ??= new Dictionary<(Type type, string name), object>();
+            _repositories ??= new Dictionary<Type, object>();
 
-            if (_repositories.TryGetValue((type, repository.GetType().FullName),
-                out var newRepository))
+            if (_repositories.TryGetValue(type, out var existedRepository))
             {
-                return newRepository;
+                return existedRepository;
             }
 
-            _repositories.Add((type, repository.GetType().FullName), repository);
+            _repositories.Add(type, repository);
             return repository;
         }
     }

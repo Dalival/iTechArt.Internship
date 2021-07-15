@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 
@@ -28,9 +27,7 @@ namespace ITechArt.Repositories
 
         public IReadOnlyCollection<T> GetAll()
         {
-            var builder = new ReadOnlyCollectionBuilder<T>(_dbSet);
-            
-            return builder.ToReadOnlyCollection();
+            return new ReadOnlyCollection<T>(_dbSet.ToList());
         }
 
         public void Add(T entity)
