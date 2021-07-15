@@ -20,12 +20,12 @@ namespace ITechArt.Repositories
         }
 
 
-        public async Task<T> Get(int id)
+        public async Task<T> GetByIdAsync(int id)
         {
             return await _dbSet.SingleOrDefaultAsync(x => x.Id == id);
         }
 
-        public async Task<IReadOnlyCollection<T>> GetAll()
+        public async Task<IReadOnlyCollection<T>> GetAllAsync()
         {
             return await _dbSet.ToListAsync();
         }

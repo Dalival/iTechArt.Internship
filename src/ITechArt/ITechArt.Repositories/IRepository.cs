@@ -7,8 +7,8 @@ namespace ITechArt.Repositories
     public interface IRepository<T> : IDisposable
         where T : class, IDbModel
     {
-        Task<T> Get(int id);
-        Task<IReadOnlyCollection<T>> GetAll();
+        Task<T> GetByIdAsync(int id);
+        Task<IReadOnlyCollection<T>> GetAllAsync();
     
         void Add(T entity);
         void Add(params T[] entities);

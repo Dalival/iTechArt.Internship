@@ -8,6 +8,6 @@ namespace ITechArt.Repositories
          IRepository<TEntity> GetRepository<TEntity>()
             where TEntity : class, IDbModel;
 
-        Task Commit();
+        Task CommitAsync();
     }
 }

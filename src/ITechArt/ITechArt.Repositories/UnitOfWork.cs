@@ -33,7 +33,7 @@ namespace ITechArt.Repositories
             Context?.Dispose();
         }
 
-        public async Task Commit()
+        public async Task CommitAsync()
         {
             await Context.SaveChangesAsync();
         }

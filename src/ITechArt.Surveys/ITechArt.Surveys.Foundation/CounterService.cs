@@ -21,7 +21,7 @@ namespace ITechArt.Surveys.Foundation
             
             var counterRepository = _unitOfWork.GetRepository<Counter>();
             var counter = new Counter();
-            var counterList = await counterRepository.GetAll();
+            var counterList = await counterRepository.GetAllAsync();
             if (counterList.Any())
             {
                 counter = counterList.First();
@@ -32,7 +32,7 @@ namespace ITechArt.Surveys.Foundation
             }
             counter.Value++;
             counterRepository.Update(counter);
-            await _unitOfWork.Commit();
+            await _unitOfWork.CommitAsync();
 
             return counter;
         }
