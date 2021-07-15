@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 using ITechArt.Repositories;
 using ITechArt.Surveys.DomainModel;
 
@@ -15,13 +16,15 @@ namespace ITechArt.Surveys.Foundation
         }
         
         
-        public Counter IncrementAndGetCounter()
+        public async Task<Counter> IncrementAndGetCounter()
         {
+            
             var counterRepository = _unitOfWork.GetRepository<Counter>();
             var counter = new Counter();
-            if (counterRepository.GetAll().Any())
+            var counterList = await counterRepository.GetAll();
+            if (counterList.Any())
             {
-                counter = counterRepository.GetAll().First();
+                counter = counterList.First();
             }
             else
             {
@@ -29,7 +32,7 @@ namespace ITechArt.Surveys.Foundation
             }
             counter.Value++;
             counterRepository.Update(counter);
-            _unitOfWork.Commit();
+            await _unitOfWork.Commit();
 
             return counter;
         }

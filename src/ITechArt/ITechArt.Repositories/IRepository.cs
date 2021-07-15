@@ -8,7 +8,7 @@ namespace ITechArt.Repositories
         where T : class, IDbModel
     {
         Task<T> Get(int id);
-        IReadOnlyCollection<T> GetAll();
+        Task<IReadOnlyCollection<T>> GetAll();
     
         void Add(T entity);
         void Add(params T[] entities);

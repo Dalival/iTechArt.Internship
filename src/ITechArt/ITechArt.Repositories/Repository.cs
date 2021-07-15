@@ -25,9 +25,9 @@ namespace ITechArt.Repositories
             return await _dbSet.SingleOrDefaultAsync(x => x.Id == id);
         }
 
-        public IReadOnlyCollection<T> GetAll()
+        public async Task<IReadOnlyCollection<T>> GetAll()
         {
-            return new ReadOnlyCollection<T>(_dbSet.ToList());
+            return await _dbSet.ToListAsync();
         }
 
         public void Add(T entity)

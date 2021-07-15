@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Diagnostics;
+using System.Threading.Tasks;
 using ITechArt.Surveys.Foundation;
 using ITechArt.Surveys.WebApp.Models;
 
@@ -20,9 +21,9 @@ namespace ITechArt.Surveys.WebApp.Controllers
         }
         
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var counterFromDatabase = _counterService.IncrementAndGetCounter();
+            var counterFromDatabase = await _counterService.IncrementAndGetCounter();
             var model = new CounterViewModel()
             {
                 CounterValue = counterFromDatabase.Value

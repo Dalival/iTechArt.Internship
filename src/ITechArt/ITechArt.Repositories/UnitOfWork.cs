@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 
 namespace ITechArt.Repositories
@@ -32,9 +33,9 @@ namespace ITechArt.Repositories
             Context?.Dispose();
         }
 
-        public void Commit()
+        public async Task Commit()
         {
-            Context.SaveChanges();
+            await Context.SaveChangesAsync();
         }
 
 
