@@ -12,14 +12,11 @@ namespace ITechArt.Repositories
 
         void Add(T entity);
         void Add(params T[] entities);
-        void Add(IReadOnlyCollection<T> entities);
 
         void Delete(T entity);
         void Delete(params T[] entities);
-        void Delete(IReadOnlyCollection<T> entities);
 
         void Update(T entity);
         void Update(params T[] entities);
-        void Update(IReadOnlyCollection<T> entities);
     }
 }
