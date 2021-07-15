@@ -11,7 +11,7 @@ namespace ITechArt.Repositories
         private Dictionary<Type, object> _repositories;
 
 
-        public TContext Context { get; }
+        private TContext Context { get; }
 
 
         public UnitOfWork(TContext context)
@@ -24,8 +24,15 @@ namespace ITechArt.Repositories
         public IRepository<TEntity> GetRepository<TEntity>()
             where TEntity : class, IDbModel
         {
-            return (IRepository<TEntity>) GetOrAddRepository(typeof(TEntity), 
-                new Repository<TEntity>(Context));
+            if (_repositories.TryGetValue(typeof(TEntity), out var existedRepository))
+            {
+                return existedRepository as IRepository<TEntity>;
+            }
+
+            var newRepository = new Repository<TEntity>(Context);
+            _repositories.Add(typeof(TEntity), newRepository);
+
+            return newRepository;
         }
 
         public void Dispose()
@@ -36,18 +43,6 @@ namespace ITechArt.Repositories
         public async Task CommitAsync()
         {
             await Context.SaveChangesAsync();
-        }
-
-
-        internal object GetOrAddRepository(Type type, object repository)
-        {
-            if (_repositories.TryGetValue(type, out var existedRepository))
-            {
-                return existedRepository;
-            }
-
-            _repositories.Add(type, repository);
-            return repository;
         }
     }
 }
