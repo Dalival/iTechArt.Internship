@@ -8,7 +8,7 @@ namespace ITechArt.Repositories
     public class UnitOfWork<TContext> : IUnitOfWork
         where TContext : DbContext
     {
-        private Dictionary<Type, object> _repositories;
+        private readonly Dictionary<Type, object> _repositories;
 
 
         private TContext Context { get; }
@@ -22,7 +22,7 @@ namespace ITechArt.Repositories
 
 
         public IRepository<TEntity> GetRepository<TEntity>()
-            where TEntity : class, IDbModel
+            where TEntity : class
         {
             if (_repositories.TryGetValue(typeof(TEntity), out var existedRepository))
             {

@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 namespace ITechArt.Repositories
 {
     public class Repository<T> : IRepository<T>
-        where T : class, IDbModel
+        where T : class
     {
         private readonly DbContext _dbContext;
         private readonly DbSet<T> _dbSet;
@@ -22,7 +22,7 @@ namespace ITechArt.Repositories
 
         public async Task<T> GetByIdAsync(int id)
         {
-            return await _dbSet.SingleOrDefaultAsync(x => x.Id == id);
+            return await _dbContext.FindAsync<T>(id);
         }
 
         public async Task<IReadOnlyCollection<T>> GetAllAsync()

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 namespace ITechArt.Repositories
 {
     public interface IRepository<T> : IDisposable
-        where T : class, IDbModel
+        where T : class
     {
         Task<T> GetByIdAsync(int id);
         Task<IReadOnlyCollection<T>> GetAllAsync();
