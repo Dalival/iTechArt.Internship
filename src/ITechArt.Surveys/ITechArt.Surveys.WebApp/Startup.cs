@@ -6,7 +6,6 @@ using Microsoft.Extensions.Hosting;
 using AutoMapper;
 using AutoMapper.Configuration;
 using ITechArt.Repositories;
-using ITechArt.Surveys.DomainModel;
 using ITechArt.Surveys.Repositories;
 using Microsoft.EntityFrameworkCore;
 using IConfiguration = Microsoft.Extensions.Configuration.IConfiguration;

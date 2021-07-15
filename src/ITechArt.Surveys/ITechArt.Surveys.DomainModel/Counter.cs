@@ -1,6 +1,4 @@
-﻿using ITechArt.Repositories;
-
-namespace ITechArt.Surveys.DomainModel
+﻿namespace ITechArt.Surveys.DomainModel
 {
     public class Counter
     {
