@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using ITechArt.Surveys.Foundation;
+using ITechArt.Surveys.Foundation.Interfaces;
 using ITechArt.Surveys.WebApp.Models;
 
 namespace ITechArt.Surveys.WebApp.Controllers
@@ -10,16 +11,16 @@ namespace ITechArt.Surveys.WebApp.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly CounterService _counterService;
-        
-        
+        private readonly ICounterService _counterService;
+
+
         public HomeController(ILogger<HomeController> logger,
-            CounterService counterService)
+            ICounterService counterService)
         {
             _logger = logger;
             _counterService = counterService;
         }
-        
+
 
         public async Task<IActionResult> Index()
         {

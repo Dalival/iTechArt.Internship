@@ -6,10 +6,12 @@ using Microsoft.Extensions.Hosting;
 using AutoMapper;
 using AutoMapper.Configuration;
 using ITechArt.Repositories;
+using ITechArt.Surveys.DomainModel;
 using ITechArt.Surveys.Repositories;
 using Microsoft.EntityFrameworkCore;
 using IConfiguration = Microsoft.Extensions.Configuration.IConfiguration;
 using ITechArt.Surveys.Foundation;
+using ITechArt.Surveys.Foundation.Interfaces;
 
 namespace ITechArt.Surveys.WebApp
 {
@@ -31,7 +33,7 @@ namespace ITechArt.Surveys.WebApp
             services.AddDbContext<SurveysDbContext>(x => x.UseSqlServer(connectionString));
 
             services.AddScoped<IUnitOfWork, UnitOfWork<SurveysDbContext>>();
-            services.AddScoped<CounterService>();
+            services.AddScoped<ICounterService, CounterService>();
 
             AddMapper(services);
 
