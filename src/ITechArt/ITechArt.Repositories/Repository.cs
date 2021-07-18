@@ -18,9 +18,9 @@ namespace ITechArt.Repositories
         }
 
 
-        public async Task<T> GetByIdAsync(int id)
+        public async Task<T> GetAsync(params object[] keyValues)
         {
-            return await _dbContext.FindAsync<T>(id);
+            return await _dbContext.FindAsync<T>(keyValues);
         }
 
         public async Task<IReadOnlyCollection<T>> GetAllAsync()
