@@ -3,12 +3,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using AutoMapper;
-using AutoMapper.Configuration;
 using ITechArt.Repositories;
 using ITechArt.Surveys.Repositories;
 using Microsoft.EntityFrameworkCore;
-using IConfiguration = Microsoft.Extensions.Configuration.IConfiguration;
 using ITechArt.Surveys.Foundation;
 using ITechArt.Surveys.Foundation.Interfaces;
 
@@ -33,8 +30,6 @@ namespace ITechArt.Surveys.WebApp
 
             services.AddScoped<IUnitOfWork, UnitOfWork<SurveysDbContext>>();
             services.AddScoped<ICounterService, CounterService>();
-
-            AddMapper(services);
 
             services.AddControllersWithViews();
         }
@@ -66,16 +61,6 @@ namespace ITechArt.Surveys.WebApp
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
             });
-        }
-
-
-        private void AddMapper(IServiceCollection services)
-        {
-            var configExp = new MapperConfigurationExpression();
-            // Here will be configuration like configExp.CreateMap<>().ForMember() ...
-
-            var mapperConfig = new MapperConfiguration(configExp);
-            services.AddScoped<Mapper>(x => new Mapper(mapperConfig));
         }
     }
 }
