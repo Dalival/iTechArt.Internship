@@ -26,7 +26,7 @@ namespace ITechArt.Repositories
         {
             if (_repositories.TryGetValue(typeof(TEntity), out var existedRepository))
             {
-                return existedRepository as IRepository<TEntity>;
+                return (IRepository<TEntity>) existedRepository;
             }
 
             var newRepository = new Repository<TEntity>(Context);
