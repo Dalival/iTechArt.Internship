@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace ITechArt.Repositories
 {
@@ -24,15 +25,19 @@ namespace ITechArt.Repositories
         public IRepository<TEntity> GetRepository<TEntity>()
             where TEntity : class
         {
-            if (_repositories.TryGetValue(typeof(TEntity), out var existedRepository))
+            var customRepository = Context.GetService<IRepository<TEntity>>();
+            if (customRepository != null)
             {
-                return (IRepository<TEntity>) existedRepository;
+                return customRepository;
             }
 
-            var newRepository = new Repository<TEntity>(Context);
-            _repositories.Add(typeof(TEntity), newRepository);
+            var type = typeof(TEntity);
+            if (!_repositories.ContainsKey(type))
+            {
+                _repositories[type] = new Repository<TEntity>(Context);
+            }
 
-            return newRepository;
+            return (IRepository<TEntity>)_repositories[type];
         }
 
         public void Dispose()
