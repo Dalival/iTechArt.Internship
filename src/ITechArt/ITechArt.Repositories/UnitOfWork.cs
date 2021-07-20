@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using ITechArt.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
 
-namespace ITechArt.Repositories.Implementations
+namespace ITechArt.Repositories
 {
     public class UnitOfWork<TContext> : IUnitOfWork
         where TContext : DbContext
@@ -21,25 +21,21 @@ namespace ITechArt.Repositories.Implementations
             _context = context;
 
             _repositories = new Dictionary<Type, object>();
+
+            RegisterCustomRepositories();
         }
 
 
         public IRepository<TEntity> GetRepository<TEntity>()
             where TEntity : class
         {
-            var customRepository = _context.GetService<IRepository<TEntity>>();
-            if (customRepository != null)
-            {
-                return customRepository;
-            }
-
             var type = typeof(TEntity);
             if (!_repositories.ContainsKey(type))
             {
                 _repositories[type] = new Repository<TEntity>(_context);
             }
 
-            return (IRepository<TEntity>)_repositories[type];
+            return (IRepository<TEntity>) _repositories[type];
         }
 
         public async Task SaveAsync()
@@ -53,14 +49,43 @@ namespace ITechArt.Repositories.Implementations
             GC.SuppressFinalize(this);
         }
 
-        protected virtual void Dispose(bool disposing)
+
+        private void Dispose(bool disposing)
         {
             if (!_disposed && disposing)
             {
                 _repositories?.Clear();
                 _context.Dispose();
             }
+
             _disposed = true;
+        }
+
+        private void RegisterCustomRepositories()
+        {
+            var allTypes = AppDomain.CurrentDomain
+                .GetAssemblies()
+                .SelectMany(type => type.GetTypes())
+                .ToList();
+
+            var repositoryTypes = allTypes
+                .Where(type =>
+                    // TODO: what if more than one generic argument?
+                    type.BaseType?.Name == "Repository`1"
+                    && type.BaseType.Namespace == typeof(Repository<>).Namespace)
+                .ToList();
+
+            var entityTypes = repositoryTypes
+                .Select(type => type.BaseType?.GenericTypeArguments.Single())
+                .ToList();
+
+            for (var i = 0; i < repositoryTypes.Count; i++)
+            {
+                var type = entityTypes[i];
+                var repository = Activator.CreateInstance(repositoryTypes[i], _context);
+
+                _repositories[type] = repository;
+            }
         }
     }
 }

@@ -1,9 +1,9 @@
+using ITechArt.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using ITechArt.Repositories.Implementations;
 using ITechArt.Repositories.Interfaces;
 using ITechArt.Surveys.Repositories;
 using Microsoft.EntityFrameworkCore;

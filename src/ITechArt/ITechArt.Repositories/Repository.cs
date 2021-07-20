@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using ITechArt.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace ITechArt.Repositories.Implementations
+namespace ITechArt.Repositories
 {
     public class Repository<T> : IRepository<T>
         where T : class
