@@ -7,7 +7,7 @@ namespace ITechArt.Repositories.Interfaces
     public interface IRepository<T>
         where T : class
     {
-        Task<T> GetAsync(params object[] keyValues);
+        Task<T> GetByIdAsync(params object[] id);
 
         Task<IReadOnlyCollection<T>> GetAllAsync();
 
