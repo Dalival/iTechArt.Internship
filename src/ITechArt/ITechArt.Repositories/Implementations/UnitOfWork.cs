@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using ITechArt.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 
-namespace ITechArt.Repositories
+namespace ITechArt.Repositories.Implementations
 {
     public class UnitOfWork<TContext> : IUnitOfWork
         where TContext : DbContext

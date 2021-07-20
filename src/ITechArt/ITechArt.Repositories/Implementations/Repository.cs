@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using ITechArt.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace ITechArt.Repositories
+namespace ITechArt.Repositories.Implementations
 {
     public class Repository<T> : IRepository<T>
         where T : class

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace ITechArt.Repositories
+namespace ITechArt.Repositories.Interfaces
 {
     public interface IRepository<T> : IDisposable
         where T : class

@@ -4,6 +4,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using ITechArt.Repositories;
+using ITechArt.Repositories.Implementations;
+using ITechArt.Repositories.Interfaces;
 using ITechArt.Surveys.Repositories;
 using Microsoft.EntityFrameworkCore;
 using ITechArt.Surveys.Foundation;

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace ITechArt.Repositories
+namespace ITechArt.Repositories.Interfaces
 {
     public interface IUnitOfWork : IDisposable
     {
