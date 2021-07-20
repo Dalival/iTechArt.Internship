@@ -13,7 +13,8 @@ namespace ITechArt.Surveys.WebApp.Controllers
         private readonly ICounterService _counterService;
 
 
-        public HomeController(ILogger<HomeController> logger,
+        public HomeController(
+            ILogger<HomeController> logger,
             ICounterService counterService)
         {
             _logger = logger;
