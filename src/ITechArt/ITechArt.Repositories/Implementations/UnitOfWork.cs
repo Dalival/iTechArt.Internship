@@ -10,15 +10,16 @@ namespace ITechArt.Repositories.Implementations
     public class UnitOfWork<TContext> : IUnitOfWork
         where TContext : DbContext
     {
+        private readonly TContext _context;
+
         private readonly Dictionary<Type, object> _repositories;
-
-
-        private TContext Context { get; }
+        private bool _disposed;
 
 
         public UnitOfWork(TContext context)
         {
-            Context = context;
+            _context = context;
+
             _repositories = new Dictionary<Type, object>();
         }
 
@@ -26,7 +27,7 @@ namespace ITechArt.Repositories.Implementations
         public IRepository<TEntity> GetRepository<TEntity>()
             where TEntity : class
         {
-            var customRepository = Context.GetService<IRepository<TEntity>>();
+            var customRepository = _context.GetService<IRepository<TEntity>>();
             if (customRepository != null)
             {
                 return customRepository;
@@ -35,20 +36,31 @@ namespace ITechArt.Repositories.Implementations
             var type = typeof(TEntity);
             if (!_repositories.ContainsKey(type))
             {
-                _repositories[type] = new Repository<TEntity>(Context);
+                _repositories[type] = new Repository<TEntity>(_context);
             }
 
             return (IRepository<TEntity>)_repositories[type];
         }
 
-        public void Dispose()
-        {
-            Context?.Dispose();
-        }
-
         public async Task SaveAsync()
         {
-            await Context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!_disposed && disposing)
+            {
+                _repositories?.Clear();
+                _context.Dispose();
+            }
+            _disposed = true;
         }
     }
 }
