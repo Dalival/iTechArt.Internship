@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ITechArt.Surveys.Repositories.Migrations
 {
     [DbContext(typeof(SurveysDbContext))]
-    [Migration("20210713125631_RemoveAllExceptCounter")]
-    partial class RemoveAllExceptCounter
+    [Migration("20210720170308_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
