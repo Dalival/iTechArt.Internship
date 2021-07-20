@@ -9,12 +9,14 @@ namespace ITechArt.Repositories.Implementations
         where T : class
     {
         private readonly DbContext _dbContext;
+
         private readonly DbSet<T> _dbSet;
 
 
         public Repository(DbContext dbContext)
         {
             _dbContext = dbContext;
+
             _dbSet = _dbContext.Set<T>();
         }
 
