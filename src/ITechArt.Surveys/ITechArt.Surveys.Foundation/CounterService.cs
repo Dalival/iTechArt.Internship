@@ -20,19 +20,18 @@ namespace ITechArt.Surveys.Foundation
         public async Task<Counter> IncrementAndGetCounter()
         {
             var counterRepository = _unitOfWork.GetRepository<Counter>();
-            var counter = new Counter()
+            var counter = new Counter();
+
+            var counters = await counterRepository.GetAllAsync();
+            if (counters.Any())
             {
-                Value = 1
-            };
-            var counterList = await counterRepository.GetAllAsync();
-            if (counterList.Any())
-            {
-                counter = counterList.First();
+                counter = counters.First();
                 counter.Value++;
                 counterRepository.Update(counter);
             }
             else
             {
+                counter.Value = 1;
                 counterRepository.Add(counter);
             }
             await _unitOfWork.SaveAsync();
