@@ -8,6 +8,6 @@ namespace ITechArt.Repositories.Interfaces
         IRepository<TEntity> GetRepository<TEntity>()
             where TEntity : class;
 
-        Task CommitAsync();
+        Task SaveAsync();
     }
 }

@@ -41,16 +41,6 @@ namespace ITechArt.Repositories.Implementations
             _dbSet.AddRange(entities);
         }
 
-        public void Delete(T entity)
-        {
-            _dbSet.Remove(entity);
-        }
-
-        public void Delete(params T[] entities)
-        {
-            _dbSet.RemoveRange(entities);
-        }
-
         public void Update(T entity)
         {
             _dbSet.Update(entity);
@@ -59,6 +49,16 @@ namespace ITechArt.Repositories.Implementations
         public void Update(params T[] entities)
         {
             _dbSet.UpdateRange(entities);
+        }
+
+        public void Delete(T entity)
+        {
+            _dbSet.Remove(entity);
+        }
+
+        public void Delete(params T[] entities)
+        {
+            _dbSet.RemoveRange(entities);
         }
     }
 }

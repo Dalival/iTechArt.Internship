@@ -46,7 +46,7 @@ namespace ITechArt.Repositories.Implementations
             Context?.Dispose();
         }
 
-        public async Task CommitAsync()
+        public async Task SaveAsync()
         {
             await Context.SaveChangesAsync();
         }
