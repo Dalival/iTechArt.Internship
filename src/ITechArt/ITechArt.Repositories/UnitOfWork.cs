@@ -25,7 +25,6 @@ namespace ITechArt.Repositories
             RegisterCustomRepositories();
         }
 
-
         public IRepository<TEntity> GetRepository<TEntity>()
             where TEntity : class
         {
@@ -36,6 +35,19 @@ namespace ITechArt.Repositories
             }
 
             return (IRepository<TEntity>) _repositories[type];
+        }
+
+        public TRepository GetCustomRepository<TEntity, TRepository>()
+            where TEntity : class
+            where TRepository : Repository<TEntity>
+        {
+            var type = typeof(TEntity);
+            if (!_repositories.ContainsKey(type))
+            {
+                _repositories[type] = Activator.CreateInstance(typeof(TRepository), _context);
+            }
+
+            return (TRepository) _repositories[type];
         }
 
         public async Task SaveAsync()
@@ -70,9 +82,9 @@ namespace ITechArt.Repositories
 
             var repositoryTypes = allTypes
                 .Where(type =>
-                    // TODO: what if more than one generic argument?
-                    type.BaseType?.Name == "Repository`1"
-                    && type.BaseType.Namespace == typeof(Repository<>).Namespace)
+                    type.BaseType != null
+                    && type.BaseType.IsGenericType
+                    && type.BaseType.GetGenericTypeDefinition() == typeof(Repository<>))
                 .ToList();
 
             var entityTypes = repositoryTypes
