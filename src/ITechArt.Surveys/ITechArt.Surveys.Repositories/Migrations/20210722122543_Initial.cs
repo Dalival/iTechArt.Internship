@@ -7,7 +7,7 @@ namespace ITechArt.Surveys.Repositories.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Counters",
+                name: "Counter",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -16,14 +16,14 @@ namespace ITechArt.Surveys.Repositories.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Counters", x => x.Id);
+                    table.PrimaryKey("PK_Counter", x => x.Id);
                 });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Counters");
+                name: "Counter");
         }
     }
 }

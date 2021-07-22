@@ -30,7 +30,7 @@ namespace ITechArt.Surveys.Repositories.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Counters");
+                    b.ToTable("Counter");
                 });
 #pragma warning restore 612, 618
         }

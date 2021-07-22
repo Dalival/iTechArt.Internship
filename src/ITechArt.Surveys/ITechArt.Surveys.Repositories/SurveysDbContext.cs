@@ -5,17 +5,15 @@ namespace ITechArt.Surveys.Repositories
 {
     public class SurveysDbContext : DbContext
     {
-        public DbSet<Counter> Counters { get; }
-
-
         public SurveysDbContext(DbContextOptions options)
             : base(options) { }
 
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            optionsBuilder.UseLazyLoadingProxies();
-            base.OnConfiguring(optionsBuilder);
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Counter>().HasKey(c => c.Id);
         }
     }
 }

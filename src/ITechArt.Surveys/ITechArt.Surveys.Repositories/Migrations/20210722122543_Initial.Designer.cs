@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ITechArt.Surveys.Repositories.Migrations
 {
     [DbContext(typeof(SurveysDbContext))]
-    [Migration("20210720170308_Initial")]
+    [Migration("20210722122543_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -32,7 +32,7 @@ namespace ITechArt.Surveys.Repositories.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Counters");
+                    b.ToTable("Counter");
                 });
 #pragma warning restore 612, 618
         }
