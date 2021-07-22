@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using ITechArt.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -13,6 +12,7 @@ namespace ITechArt.Repositories
         private readonly TContext _context;
 
         private readonly Dictionary<Type, object> _repositories;
+        private readonly Dictionary<Type, object> _customRepositories;
         private bool _disposed;
 
 
@@ -21,14 +21,19 @@ namespace ITechArt.Repositories
             _context = context;
 
             _repositories = new Dictionary<Type, object>();
-
-            RegisterCustomRepositories();
+            _customRepositories = new Dictionary<Type, object>();
         }
+
 
         public IRepository<TEntity> GetRepository<TEntity>()
             where TEntity : class
         {
             var type = typeof(TEntity);
+
+            if (_customRepositories.ContainsKey(type))
+            {
+                return (IRepository<TEntity>) _customRepositories[type];
+            }
             if (!_repositories.ContainsKey(type))
             {
                 _repositories[type] = new Repository<TEntity>(_context);
@@ -37,17 +42,13 @@ namespace ITechArt.Repositories
             return (IRepository<TEntity>) _repositories[type];
         }
 
-        public TRepository GetCustomRepository<TEntity, TRepository>()
+        public void RegisterRepository<TRepository, TEntity>()
             where TEntity : class
-            where TRepository : Repository<TEntity>
+            where TRepository : IRepository<TEntity>
         {
-            var type = typeof(TEntity);
-            if (!_repositories.ContainsKey(type))
-            {
-                _repositories[type] = Activator.CreateInstance(typeof(TRepository), _context);
-            }
-
-            return (TRepository) _repositories[type];
+            var entityType = typeof(TEntity);
+            var repositoryType = typeof(TRepository);
+            _customRepositories[entityType] = Activator.CreateInstance(repositoryType, _context);
         }
 
         public async Task SaveAsync()
@@ -64,39 +65,16 @@ namespace ITechArt.Repositories
 
         private void Dispose(bool disposing)
         {
-            if (!_disposed && disposing)
+            if (!_disposed)
             {
-                _repositories?.Clear();
-                _context.Dispose();
-            }
+                if (disposing)
+                {
+                    _repositories.Clear();
+                    _customRepositories.Clear();
+                    _context.Dispose();
+                }
 
-            _disposed = true;
-        }
-
-        private void RegisterCustomRepositories()
-        {
-            var allTypes = AppDomain.CurrentDomain
-                .GetAssemblies()
-                .SelectMany(type => type.GetTypes())
-                .ToList();
-
-            var repositoryTypes = allTypes
-                .Where(type =>
-                    type.BaseType != null
-                    && type.BaseType.IsGenericType
-                    && type.BaseType.GetGenericTypeDefinition() == typeof(Repository<>))
-                .ToList();
-
-            var entityTypes = repositoryTypes
-                .Select(type => type.BaseType?.GenericTypeArguments.Single())
-                .ToList();
-
-            for (var i = 0; i < repositoryTypes.Count; i++)
-            {
-                var type = entityTypes[i];
-                var repository = Activator.CreateInstance(repositoryTypes[i], _context);
-
-                _repositories[type] = repository;
+                _disposed = true;
             }
         }
     }

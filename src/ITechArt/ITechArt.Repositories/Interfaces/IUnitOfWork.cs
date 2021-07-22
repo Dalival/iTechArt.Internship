@@ -8,9 +8,9 @@ namespace ITechArt.Repositories.Interfaces
         IRepository<TEntity> GetRepository<TEntity>()
             where TEntity : class;
 
-        public TRepository GetCustomRepository<TEntity, TRepository>()
+        void RegisterRepository<TRepository, TEntity>()
             where TEntity : class
-            where TRepository : Repository<TEntity>;
+            where TRepository : IRepository<TEntity>;
 
         Task SaveAsync();
     }
