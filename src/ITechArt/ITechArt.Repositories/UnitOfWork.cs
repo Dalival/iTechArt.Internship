@@ -73,7 +73,6 @@ namespace ITechArt.Repositories
                     _customRepositories.Clear();
                     _context.Dispose();
                 }
-
                 _disposed = true;
             }
         }
