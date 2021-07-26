@@ -36,7 +36,7 @@ namespace ITechArt.Repositories
             _dbSet.Add(entity);
         }
 
-        public void Add(params T[] entities)
+        public void AddRange(IReadOnlyCollection<T> entities)
         {
             _dbSet.AddRange(entities);
         }
@@ -46,7 +46,7 @@ namespace ITechArt.Repositories
             _dbSet.Update(entity);
         }
 
-        public void Update(params T[] entities)
+        public void UpdateRange(IReadOnlyCollection<T> entities)
         {
             _dbSet.UpdateRange(entities);
         }
@@ -56,7 +56,7 @@ namespace ITechArt.Repositories
             _dbSet.Remove(entity);
         }
 
-        public void Delete(params T[] entities)
+        public void DeleteRange(IReadOnlyCollection<T> entities)
         {
             _dbSet.RemoveRange(entities);
         }
