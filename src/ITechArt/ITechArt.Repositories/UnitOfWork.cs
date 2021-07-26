@@ -12,6 +12,7 @@ namespace ITechArt.Repositories
         private readonly TContext _context;
 
         private readonly Dictionary<Type, object> _repositories;
+        private readonly Dictionary<Type, Type> _customRepositoriesTypes;
         private readonly Dictionary<Type, object> _customRepositories;
 
         private bool _disposed;
@@ -22,6 +23,7 @@ namespace ITechArt.Repositories
             _context = context;
 
             _repositories = new Dictionary<Type, object>();
+            _customRepositoriesTypes = new Dictionary<Type, Type>();
             _customRepositories = new Dictionary<Type, object>();
         }
 
@@ -31,16 +33,28 @@ namespace ITechArt.Repositories
         {
             var type = typeof(TEntity);
 
-            if (_customRepositories.ContainsKey(type))
+            if (_repositories.TryGetValue(type, out var repository))
             {
-                return (IRepository<TEntity>) _customRepositories[type];
-            }
-            if (!_repositories.ContainsKey(type))
-            {
-                _repositories[type] = new Repository<TEntity>(_context);
+                return (IRepository<TEntity>) repository;
             }
 
-            return (IRepository<TEntity>) _repositories[type];
+            if (_customRepositories.TryGetValue(type, out var customRepository))
+            {
+                return (IRepository<TEntity>) customRepository;
+            }
+
+            if (_customRepositoriesTypes.TryGetValue(type, out var customRepositoryType))
+            {
+                var newCustomRepository = Activator.CreateInstance(customRepositoryType, _context);
+                _customRepositories.Add(type, newCustomRepository);
+
+                return (IRepository<TEntity>) newCustomRepository;
+            }
+
+            var newRepository = new Repository<TEntity>(_context);
+            _repositories.Add(type, newRepository);
+
+            return newRepository;
         }
 
         public async Task SaveAsync()
@@ -61,7 +75,7 @@ namespace ITechArt.Repositories
         {
             var entityType = typeof(TEntity);
             var repositoryType = typeof(TRepository);
-            _customRepositories[entityType] = Activator.CreateInstance(repositoryType, _context);
+            _customRepositoriesTypes.Add(entityType, repositoryType);
         }
 
 
@@ -72,6 +86,7 @@ namespace ITechArt.Repositories
                 if (disposing)
                 {
                     _repositories.Clear();
+                    _customRepositoriesTypes.Clear();
                     _customRepositories.Clear();
                     _context.Dispose();
                 }
