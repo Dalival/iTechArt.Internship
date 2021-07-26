@@ -42,15 +42,6 @@ namespace ITechArt.Repositories
             return (IRepository<TEntity>) _repositories[type];
         }
 
-        public void RegisterRepository<TEntity, TRepository>()
-            where TEntity : class
-            where TRepository : IRepository<TEntity>
-        {
-            var entityType = typeof(TEntity);
-            var repositoryType = typeof(TRepository);
-            _customRepositories[entityType] = Activator.CreateInstance(repositoryType, _context);
-        }
-
         public async Task SaveAsync()
         {
             await _context.SaveChangesAsync();
@@ -60,6 +51,16 @@ namespace ITechArt.Repositories
         {
             Dispose(true);
             GC.SuppressFinalize(this);
+        }
+
+
+        protected void RegisterRepository<TEntity, TRepository>()
+            where TEntity : class
+            where TRepository : IRepository<TEntity>
+        {
+            var entityType = typeof(TEntity);
+            var repositoryType = typeof(TRepository);
+            _customRepositories[entityType] = Activator.CreateInstance(repositoryType, _context);
         }
 
 
