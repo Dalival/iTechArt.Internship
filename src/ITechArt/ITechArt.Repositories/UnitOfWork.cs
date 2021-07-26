@@ -42,7 +42,7 @@ namespace ITechArt.Repositories
             return (IRepository<TEntity>) _repositories[type];
         }
 
-        public void RegisterRepository<TRepository, TEntity>()
+        public void RegisterRepository<TEntity, TRepository>()
             where TEntity : class
             where TRepository : IRepository<TEntity>
         {
