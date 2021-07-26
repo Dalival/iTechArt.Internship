@@ -13,6 +13,7 @@ namespace ITechArt.Repositories
 
         private readonly Dictionary<Type, object> _repositories;
         private readonly Dictionary<Type, object> _customRepositories;
+
         private bool _disposed;
 
 
