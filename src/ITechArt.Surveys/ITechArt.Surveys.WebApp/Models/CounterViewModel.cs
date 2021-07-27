@@ -2,6 +2,6 @@
 {
     public class CounterViewModel
     {
-        public int CounterValue { get; set; }
+        public int Value { get; set; }
     }
 }

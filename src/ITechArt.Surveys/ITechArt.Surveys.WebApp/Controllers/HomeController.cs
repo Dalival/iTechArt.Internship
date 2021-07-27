@@ -27,7 +27,7 @@ namespace ITechArt.Surveys.WebApp.Controllers
             var counterFromDatabase = await _counterService.IncrementAndGetCounter();
             var model = new CounterViewModel()
             {
-                CounterValue = counterFromDatabase.Value
+                Value = counterFromDatabase.Value
             };
 
             return View(model);
