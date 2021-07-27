@@ -30,7 +30,10 @@ namespace ITechArt.Surveys.Foundation
             }
             else
             {
-                counter = new Counter() {Value = 1};
+                counter = new Counter()
+                {
+                    Value = 1
+                };
                 counterRepository.Add(counter);
             }
 
