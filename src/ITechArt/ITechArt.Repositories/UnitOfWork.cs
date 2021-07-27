@@ -13,7 +13,6 @@ namespace ITechArt.Repositories
 
         private readonly Dictionary<Type, object> _repositories;
         private readonly Dictionary<Type, Type> _customRepositoriesTypes;
-        private readonly Dictionary<Type, object> _customRepositories;
 
         private bool _disposed;
 
@@ -24,7 +23,6 @@ namespace ITechArt.Repositories
 
             _repositories = new Dictionary<Type, object>();
             _customRepositoriesTypes = new Dictionary<Type, Type>();
-            _customRepositories = new Dictionary<Type, object>();
         }
 
 
@@ -38,15 +36,10 @@ namespace ITechArt.Repositories
                 return (IRepository<TEntity>) repository;
             }
 
-            if (_customRepositories.TryGetValue(type, out var customRepository))
-            {
-                return (IRepository<TEntity>) customRepository;
-            }
-
             if (_customRepositoriesTypes.TryGetValue(type, out var customRepositoryType))
             {
                 var newCustomRepository = Activator.CreateInstance(customRepositoryType, _context);
-                _customRepositories.Add(type, newCustomRepository);
+                _repositories.Add(type, newCustomRepository);
 
                 return (IRepository<TEntity>) newCustomRepository;
             }
@@ -87,7 +80,6 @@ namespace ITechArt.Repositories
                 {
                     _repositories.Clear();
                     _customRepositoriesTypes.Clear();
-                    _customRepositories.Clear();
                     _context.Dispose();
                 }
                 _disposed = true;
