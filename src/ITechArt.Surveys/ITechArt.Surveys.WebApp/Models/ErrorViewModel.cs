@@ -1,5 +1,3 @@
-using System;
-
 namespace ITechArt.Surveys.WebApp.Models
 {
     public class ErrorViewModel

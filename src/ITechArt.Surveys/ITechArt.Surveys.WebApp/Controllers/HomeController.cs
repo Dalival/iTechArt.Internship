@@ -1,10 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Threading.Tasks;
+using ITechArt.Surveys.Foundation.Interfaces;
 using ITechArt.Surveys.WebApp.Models;
 
 namespace ITechArt.Surveys.WebApp.Controllers
@@ -12,20 +10,24 @@ namespace ITechArt.Surveys.WebApp.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly ICounterService _counterService;
 
-        private static int _counter = 0;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(
+            ILogger<HomeController> logger,
+            ICounterService counterService)
         {
             _logger = logger;
+            _counterService = counterService;
         }
 
-        public IActionResult Index()
+
+        public async Task<IActionResult> Index()
         {
-            _counter++;
-            var model = new CounterViewModel
+            var counterFromDatabase = await _counterService.IncrementAndGetCounter();
+            var model = new CounterViewModel()
             {
-                Counter = _counter
+                Value = counterFromDatabase.Value
             };
 
             return View(model);
