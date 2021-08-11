@@ -1,3 +1,4 @@
+using ITechArt.Common.Logger;
 using ITechArt.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -31,6 +32,7 @@ namespace ITechArt.Surveys.WebApp
 
             services.AddScoped<IUnitOfWork, UnitOfWork<SurveysDbContext>>();
             services.AddScoped<ICounterService, CounterService>();
+            services.AddScoped<ICustomLogger, CustomLogger>();
 
             services.AddControllersWithViews();
         }

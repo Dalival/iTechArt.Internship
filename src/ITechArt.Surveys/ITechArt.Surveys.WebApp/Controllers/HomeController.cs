@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using ITechArt.Common.Logger;
 using ITechArt.Surveys.Foundation.Interfaces;
 using ITechArt.Surveys.WebApp.Models;
 
@@ -9,12 +9,12 @@ namespace ITechArt.Surveys.WebApp.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly ICustomLogger _logger;
         private readonly ICounterService _counterService;
 
 
         public HomeController(
-            ILogger<HomeController> logger,
+            ICustomLogger logger,
             ICounterService counterService)
         {
             _logger = logger;
@@ -25,6 +25,7 @@ namespace ITechArt.Surveys.WebApp.Controllers
         public async Task<IActionResult> Index()
         {
             var counterFromDatabase = await _counterService.IncrementAndGetCounter();
+            _logger.LogInformation("Counter taken from DB and incremented");
             var model = new CounterViewModel()
             {
                 Value = counterFromDatabase.Value

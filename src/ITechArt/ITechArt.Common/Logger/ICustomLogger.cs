@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.Extensions.Logging;
 
 namespace ITechArt.Common.Logger
 {
@@ -13,21 +14,21 @@ namespace ITechArt.Common.Logger
 
         void Log(LogLevel logLevel, string message, params object[] args);
 
-        void LogFatal(Exception exception, string message, params object[] args);
+        void LogCritical(Exception exception, string message, params object[] args);
 
-        void LogFatal(string message, params object[] args);
+        void LogCritical(string message, params object[] args);
 
         void LogError(Exception exception, string message, params object[] args);
 
         void LogError(string message, params object[] args);
 
-        void LogWarn(Exception exception, string message, params object[] args);
+        void LogWarning(Exception exception, string message, params object[] args);
 
-        void LogWarn(string message, params object[] args);
+        void LogWarning(string message, params object[] args);
 
-        void LogInfo(Exception exception, string message, params object[] args);
+        void LogInformation(Exception exception, string message, params object[] args);
 
-        void LogInfo(string message, params object[] args);
+        void LogInformation(string message, params object[] args);
 
         void LogDebug(Exception exception, string message, params object[] args);
 
