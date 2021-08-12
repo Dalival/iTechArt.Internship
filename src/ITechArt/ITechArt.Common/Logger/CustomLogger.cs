@@ -48,6 +48,8 @@ namespace ITechArt.Common.Logger
         public void LogError(Exception exception, string message, params object[] args)
         {
             _logger.LogError(exception, message, args);
+            var microsoftLogLevel = ConvertLogLevel(logLevel);
+            _logger.Log(microsoftLogLevel, exception, message, args);
         }
 
         public void LogError(string message, params object[] args)
@@ -71,8 +73,11 @@ namespace ITechArt.Common.Logger
         }
 
         public void LogInformation(string message, params object[] args)
+        public void Log(LogLevel logLevel, string message, params object[] args)
         {
             _logger.LogInformation(message, args);
+            var microsoftLogLevel = ConvertLogLevel(logLevel);
+            _logger.Log(microsoftLogLevel, message, args);
         }
 
         public void LogDebug(Exception exception, string message, params object[] args)
@@ -81,9 +86,20 @@ namespace ITechArt.Common.Logger
         }
 
         public void LogDebug(string message, params object[] args)
+        private Microsoft.Extensions.Logging.LogLevel ConvertLogLevel(LogLevel sourceLevel)
         {
             _logger.LogDebug(message, args);
         }
+            var destinationLevel = sourceLevel switch
+            {
+                LogLevel.Trace => Microsoft.Extensions.Logging.LogLevel.Trace,
+                LogLevel.Debug => Microsoft.Extensions.Logging.LogLevel.Debug,
+                LogLevel.Information => Microsoft.Extensions.Logging.LogLevel.Information,
+                LogLevel.Warning => Microsoft.Extensions.Logging.LogLevel.Warning,
+                LogLevel.Error => Microsoft.Extensions.Logging.LogLevel.Error,
+                LogLevel.Critical => Microsoft.Extensions.Logging.LogLevel.Critical,
+                _ => throw new ArgumentOutOfRangeException(nameof(sourceLevel), sourceLevel, null)
+            };
 
         public void LogTrace(Exception exception, string message, params object[] args)
         {
@@ -93,6 +109,7 @@ namespace ITechArt.Common.Logger
         public void LogTrace(string message, params object[] args)
         {
             _logger.LogTrace(message, args);
+            return destinationLevel;
         }
     }
 }

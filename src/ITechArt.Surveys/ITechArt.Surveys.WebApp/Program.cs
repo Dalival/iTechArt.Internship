@@ -36,7 +36,6 @@ namespace ITechArt.Surveys.WebApp
                 .ConfigureLogging(logging =>
                 {
                     logging.ClearProviders();
-                    logging.SetMinimumLevel(LogLevel.Trace);
                 })
                 .UseNLog();
     }
