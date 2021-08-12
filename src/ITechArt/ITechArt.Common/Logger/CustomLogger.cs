@@ -8,9 +8,9 @@ namespace ITechArt.Common.Logger
         private readonly ILogger _logger;
 
 
-        public CustomLogger(ILogger logger)
+        public CustomLogger(ILoggerFactory loggerFactory)
         {
-            _logger = logger;
+            _logger = loggerFactory.CreateLogger("default");
         }
 
 

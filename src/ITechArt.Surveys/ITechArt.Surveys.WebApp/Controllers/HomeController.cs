@@ -13,9 +13,7 @@ namespace ITechArt.Surveys.WebApp.Controllers
         private readonly ICounterService _counterService;
 
 
-        public HomeController(
-            ICustomLogger logger,
-            ICounterService counterService)
+        public HomeController(ICustomLogger logger, ICounterService counterService)
         {
             _logger = logger;
             _counterService = counterService;
@@ -25,7 +23,6 @@ namespace ITechArt.Surveys.WebApp.Controllers
         public async Task<IActionResult> Index()
         {
             var counterFromDatabase = await _counterService.IncrementAndGetCounter();
-            _logger.LogInformation("Counter taken from DB and incremented");
             var model = new CounterViewModel()
             {
                 Value = counterFromDatabase.Value
