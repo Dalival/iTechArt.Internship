@@ -21,13 +21,6 @@ namespace ITechArt.Common.Logger
         }
 
 
-        public void Log(LogLevel logLevel, string message, params object[] args)
-        {
-            var microsoftLogLevel = ConvertLogLevel(logLevel);
-            _logger.Log(microsoftLogLevel, message, args);
-        }
-
-
         private Microsoft.Extensions.Logging.LogLevel ConvertLogLevel(LogLevel sourceLevel)
         {
             var destinationLevel = sourceLevel switch
