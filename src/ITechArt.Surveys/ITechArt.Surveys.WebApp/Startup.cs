@@ -9,6 +9,8 @@ using ITechArt.Surveys.Repositories;
 using Microsoft.EntityFrameworkCore;
 using ITechArt.Surveys.Foundation;
 using ITechArt.Surveys.Foundation.Interfaces;
+using Microsoft.AspNetCore.Identity;
+using ITechArt.Surveys.DomainModel;
 
 namespace ITechArt.Surveys.WebApp
 {
@@ -29,10 +31,14 @@ namespace ITechArt.Surveys.WebApp
             var connectionString = Configuration.GetValue<string>("connectionString");
             services.AddDbContext<SurveysDbContext>(x => x.UseSqlServer(connectionString));
 
+            services.AddIdentity<User, IdentityRole>()
+                .AddEntityFrameworkStores<SurveysDbContext>()
+                .AddDefaultTokenProviders();
+
             services.AddScoped<IUnitOfWork, UnitOfWork<SurveysDbContext>>();
             services.AddScoped<ICounterService, CounterService>();
 
-            services.AddControllersWithViews();
+            services.AddMvc();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
