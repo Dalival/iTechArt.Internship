@@ -64,9 +64,8 @@ namespace ITechArt.Surveys.WebApp
                 options.Cookie.HttpOnly = true;
                 options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
 
-                options.LoginPath = "/Identity/Pages/Account/Login";
-                options.LogoutPath = "/Identity/Pages/Account/Logout";
-                options.AccessDeniedPath = "/Identity/Pages/Account/AccessDenied";
+                options.LoginPath = "/Identity/Account/Login";
+                options.AccessDeniedPath = "/Identity/Account/AccessDenied";
                 options.SlidingExpiration = true;
             });
         }
