@@ -1,10 +1,9 @@
 ﻿using ITechArt.Surveys.DomainModel;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace ITechArt.Surveys.Repositories
 {
-    public class SurveysDbContext : IdentityDbContext<User>
+    public class SurveysDbContext : DbContext
     {
         public SurveysDbContext(DbContextOptions options)
             : base(options) { }
