@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using System.Threading.Tasks;
-using ITechArt.Common.Logger;
 using ITechArt.Surveys.Foundation.Interfaces;
 using ITechArt.Surveys.WebApp.Models;
 

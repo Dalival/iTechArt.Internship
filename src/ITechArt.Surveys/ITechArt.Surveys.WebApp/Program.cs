@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using NLog;
 using NLog.Web;
 
 namespace ITechArt.Surveys.WebApp
@@ -9,6 +10,8 @@ namespace ITechArt.Surveys.WebApp
     {
         public static void Main(string[] args)
         {
+            LogManager.Setup().LoadConfigurationFromAppSettings();
+
             CreateHostBuilder(args).Build().Run();
         }
 
