@@ -5,10 +5,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using ITechArt.Repositories.Interfaces;
+using ITechArt.Surveys.DomainModel;
 using ITechArt.Surveys.Repositories;
 using Microsoft.EntityFrameworkCore;
 using ITechArt.Surveys.Foundation;
 using ITechArt.Surveys.Foundation.Interfaces;
+using Microsoft.AspNetCore.Identity;
 
 namespace ITechArt.Surveys.WebApp
 {
@@ -28,6 +30,11 @@ namespace ITechArt.Surveys.WebApp
         {
             var connectionString = Configuration.GetValue<string>("connectionString");
             services.AddDbContext<SurveysDbContext>(x => x.UseSqlServer(connectionString));
+
+            services.AddIdentity<User, Role>()
+                .AddDefaultTokenProviders();
+            services.AddTransient<IUserStore<User>, UserStore>();
+            services.AddTransient<IRoleStore<Role>, RoleStore>();
 
             services.AddScoped<IUnitOfWork, UnitOfWork<SurveysDbContext>>();
             services.AddScoped<ICounterService, CounterService>();
@@ -54,6 +61,7 @@ namespace ITechArt.Surveys.WebApp
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
