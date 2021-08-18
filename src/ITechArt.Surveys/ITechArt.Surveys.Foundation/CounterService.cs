@@ -25,23 +25,24 @@ namespace ITechArt.Surveys.Foundation
         {
             var counterRepository = _unitOfWork.GetRepository<Counter>();
             var counters = await counterRepository.GetAllAsync();
-            Counter counter;
-            try
+            var counter = counters.FirstOrDefault();
+
+            if (counter != null)
             {
-                counter = counters.First();
                 counter.Value++;
                 counterRepository.Update(counter);
                 _logger.LogInformation($"Counter was found and incremented, new value is {counter.Value}");
             }
-            catch (Exception e)
+            else
             {
                 counter = new Counter()
                 {
                     Value = 1
                 };
                 counterRepository.Add(counter);
-                _logger.LogError(e, "No counters was found, a new one was created with value 1");
+                _logger.LogInformation("No counters was found, a new one was created with value 1");
             }
+
             await _unitOfWork.SaveAsync();
 
             return counter;
