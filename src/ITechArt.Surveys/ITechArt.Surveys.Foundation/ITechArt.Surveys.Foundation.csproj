@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\ITechArt\ITechArt.Common\ITechArt.Common.csproj" />
     <ProjectReference Include="..\..\ITechArt\ITechArt.Repositories\ITechArt.Repositories.csproj" />
     <ProjectReference Include="..\ITechArt.Surveys.DomainModel\ITechArt.Surveys.DomainModel.csproj" />
   </ItemGroup>
