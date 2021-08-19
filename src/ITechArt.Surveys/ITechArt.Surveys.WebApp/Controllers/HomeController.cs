@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using ITechArt.Surveys.Foundation.Interfaces;
@@ -9,15 +8,11 @@ namespace ITechArt.Surveys.WebApp.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
         private readonly ICounterService _counterService;
 
 
-        public HomeController(
-            ILogger<HomeController> logger,
-            ICounterService counterService)
+        public HomeController(ICounterService counterService)
         {
-            _logger = logger;
             _counterService = counterService;
         }
 
