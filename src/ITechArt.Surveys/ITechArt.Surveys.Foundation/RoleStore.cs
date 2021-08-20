@@ -194,10 +194,8 @@ namespace ITechArt.Surveys.Foundation
             return targetRole;
         }
 
-        // In sources the whole code of this method is just _disposed=true; Why?
         public void Dispose()
         {
-            throw new System.NotImplementedException();
         }
     }
 }
