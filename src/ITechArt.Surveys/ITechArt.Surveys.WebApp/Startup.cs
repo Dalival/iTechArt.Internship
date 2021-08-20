@@ -33,9 +33,9 @@ namespace ITechArt.Surveys.WebApp
             services.AddDbContext<SurveysDbContext>(x => x.UseSqlServer(connectionString));
 
             services.AddIdentity<User, Role>()
-                .AddDefaultTokenProviders();
-            services.AddTransient<IUserStore<User>, UserStore>();
-            services.AddTransient<IRoleStore<Role>, RoleStore>();
+                .AddDefaultTokenProviders()
+                .AddUserStore<UserStore>()
+                .AddRoleStore<RoleStore>();
 
             services.AddScoped<IUnitOfWork, UnitOfWork<SurveysDbContext>>();
             services.AddScoped<ICounterService, CounterService>();
