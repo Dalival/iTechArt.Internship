@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -13,12 +14,16 @@ namespace ITechArt.Surveys.Foundation
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IRepository<User> _userRepository;
+        private readonly IRepository<UserRole> _userRoleRepository;
+        private readonly IRepository<Role> _roleRepository;
 
 
         public UserStore(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
             _userRepository = unitOfWork.GetRepository<User>();
+            _userRoleRepository = unitOfWork.GetRepository<UserRole>();
+            _roleRepository = unitOfWork.GetRepository<Role>();
         }
 
 
@@ -335,29 +340,115 @@ namespace ITechArt.Surveys.Foundation
             return Task.CompletedTask;
         }
 
-        public Task AddToRoleAsync(User user, string roleName, CancellationToken cancellationToken = default)
+        public async Task AddToRoleAsync(User user, string roleName, CancellationToken cancellationToken = default)
         {
-            throw new System.NotImplementedException();
+            cancellationToken.ThrowIfCancellationRequested();
+            if (user == null)
+            {
+                throw new ArgumentNullException(nameof(user));
+            }
+
+            if (roleName == null)
+            {
+                throw new ArgumentNullException(nameof(roleName));
+            }
+
+            var allRoles = await _roleRepository.GetAllAsync();
+            var targetRole = allRoles.Single(r => r.Name == roleName);
+
+            _userRoleRepository.Add(new UserRole
+            {
+                RoleId = targetRole.Id,
+                UserId = user.Id
+            });
+
+            await _unitOfWork.SaveAsync();
         }
 
-        public Task RemoveFromRoleAsync(User user, string roleName, CancellationToken cancellationToken = default)
+        public async Task RemoveFromRoleAsync(User user, string roleName, CancellationToken cancellationToken = default)
         {
-            throw new System.NotImplementedException();
+            cancellationToken.ThrowIfCancellationRequested();
+            if (user == null)
+            {
+                throw new ArgumentNullException(nameof(user));
+            }
+
+            if (roleName == null)
+            {
+                throw new ArgumentNullException(nameof(roleName));
+            }
+
+            var allRoles = await _roleRepository.GetAllAsync();
+            var targetRole = allRoles.Single(r => r.Name == roleName);
+
+            _userRoleRepository.Delete(new UserRole
+            {
+                RoleId = targetRole.Id,
+                UserId = user.Id
+            });
+
+            await _unitOfWork.SaveAsync();
         }
 
-        public Task<IList<string>> GetRolesAsync(User user, CancellationToken cancellationToken = default)
+        public async Task<IList<string>> GetRolesAsync(User user, CancellationToken cancellationToken = default)
         {
-            throw new System.NotImplementedException();
+            cancellationToken.ThrowIfCancellationRequested();
+            if (user == null)
+            {
+                throw new ArgumentNullException(nameof(user));
+            }
+
+            var allUserRoles = await _userRoleRepository.GetAllAsync();
+            var userRolesOfTargetUser = allUserRoles.Where(ur => ur.UserId == user.Id);
+            var rolesOfTargetUser = userRolesOfTargetUser
+                .Select(ur => _roleRepository.GetByIdAsync(ur.RoleId).Result.Name)
+                .ToList();
+
+            return rolesOfTargetUser;
         }
 
-        public Task<bool> IsInRoleAsync(User user, string roleName, CancellationToken cancellationToken = default)
+        public async Task<bool> IsInRoleAsync(User user, string roleName, CancellationToken cancellationToken = default)
         {
-            throw new System.NotImplementedException();
+            cancellationToken.ThrowIfCancellationRequested();
+            if (user == null)
+            {
+                throw new ArgumentNullException(nameof(user));
+            }
+
+            if (roleName == null)
+            {
+                throw new ArgumentNullException(nameof(roleName));
+            }
+
+            var allRoles = await _roleRepository.GetAllAsync();
+            var targetRole = allRoles.Single(r => r.Name == roleName);
+
+            var allUserRoles = await _userRoleRepository.GetAllAsync();
+            var targetUserRole = allUserRoles.SingleOrDefault(ur => ur.UserId == user.Id
+                                                                    && ur.RoleId == targetRole.Id);
+
+            return targetUserRole != null;
         }
 
-        public Task<IList<User>> GetUsersInRoleAsync(string roleName, CancellationToken cancellationToken = default)
+        public async Task<IList<User>> GetUsersInRoleAsync(string roleName, CancellationToken cancellationToken = default)
         {
-            throw new System.NotImplementedException();
+            cancellationToken.ThrowIfCancellationRequested();
+
+            if (roleName == null)
+            {
+                throw new ArgumentNullException(nameof(roleName));
+            }
+
+            var allRoles = await _roleRepository.GetAllAsync();
+            var targetRole = allRoles.Single(r => r.Name == roleName);
+
+            var allUserRoles = await _userRoleRepository.GetAllAsync();
+            var userRolesOfTargetRole = allUserRoles.Where(ur => ur.RoleId == targetRole.Id);
+            var targetUsers = userRolesOfTargetRole
+                .Select(ur => _userRepository.GetByIdAsync(ur.UserId).Result)
+                .ToList();
+
+            return targetUsers;
         }
 
         public void Dispose()
