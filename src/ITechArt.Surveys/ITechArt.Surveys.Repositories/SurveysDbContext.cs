@@ -26,7 +26,7 @@ namespace ITechArt.Surveys.Repositories
             {
                 b.HasKey(u => u.Id);
                 b.HasIndex(u => u.NormalizedUserName).HasDatabaseName("UserNameIndex").IsUnique();
-                b.HasIndex(u => u.NormalizedEmail).HasDatabaseName("EmailIndex"); // why not to make Email unique too?
+                b.HasIndex(u => u.NormalizedEmail).HasDatabaseName("EmailIndex").IsUnique();
                 b.ToTable("Users");
                 b.Property(u => u.ConcurrencyStamp).IsConcurrencyToken();
 
