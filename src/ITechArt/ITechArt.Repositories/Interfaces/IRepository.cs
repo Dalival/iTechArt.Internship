@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
@@ -13,6 +14,8 @@ namespace ITechArt.Repositories.Interfaces
         Task<IReadOnlyCollection<T>> GetAllAsync();
 
         Task<IReadOnlyCollection<T>> GetWhereAsync(Expression<Func<T, bool>> predicate);
+
+        Task<IReadOnlyCollection<T>> GetWithIncludesAsync<TProperty>(params Expression<Func<T, TProperty>>[] navigationProperties);
 
         void Add(T entity);
 

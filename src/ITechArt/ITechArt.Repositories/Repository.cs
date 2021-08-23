@@ -14,7 +14,7 @@ namespace ITechArt.Repositories
     {
         private readonly DbContext _dbContext;
 
-        private readonly DbSet<T> _dbSet;
+        private DbSet<T> _dbSet;
 
 
         public Repository(DbContext dbContext)
@@ -38,6 +38,18 @@ namespace ITechArt.Repositories
         public async Task<IReadOnlyCollection<T>> GetWhereAsync(Expression<Func<T, bool>> predicate)
         {
             return await _dbSet.Where(predicate).ToListAsync();
+        }
+
+        public async Task<IReadOnlyCollection<T>> GetWithIncludesAsync<TProperty>(params Expression<Func<T, TProperty>>[] navigationProperties)
+        {
+            var query = _dbSet.AsQueryable();
+
+            foreach (var property in navigationProperties)
+            {
+                query = query.Include(property);
+            }
+
+            return await query.ToListAsync();
         }
 
         public void Add(T entity)
