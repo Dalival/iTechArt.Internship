@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace ITechArt.Repositories.Interfaces
@@ -9,6 +11,8 @@ namespace ITechArt.Repositories.Interfaces
         Task<T> GetByIdAsync(params object[] id);
 
         Task<IReadOnlyCollection<T>> GetAllAsync();
+
+        Task<IReadOnlyCollection<T>> GetWhereAsync(Expression<Func<T, bool>> predicate);
 
         void Add(T entity);
 

@@ -1,7 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using ITechArt.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualBasic.CompilerServices;
 
 namespace ITechArt.Repositories
 {
@@ -29,6 +33,11 @@ namespace ITechArt.Repositories
         public async Task<IReadOnlyCollection<T>> GetAllAsync()
         {
             return await _dbSet.ToListAsync();
+        }
+
+        public async Task<IReadOnlyCollection<T>> GetWhereAsync(Expression<Func<T, bool>> predicate)
+        {
+            return await _dbSet.Where(predicate).ToListAsync();
         }
 
         public void Add(T entity)
