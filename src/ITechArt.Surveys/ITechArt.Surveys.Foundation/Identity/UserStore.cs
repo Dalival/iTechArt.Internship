@@ -135,7 +135,6 @@ namespace ITechArt.Surveys.Foundation.Identity
 
             user.UserName = userName;
 
-            //return Task.FromResult<string>(null);
             return Task.CompletedTask;
         }
 
@@ -165,7 +164,6 @@ namespace ITechArt.Surveys.Foundation.Identity
 
             user.NormalizedUserName = normalizedName;
 
-            //return Task.FromResult<string>(null);
             return Task.CompletedTask;
         }
 
@@ -214,7 +212,6 @@ namespace ITechArt.Surveys.Foundation.Identity
 
             user.PasswordHash = passwordHash;
 
-            //return Task.FromResult<object>(null);
             return Task.CompletedTask;
         }
 
@@ -255,7 +252,6 @@ namespace ITechArt.Surveys.Foundation.Identity
 
             user.Email = email;
 
-            //return Task.FromResult<string>(null);
             return Task.CompletedTask;
         }
 
@@ -291,7 +287,6 @@ namespace ITechArt.Surveys.Foundation.Identity
 
             user.EmailConfirmed = isConfirmed;
 
-            //return Task.FromResult<bool>(null);
             return Task.CompletedTask;
         }
 
@@ -335,7 +330,6 @@ namespace ITechArt.Surveys.Foundation.Identity
 
             user.NormalizedEmail = normalizedEmail;
 
-            //return Task.FromResult<string>(null);
             return Task.CompletedTask;
         }
 

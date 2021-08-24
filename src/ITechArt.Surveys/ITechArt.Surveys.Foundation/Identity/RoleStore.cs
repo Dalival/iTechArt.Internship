@@ -130,7 +130,6 @@ namespace ITechArt.Surveys.Foundation.Identity
 
             role.Name = name;
 
-            //return Task.FromResult<string>(null);
             return Task.CompletedTask;
         }
 
@@ -160,7 +159,6 @@ namespace ITechArt.Surveys.Foundation.Identity
 
             role.NormalizedName = normalizedName;
 
-            //return Task.FromResult<string>(null);
             return Task.CompletedTask;
         }
 
