@@ -6,7 +6,7 @@ using ITechArt.Repositories.Interfaces;
 using ITechArt.Surveys.DomainModel;
 using Microsoft.AspNetCore.Identity;
 
-namespace ITechArt.Surveys.Foundation
+namespace ITechArt.Surveys.Foundation.Identity
 {
     public class RoleStore : IRoleStore<Role>
     {

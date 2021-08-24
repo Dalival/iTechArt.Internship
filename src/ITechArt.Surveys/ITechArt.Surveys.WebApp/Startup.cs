@@ -11,6 +11,7 @@ using ITechArt.Surveys.DomainModel;
 using ITechArt.Surveys.Repositories;
 using Microsoft.EntityFrameworkCore;
 using ITechArt.Surveys.Foundation;
+using ITechArt.Surveys.Foundation.Identity;
 using ITechArt.Surveys.Foundation.Interfaces;
 using Microsoft.AspNetCore.Identity;
 
