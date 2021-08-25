@@ -390,10 +390,15 @@ namespace ITechArt.Surveys.Foundation.Identity
                 throw new ArgumentNullException(nameof(user));
             }
 
-            var allUserRoles = await _userRoleRepository.GetAllAsync();
-            var userRolesOfTargetUser = allUserRoles.Where(ur => ur.UserId == user.Id);
-            var rolesOfTargetUser = userRolesOfTargetUser
-                .Select(ur => _roleRepository.GetByIdAsync(ur.RoleId).Result.Name)
+            // var userRolesOfTargetUser = await _userRoleRepository.GetWhereAsync(ur => ur.UserId == user.Id);
+            // var rolesOfTargetUser = userRolesOfTargetUser
+            //     .Select(ur => _roleRepository.GetByIdAsync(ur.RoleId).Result.Name)
+            //     .ToList();
+
+            var allUserRoles = await _userRoleRepository.GetWithIncludesAsync(ur => ur.Role);
+            var rolesOfTargetUser = allUserRoles
+                .Where(ur => ur.UserId == user.Id)
+                .Select(ur => ur.Role.Name)
                 .ToList();
 
             return rolesOfTargetUser;
@@ -412,12 +417,16 @@ namespace ITechArt.Surveys.Foundation.Identity
                 throw new ArgumentNullException(nameof(roleName));
             }
 
-            var allRoles = await _roleRepository.GetAllAsync();
-            var targetRole = allRoles.Single(r => r.Name == roleName);
+            var targetRoles = await _roleRepository.GetWhereAsync(r => r.Name == roleName);
+            if (!targetRoles.Any())
+            {
+                return false;
+            }
+            var targetRole = targetRoles.Single();
 
-            var allUserRoles = await _userRoleRepository.GetAllAsync();
-            var targetUserRole = allUserRoles.SingleOrDefault(ur => ur.UserId == user.Id
-                                                                    && ur.RoleId == targetRole.Id);
+            var targetUserRoles = await _userRoleRepository
+                .GetWhereAsync(ur => ur.UserId == user.Id && ur.RoleId == targetRole.Id);
+            var targetUserRole = targetUserRoles.SingleOrDefault();
 
             return targetUserRole != null;
         }
