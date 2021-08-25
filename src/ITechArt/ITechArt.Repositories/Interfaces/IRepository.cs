@@ -10,11 +10,11 @@ namespace ITechArt.Repositories.Interfaces
     {
         Task<T> GetByIdAsync(params object[] id);
 
-        Task<IReadOnlyCollection<T>> GetAllAsync();
+        Task<IReadOnlyCollection<T>> GetAllAsync(params Expression<Func<T, object>>[] includes);
 
-        Task<IReadOnlyCollection<T>> GetWhereAsync(Expression<Func<T, bool>> predicate);
+        Task<IReadOnlyCollection<T>> GetWhereAsync(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includes);
 
-        Task<IReadOnlyCollection<T>> GetWithIncludesAsync<TProperty>(params Expression<Func<T, TProperty>>[] navigationProperties);
+        Task<T> GetSingleOrDefaultAsync(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includes);
 
         void Add(T entity);
 
@@ -27,5 +27,7 @@ namespace ITechArt.Repositories.Interfaces
         void Delete(T entity);
 
         void DeleteRange(IReadOnlyCollection<T> entities);
+
+        Task<bool> AnyAsync(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includes);
     }
 }

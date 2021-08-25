@@ -13,7 +13,7 @@ namespace ITechArt.Repositories
     {
         private readonly DbContext _dbContext;
 
-        private DbSet<T> _dbSet;
+        private readonly DbSet<T> _dbSet;
 
 
         public Repository(DbContext dbContext)
@@ -29,26 +29,28 @@ namespace ITechArt.Repositories
             return await _dbContext.FindAsync<T>(id);
         }
 
-        public async Task<IReadOnlyCollection<T>> GetAllAsync()
-        {
-            return await _dbSet.ToListAsync();
-        }
-
-        public async Task<IReadOnlyCollection<T>> GetWhereAsync(Expression<Func<T, bool>> predicate)
-        {
-            return await _dbSet.Where(predicate).ToListAsync();
-        }
-
-        public async Task<IReadOnlyCollection<T>> GetWithIncludesAsync<TProperty>(params Expression<Func<T, TProperty>>[] navigationProperties)
+        public async Task<IReadOnlyCollection<T>> GetAllAsync(params Expression<Func<T, object>>[] includes)
         {
             var query = _dbSet.AsQueryable();
-
-            foreach (var property in navigationProperties)
-            {
-                query = query.Include(property);
-            }
+            query = includes.Aggregate(query, (current, property) => current.Include(property));
 
             return await query.ToListAsync();
+        }
+
+        public async Task<IReadOnlyCollection<T>> GetWhereAsync(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includes)
+        {
+            var query = _dbSet.AsQueryable();
+            query = includes.Aggregate(query, (current, property) => current.Include(property));
+
+            return await query.Where(predicate).ToListAsync();
+        }
+
+        public async Task<T> GetSingleOrDefaultAsync(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includes)
+        {
+            var query = _dbSet.AsQueryable();
+            query = includes.Aggregate(query, (current, property) => current.Include(property));
+
+            return await query.Where(predicate).SingleOrDefaultAsync();
         }
 
         public void Add(T entity)
@@ -79,6 +81,14 @@ namespace ITechArt.Repositories
         public void DeleteRange(IReadOnlyCollection<T> entities)
         {
             _dbSet.RemoveRange(entities);
+        }
+
+        public async Task<bool> AnyAsync(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includes)
+        {
+            var query = _dbSet.AsQueryable();
+            query = includes.Aggregate(query, (current, property) => current.Include(property));
+
+            return await query.Where(predicate).AnyAsync();
         }
     }
 }
