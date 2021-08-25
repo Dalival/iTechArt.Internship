@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using ITechArt.Repositories.Interfaces;
@@ -186,9 +185,7 @@ namespace ITechArt.Surveys.Foundation.Identity
                 throw new ArgumentNullException(nameof(normalizedRoleName));
             }
 
-            var targetRoles = await _roleRepository.GetWhereAsync(r => r.NormalizedName == normalizedRoleName);
-
-            return targetRoles.SingleOrDefault();
+            return await _roleRepository.GetSingleOrDefaultAsync(r => r.NormalizedName == normalizedRoleName);
         }
 
         public void Dispose()

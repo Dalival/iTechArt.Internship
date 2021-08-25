@@ -106,7 +106,7 @@ namespace ITechArt.Surveys.Foundation.Identity
                 throw new ArgumentNullException(nameof(user));
             }
 
-            return Task.FromResult(user.Id.ToString());
+            return Task.FromResult(user.Id);
         }
 
         public Task<string> GetUserNameAsync(User user, CancellationToken cancellationToken = default)
@@ -191,10 +191,7 @@ namespace ITechArt.Surveys.Foundation.Identity
                 throw new ArgumentNullException(nameof(normalizedUserName));
             }
 
-            var allUsers = await _userRepository.GetAllAsync();
-            var targetUser = allUsers.SingleOrDefault(u => u.NormalizedUserName == normalizedUserName);
-
-            return targetUser;
+            return await _userRepository.GetSingleOrDefaultAsync(u => u.NormalizedUserName == normalizedUserName);
         }
 
         public Task SetPasswordHashAsync(User user, string passwordHash, CancellationToken cancellationToken = default)
@@ -298,9 +295,7 @@ namespace ITechArt.Surveys.Foundation.Identity
                 throw new ArgumentNullException(nameof(normalizedEmail));
             }
 
-            var allUsers = await _userRepository.GetWhereAsync(u => u.NormalizedEmail == normalizedEmail);
-
-            return allUsers.SingleOrDefault();
+            return await _userRepository.GetSingleOrDefaultAsync(u => u.NormalizedEmail == normalizedEmail);
         }
 
         public Task<string> GetNormalizedEmailAsync(User user, CancellationToken cancellationToken = default)
@@ -345,8 +340,7 @@ namespace ITechArt.Surveys.Foundation.Identity
                 throw new ArgumentNullException(nameof(roleName));
             }
 
-            var targetRoles = await _roleRepository.GetWhereAsync(r => r.Name == roleName);
-            var targetRole = targetRoles.Single();
+            var targetRole = await _roleRepository.GetSingleOrDefaultAsync(r => r.Name == roleName);
 
             _userRoleRepository.Add(new UserRole
             {
@@ -370,8 +364,7 @@ namespace ITechArt.Surveys.Foundation.Identity
                 throw new ArgumentNullException(nameof(roleName));
             }
 
-            var targetRoles = await _roleRepository.GetWhereAsync(r => r.Name == roleName);
-            var targetRole = targetRoles.Single();
+            var targetRole = await _roleRepository.GetSingleOrDefaultAsync(r => r.Name == roleName);
 
             _userRoleRepository.Delete(new UserRole
             {
@@ -390,14 +383,9 @@ namespace ITechArt.Surveys.Foundation.Identity
                 throw new ArgumentNullException(nameof(user));
             }
 
-            // var userRolesOfTargetUser = await _userRoleRepository.GetWhereAsync(ur => ur.UserId == user.Id);
-            // var rolesOfTargetUser = userRolesOfTargetUser
-            //     .Select(ur => _roleRepository.GetByIdAsync(ur.RoleId).Result.Name)
-            //     .ToList();
-
-            var allUserRoles = await _userRoleRepository.GetWithIncludesAsync(ur => ur.Role);
-            var rolesOfTargetUser = allUserRoles
-                .Where(ur => ur.UserId == user.Id)
+            var userRolesOfTargetUser = await _userRoleRepository
+                .GetWhereAsync(ur => ur.UserId == user.Id, ur => ur.Role);
+            var rolesOfTargetUser = userRolesOfTargetUser
                 .Select(ur => ur.Role.Name)
                 .ToList();
 
@@ -417,18 +405,9 @@ namespace ITechArt.Surveys.Foundation.Identity
                 throw new ArgumentNullException(nameof(roleName));
             }
 
-            var targetRoles = await _roleRepository.GetWhereAsync(r => r.Name == roleName);
-            if (!targetRoles.Any())
-            {
-                return false;
-            }
-            var targetRole = targetRoles.Single();
-
-            var targetUserRoles = await _userRoleRepository
-                .GetWhereAsync(ur => ur.UserId == user.Id && ur.RoleId == targetRole.Id);
-            var targetUserRole = targetUserRoles.SingleOrDefault();
-
-            return targetUserRole != null;
+            return await _userRoleRepository
+                .AnyAsync(ur => ur.UserId == user.Id && ur.Role.Name == roleName,
+                    ur => ur.Role);
         }
 
         public async Task<IList<User>> GetUsersInRoleAsync(string roleName, CancellationToken cancellationToken = default)
@@ -440,16 +419,12 @@ namespace ITechArt.Surveys.Foundation.Identity
                 throw new ArgumentNullException(nameof(roleName));
             }
 
-            var allRoles = await _roleRepository.GetAllAsync();
-            var targetRole = allRoles.Single(r => r.Name == roleName);
+            var targetUserRoles = await _userRoleRepository
+                .GetWhereAsync(ur => ur.Role.Name == roleName,
+                    ur => ur.Role, ur => ur.User);
 
-            var allUserRoles = await _userRoleRepository.GetAllAsync();
-            var userRolesOfTargetRole = allUserRoles.Where(ur => ur.RoleId == targetRole.Id);
-            var targetUsers = userRolesOfTargetRole
-                .Select(ur => _userRepository.GetByIdAsync(ur.UserId).Result)
-                .ToList();
-
-            return targetUsers;
+            //TODO: probably ur.User will be null
+            return targetUserRoles.Select(ur => ur.User).ToList();
         }
 
         public void Dispose()
