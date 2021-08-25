@@ -327,7 +327,7 @@ namespace ITechArt.Surveys.Foundation.Identity
             return Task.CompletedTask;
         }
 
-        public async Task AddToRoleAsync(User user, string roleName, CancellationToken cancellationToken = default)
+        public async Task AddToRoleAsync(User user, string normalizedRoleName, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
             if (user == null)
@@ -335,12 +335,12 @@ namespace ITechArt.Surveys.Foundation.Identity
                 throw new ArgumentNullException(nameof(user));
             }
 
-            if (roleName == null)
+            if (normalizedRoleName == null)
             {
-                throw new ArgumentNullException(nameof(roleName));
+                throw new ArgumentNullException(nameof(normalizedRoleName));
             }
 
-            var targetRole = await _roleRepository.GetSingleOrDefaultAsync(r => r.Name == roleName);
+            var targetRole = await _roleRepository.GetSingleOrDefaultAsync(r => r.NormalizedName == normalizedRoleName);
 
             _userRoleRepository.Add(new UserRole
             {
@@ -351,7 +351,7 @@ namespace ITechArt.Surveys.Foundation.Identity
             await _unitOfWork.SaveAsync();
         }
 
-        public async Task RemoveFromRoleAsync(User user, string roleName, CancellationToken cancellationToken = default)
+        public async Task RemoveFromRoleAsync(User user, string normalizedRoleName, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
             if (user == null)
@@ -359,12 +359,12 @@ namespace ITechArt.Surveys.Foundation.Identity
                 throw new ArgumentNullException(nameof(user));
             }
 
-            if (roleName == null)
+            if (normalizedRoleName == null)
             {
-                throw new ArgumentNullException(nameof(roleName));
+                throw new ArgumentNullException(nameof(normalizedRoleName));
             }
 
-            var targetRole = await _roleRepository.GetSingleOrDefaultAsync(r => r.Name == roleName);
+            var targetRole = await _roleRepository.GetSingleOrDefaultAsync(r => r.NormalizedName == normalizedRoleName);
 
             _userRoleRepository.Delete(new UserRole
             {
@@ -392,7 +392,7 @@ namespace ITechArt.Surveys.Foundation.Identity
             return rolesOfTargetUser;
         }
 
-        public async Task<bool> IsInRoleAsync(User user, string roleName, CancellationToken cancellationToken = default)
+        public async Task<bool> IsInRoleAsync(User user, string normalizedRoleName, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
             if (user == null)
@@ -400,27 +400,27 @@ namespace ITechArt.Surveys.Foundation.Identity
                 throw new ArgumentNullException(nameof(user));
             }
 
-            if (roleName == null)
+            if (normalizedRoleName == null)
             {
-                throw new ArgumentNullException(nameof(roleName));
+                throw new ArgumentNullException(nameof(normalizedRoleName));
             }
 
             return await _userRoleRepository
-                .AnyAsync(ur => ur.UserId == user.Id && ur.Role.Name == roleName,
+                .AnyAsync(ur => ur.UserId == user.Id && ur.Role.NormalizedName == normalizedRoleName,
                     ur => ur.Role);
         }
 
-        public async Task<IList<User>> GetUsersInRoleAsync(string roleName, CancellationToken cancellationToken = default)
+        public async Task<IList<User>> GetUsersInRoleAsync(string normalizedRoleName, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            if (roleName == null)
+            if (normalizedRoleName == null)
             {
-                throw new ArgumentNullException(nameof(roleName));
+                throw new ArgumentNullException(nameof(normalizedRoleName));
             }
 
             var targetUserRoles = await _userRoleRepository
-                .GetWhereAsync(ur => ur.Role.Name == roleName,
+                .GetWhereAsync(ur => ur.Role.NormalizedName == normalizedRoleName,
                     ur => ur.Role, ur => ur.User);
 
             //TODO: probably ur.User will be null
