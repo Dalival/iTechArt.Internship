@@ -13,8 +13,6 @@ namespace ITechArt.Surveys.Repositories
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<Counter>().HasKey(c => c.Id);
-
             modelBuilder.Entity<User>(b =>
             {
                 b.HasKey(u => u.Id);

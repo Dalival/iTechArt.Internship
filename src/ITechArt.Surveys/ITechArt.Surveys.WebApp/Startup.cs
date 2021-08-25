@@ -10,9 +10,7 @@ using ITechArt.Repositories.Interfaces;
 using ITechArt.Surveys.DomainModel;
 using ITechArt.Surveys.Repositories;
 using Microsoft.EntityFrameworkCore;
-using ITechArt.Surveys.Foundation;
 using ITechArt.Surveys.Foundation.Identity;
-using ITechArt.Surveys.Foundation.Interfaces;
 using Microsoft.AspNetCore.Identity;
 
 namespace ITechArt.Surveys.WebApp
@@ -40,7 +38,6 @@ namespace ITechArt.Surveys.WebApp
                 .AddRoleStore<RoleStore>();
 
             services.AddScoped<IUnitOfWork, UnitOfWork<SurveysDbContext>>();
-            services.AddScoped<ICounterService, CounterService>();
             services.AddScoped<ICustomLogger, CustomLogger>();
 
             services.AddControllersWithViews();

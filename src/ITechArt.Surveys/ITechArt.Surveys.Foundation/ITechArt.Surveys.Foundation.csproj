@@ -10,4 +10,8 @@
     <ProjectReference Include="..\ITechArt.Surveys.DomainModel\ITechArt.Surveys.DomainModel.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Interfaces" />
+  </ItemGroup>
+
 </Project>
