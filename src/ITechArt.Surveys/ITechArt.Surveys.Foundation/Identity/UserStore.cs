@@ -298,10 +298,9 @@ namespace ITechArt.Surveys.Foundation.Identity
                 throw new ArgumentNullException(nameof(normalizedEmail));
             }
 
-            var allUsers = await _userRepository.GetAllAsync();
-            var targetUser = allUsers.SingleOrDefault(u => u.NormalizedEmail == normalizedEmail);
+            var allUsers = await _userRepository.GetWhereAsync(u => u.NormalizedEmail == normalizedEmail);
 
-            return targetUser;
+            return allUsers.SingleOrDefault();
         }
 
         public Task<string> GetNormalizedEmailAsync(User user, CancellationToken cancellationToken = default)
@@ -346,8 +345,8 @@ namespace ITechArt.Surveys.Foundation.Identity
                 throw new ArgumentNullException(nameof(roleName));
             }
 
-            var allRoles = await _roleRepository.GetAllAsync();
-            var targetRole = allRoles.Single(r => r.Name == roleName);
+            var targetRoles = await _roleRepository.GetWhereAsync(r => r.Name == roleName);
+            var targetRole = targetRoles.Single();
 
             _userRoleRepository.Add(new UserRole
             {
@@ -371,8 +370,8 @@ namespace ITechArt.Surveys.Foundation.Identity
                 throw new ArgumentNullException(nameof(roleName));
             }
 
-            var allRoles = await _roleRepository.GetAllAsync();
-            var targetRole = allRoles.Single(r => r.Name == roleName);
+            var targetRoles = await _roleRepository.GetWhereAsync(r => r.Name == roleName);
+            var targetRole = targetRoles.Single();
 
             _userRoleRepository.Delete(new UserRole
             {

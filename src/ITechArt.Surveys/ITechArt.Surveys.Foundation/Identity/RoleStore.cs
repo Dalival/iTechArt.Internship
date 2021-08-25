@@ -186,10 +186,9 @@ namespace ITechArt.Surveys.Foundation.Identity
                 throw new ArgumentNullException(nameof(normalizedRoleName));
             }
 
-            var allRoles = await _roleRepository.GetAllAsync();
-            var targetRole = allRoles.SingleOrDefault(r => r.NormalizedName == normalizedRoleName);
+            var targetRoles = await _roleRepository.GetWhereAsync(r => r.NormalizedName == normalizedRoleName);
 
-            return targetRole;
+            return targetRoles.SingleOrDefault();
         }
 
         public void Dispose()
