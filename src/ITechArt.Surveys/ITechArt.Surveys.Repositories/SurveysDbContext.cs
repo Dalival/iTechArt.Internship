@@ -5,13 +5,6 @@ namespace ITechArt.Surveys.Repositories
 {
     public class SurveysDbContext : DbContext
     {
-        public DbSet<UserRole> UserRoles { get; set; }
-
-        public DbSet<Role> Roles { get; set; }
-
-        public DbSet<User> Users { get; set; }
-
-
         public SurveysDbContext(DbContextOptions options)
             : base(options) { }
 
@@ -35,7 +28,7 @@ namespace ITechArt.Surveys.Repositories
                 b.Property(u => u.Email).HasMaxLength(256);
                 b.Property(u => u.NormalizedEmail).HasMaxLength(256);
 
-                b.HasMany<UserRole>().WithOne(ur => ur.User).HasForeignKey(ur => ur.UserId).IsRequired();
+                b.HasMany(u => u.UserRoles).WithOne(ur => ur.User).HasForeignKey(ur => ur.UserId).IsRequired();
             });
 
             modelBuilder.Entity<Role>(b =>
@@ -48,7 +41,7 @@ namespace ITechArt.Surveys.Repositories
                 b.Property(u => u.Name).HasMaxLength(256);
                 b.Property(u => u.NormalizedName).HasMaxLength(256);
 
-                b.HasMany<UserRole>().WithOne(ur => ur.Role).HasForeignKey(ur => ur.RoleId).IsRequired();
+                b.HasMany(r => r.UserRoles).WithOne(ur => ur.Role).HasForeignKey(ur => ur.RoleId).IsRequired();
             });
 
             modelBuilder.Entity<UserRole>(b =>
