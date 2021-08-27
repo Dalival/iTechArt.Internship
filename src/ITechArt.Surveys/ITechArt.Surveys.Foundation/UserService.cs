@@ -24,18 +24,22 @@ namespace ITechArt.Surveys.Foundation
         {
             var user = await _userManager.FindByEmailAsync(email);
 
-            return user == null;
+            return user != null;
         }
 
         public async Task<bool> IsUserNameExistAsync(string userName)
         {
             var user = await _userManager.FindByNameAsync(userName);
 
-            return user == null;
+            return user != null;
         }
 
         public async Task CreateUserAsync(string userName, string email, string password)
         {
+            if (password == null)
+            {
+
+            }
             var user = new User
             {
                 UserName = userName,
