@@ -36,8 +36,8 @@ namespace ITechArt.Surveys.Repositories
                 b.ToTable("Roles");
                 b.Property(r => r.ConcurrencyStamp).IsConcurrencyToken();
 
-                b.Property(u => u.Name).HasMaxLength(256);
-                b.Property(u => u.NormalizedName).HasMaxLength(256);
+                b.Property(r => r.Name).HasMaxLength(256);
+                b.Property(r => r.NormalizedName).HasMaxLength(256);
 
                 b.HasMany(r => r.UserRoles).WithOne(ur => ur.Role).HasForeignKey(ur => ur.RoleId).IsRequired();
             });
