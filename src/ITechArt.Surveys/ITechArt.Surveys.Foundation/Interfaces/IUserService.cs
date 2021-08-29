@@ -1,13 +1,11 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using ITechArt.Surveys.DomainModel;
 
 namespace ITechArt.Surveys.Foundation.Interfaces
 {
     public interface IUserService
     {
-        Task<bool> IsEmailExistAsync(string email);
-
-        Task<bool> IsUserNameExistAsync(string email);
-
-        Task CreateUserAsync(string userName, string email, string password);
+        Task<List<AuthError>> CreateUserAsync(User user, string password);
     }
 }

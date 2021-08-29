@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using ITechArt.Common.Logger;
 using ITechArt.Repositories.Interfaces;
 using ITechArt.Surveys.DomainModel;
@@ -20,32 +22,65 @@ namespace ITechArt.Surveys.Foundation
             _userManager = userManager;
         }
 
-        public async Task<bool> IsEmailExistAsync(string email)
+        public async Task<List<AuthError>> CreateUserAsync(User user, string password)
         {
-            var user = await _userManager.FindByEmailAsync(email);
+            var errors = new List<AuthError>();
 
-            return user != null;
-        }
-
-        public async Task<bool> IsUserNameExistAsync(string userName)
-        {
-            var user = await _userManager.FindByNameAsync(userName);
-
-            return user != null;
-        }
-
-        public async Task CreateUserAsync(string userName, string email, string password)
-        {
-            if (password == null)
+            var result = await _userManager.CreateAsync(user, password);
+            if (!result.Succeeded)
             {
-
+                errors = ConvertErrors(result.Errors);
             }
-            var user = new User
+
+            return errors;
+        }
+
+
+        private List<AuthError> ConvertErrors(IEnumerable<IdentityError> identityErrors)
+        {
+            var authErrors = new List<AuthError>();
+
+            foreach (var identityError in identityErrors)
             {
-                UserName = userName,
-                Email = email
-            };
-            await _userManager.CreateAsync(user, password);
+                switch (identityError.Code)
+                {
+                    case nameof(IdentityErrorDescriber.InvalidUserName):
+                        authErrors.Add(AuthError.InvalidUserName);
+                        break;
+                    case nameof(IdentityErrorDescriber.DuplicateUserName):
+                        authErrors.Add(AuthError.DuplicateUserName);
+                        break;
+                    case nameof(IdentityErrorDescriber.InvalidEmail):
+                        authErrors.Add(AuthError.InvalidEmail);
+                        break;
+                    case nameof(IdentityErrorDescriber.DuplicateEmail):
+                        authErrors.Add(AuthError.DuplicateEmail);
+                        break;
+                    case nameof(IdentityErrorDescriber.PasswordTooShort):
+                        authErrors.Add(AuthError.PasswordTooShort);
+                        break;
+                    case nameof(IdentityErrorDescriber.PasswordRequiresDigit):
+                        authErrors.Add(AuthError.PasswordRequiresDigit);
+                        break;
+                    case nameof(IdentityErrorDescriber.PasswordRequiresLower):
+                        authErrors.Add(AuthError.PasswordRequiresLower);
+                        break;
+                    case nameof(IdentityErrorDescriber.PasswordRequiresUpper):
+                        authErrors.Add(AuthError.PasswordRequiresUpper);
+                        break;
+                    case nameof(IdentityErrorDescriber):
+                        authErrors.Add(AuthError.PasswordRequiresUniqueChars);
+                        break;
+                    case nameof(IdentityErrorDescriber.PasswordRequiresNonAlphanumeric):
+                        authErrors.Add(AuthError.PasswordRequiresNonAlphanumeric);
+                        break;
+                    default:
+                        authErrors.Add(AuthError.DefaultError);
+                        break;
+                }
+            }
+
+            return authErrors;
         }
     }
 }
