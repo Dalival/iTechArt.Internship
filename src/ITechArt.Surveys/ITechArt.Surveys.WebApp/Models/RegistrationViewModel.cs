@@ -23,7 +23,6 @@ namespace ITechArt.Surveys.WebApp.Models
         public string Password { get; set; }
 
         [DataType(DataType.Password)]
-        [Compare("Password", ErrorMessage = "The password and the confirmation password do not match.")]
         [DisplayName("Confirm password")]
         public string ConfirmPassword { get; set; }
     }
