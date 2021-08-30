@@ -12,6 +12,7 @@ namespace ITechArt.Surveys.Foundation.Identity
     public class UserStore : IUserPasswordStore<User>, IUserEmailStore<User>, IUserRoleStore<User>
     {
         private readonly IUnitOfWork _unitOfWork;
+
         private readonly IRepository<User> _userRepository;
         private readonly IRepository<UserRole> _userRoleRepository;
         private readonly IRepository<Role> _roleRepository;
@@ -20,6 +21,7 @@ namespace ITechArt.Surveys.Foundation.Identity
         public UserStore(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
+
             _userRepository = unitOfWork.GetRepository<User>();
             _userRoleRepository = unitOfWork.GetRepository<UserRole>();
             _roleRepository = unitOfWork.GetRepository<Role>();

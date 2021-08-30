@@ -10,12 +10,14 @@ namespace ITechArt.Surveys.Foundation.Identity
     public class RoleStore : IRoleStore<Role>
     {
         private readonly IUnitOfWork _unitOfWork;
+
         private readonly IRepository<Role> _roleRepository;
 
 
         public RoleStore(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
+
             _roleRepository = unitOfWork.GetRepository<Role>();
         }
 
