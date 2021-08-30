@@ -426,7 +426,6 @@ namespace ITechArt.Surveys.Foundation.Identity
                 .GetWhereAsync(ur => ur.Role.NormalizedName == normalizedRoleName,
                     ur => ur.Role, ur => ur.User);
 
-            //TODO: probably ur.User will be null
             return targetUserRoles.Select(ur => ur.User).ToList();
         }
 
