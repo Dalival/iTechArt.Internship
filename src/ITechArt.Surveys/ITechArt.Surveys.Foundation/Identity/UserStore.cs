@@ -344,13 +344,15 @@ namespace ITechArt.Surveys.Foundation.Identity
 
             var targetRole = await _roleRepository.GetSingleOrDefaultAsync(r => r.NormalizedName == normalizedRoleName);
 
-            _userRoleRepository.Add(new UserRole
+            if (targetRole != null)
             {
-                RoleId = targetRole.Id,
-                UserId = user.Id
-            });
-
-            await _unitOfWork.SaveAsync();
+                _userRoleRepository.Add(new UserRole
+                {
+                    RoleId = targetRole.Id,
+                    UserId = user.Id
+                });
+                await _unitOfWork.SaveAsync();
+            }
         }
 
         public async Task RemoveFromRoleAsync(User user, string normalizedRoleName, CancellationToken cancellationToken = default)
@@ -366,15 +368,14 @@ namespace ITechArt.Surveys.Foundation.Identity
                 throw new ArgumentNullException(nameof(normalizedRoleName));
             }
 
-            var targetRole = await _roleRepository.GetSingleOrDefaultAsync(r => r.NormalizedName == normalizedRoleName);
+            var targetUserRole = await _userRoleRepository
+                .GetSingleOrDefaultAsync(ur => ur.User == user && ur.Role.NormalizedName == normalizedRoleName);
 
-            _userRoleRepository.Delete(new UserRole
+            if (targetUserRole != null)
             {
-                RoleId = targetRole.Id,
-                UserId = user.Id
-            });
-
-            await _unitOfWork.SaveAsync();
+                _userRoleRepository.Delete(targetUserRole);
+                await _unitOfWork.SaveAsync();
+            }
         }
 
         public async Task<IList<string>> GetRolesAsync(User user, CancellationToken cancellationToken = default)
