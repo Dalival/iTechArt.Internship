@@ -61,57 +61,57 @@ namespace ITechArt.Surveys.WebApp.Controllers
         }
 
 
-        private void AddAuthErrors(IEnumerable<AuthError> errors)
+        private void AddAuthErrors(IEnumerable<AuthenticationError> errors)
         {
             foreach (var error in errors)
             {
                 switch (error)
                 {
-                    case AuthError.DefaultError:
+                    case AuthenticationError.UnknownError:
                         ModelState.AddModelError(string.Empty,
                             "Something went wrong. Try to enter another data.");
                         break;
-                    case AuthError.InvalidUserName:
+                    case AuthenticationError.InvalidUserName:
                         ModelState.AddModelError(nameof(RegistrationViewModel.UserName),
                             "Invalid username. Allowed symbols: -._@+");
                         break;
-                    case AuthError.DuplicateUserName:
+                    case AuthenticationError.DuplicateUserName:
                         ModelState.AddModelError(nameof(RegistrationViewModel.UserName),
                             "User with such username already exists");
                         break;
-                    case AuthError.InvalidEmail:
+                    case AuthenticationError.InvalidEmail:
                         ModelState.AddModelError(nameof(RegistrationViewModel.Email),
                             "Invalid email");
                         break;
-                    case AuthError.DuplicateEmail:
+                    case AuthenticationError.DuplicateEmail:
                         ModelState.AddModelError(nameof(RegistrationViewModel.Email),
                             "User with such email already exists");
                         break;
-                    case AuthError.PasswordTooShort:
+                    case AuthenticationError.PasswordTooShort:
                         ModelState.AddModelError(nameof(RegistrationViewModel.Password),
                             "Password should contain 6-30 characters");
                         break;
-                    case AuthError.PasswordRequiresDigit:
+                    case AuthenticationError.PasswordRequiresDigit:
                         ModelState.AddModelError(nameof(RegistrationViewModel.Password),
                             "Password should contain at least one digit");
                         break;
-                    case AuthError.PasswordRequiresLower:
+                    case AuthenticationError.PasswordRequiresLower:
                         ModelState.AddModelError(nameof(RegistrationViewModel.Password),
                             "Password should contain at least one lowercase letter");
                         break;
-                    case AuthError.PasswordRequiresUpper:
+                    case AuthenticationError.PasswordRequiresUpper:
                         ModelState.AddModelError(nameof(RegistrationViewModel.Password),
                             "Password should contain at least one uppercase letter");
                         break;
-                    case AuthError.PasswordRequiresUniqueChars:
+                    case AuthenticationError.PasswordRequiresUniqueChars:
                         ModelState.AddModelError(nameof(RegistrationViewModel.Password),
                             "Please add more unique symbols");
                         break;
-                    case AuthError.PasswordRequiresNonAlphanumeric:
+                    case AuthenticationError.PasswordRequiresNonAlphanumeric:
                         ModelState.AddModelError(nameof(RegistrationViewModel.Password),
                             "Password should contain at least one non alphanumeric symbol. Please add one of these: -._@+");
                         break;
-                    case AuthError.PasswordConfirmationIncorrect:
+                    case AuthenticationError.PasswordConfirmationIncorrect:
                         ModelState.AddModelError(nameof(RegistrationViewModel.ConfirmPassword),
                             "The password and the confirmation password do not match.");
                         break;

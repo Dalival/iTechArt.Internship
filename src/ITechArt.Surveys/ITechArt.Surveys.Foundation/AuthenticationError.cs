@@ -1,8 +1,8 @@
 ﻿namespace ITechArt.Surveys.Foundation
 {
-    public enum AuthError
+    public enum AuthenticationError
     {
-        DefaultError,
+        UnknownError,
         InvalidUserName,
         DuplicateUserName,
         InvalidEmail,

@@ -21,9 +21,9 @@ namespace ITechArt.Surveys.Foundation
             _userManager = userManager;
         }
 
-        public async Task<List<AuthError>> CreateUserAsync(User user, string password)
+        public async Task<List<AuthenticationError>> CreateUserAsync(User user, string password)
         {
-            var errors = new List<AuthError>();
+            var errors = new List<AuthenticationError>();
 
             var result = await _userManager.CreateAsync(user, password);
             if (!result.Succeeded)
@@ -35,46 +35,46 @@ namespace ITechArt.Surveys.Foundation
         }
 
 
-        private List<AuthError> ConvertErrors(IEnumerable<IdentityError> identityErrors)
+        private List<AuthenticationError> ConvertErrors(IEnumerable<IdentityError> identityErrors)
         {
-            var authErrors = new List<AuthError>();
+            var authErrors = new List<AuthenticationError>();
 
             foreach (var identityError in identityErrors)
             {
                 switch (identityError.Code)
                 {
                     case nameof(IdentityErrorDescriber.InvalidUserName):
-                        authErrors.Add(AuthError.InvalidUserName);
+                        authErrors.Add(AuthenticationError.InvalidUserName);
                         break;
                     case nameof(IdentityErrorDescriber.DuplicateUserName):
-                        authErrors.Add(AuthError.DuplicateUserName);
+                        authErrors.Add(AuthenticationError.DuplicateUserName);
                         break;
                     case nameof(IdentityErrorDescriber.InvalidEmail):
-                        authErrors.Add(AuthError.InvalidEmail);
+                        authErrors.Add(AuthenticationError.InvalidEmail);
                         break;
                     case nameof(IdentityErrorDescriber.DuplicateEmail):
-                        authErrors.Add(AuthError.DuplicateEmail);
+                        authErrors.Add(AuthenticationError.DuplicateEmail);
                         break;
                     case nameof(IdentityErrorDescriber.PasswordTooShort):
-                        authErrors.Add(AuthError.PasswordTooShort);
+                        authErrors.Add(AuthenticationError.PasswordTooShort);
                         break;
                     case nameof(IdentityErrorDescriber.PasswordRequiresDigit):
-                        authErrors.Add(AuthError.PasswordRequiresDigit);
+                        authErrors.Add(AuthenticationError.PasswordRequiresDigit);
                         break;
                     case nameof(IdentityErrorDescriber.PasswordRequiresLower):
-                        authErrors.Add(AuthError.PasswordRequiresLower);
+                        authErrors.Add(AuthenticationError.PasswordRequiresLower);
                         break;
                     case nameof(IdentityErrorDescriber.PasswordRequiresUpper):
-                        authErrors.Add(AuthError.PasswordRequiresUpper);
+                        authErrors.Add(AuthenticationError.PasswordRequiresUpper);
                         break;
                     case nameof(IdentityErrorDescriber):
-                        authErrors.Add(AuthError.PasswordRequiresUniqueChars);
+                        authErrors.Add(AuthenticationError.PasswordRequiresUniqueChars);
                         break;
                     case nameof(IdentityErrorDescriber.PasswordRequiresNonAlphanumeric):
-                        authErrors.Add(AuthError.PasswordRequiresNonAlphanumeric);
+                        authErrors.Add(AuthenticationError.PasswordRequiresNonAlphanumeric);
                         break;
                     default:
-                        authErrors.Add(AuthError.DefaultError);
+                        authErrors.Add(AuthenticationError.UnknownError);
                         break;
                 }
             }
