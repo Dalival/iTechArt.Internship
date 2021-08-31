@@ -14,12 +14,14 @@ namespace ITechArt.Surveys.Foundation
         private readonly ICustomLogger _logger;
         private readonly UserManager<User> _userManager;
 
+
         public UserService(ICustomLogger logger, IUnitOfWork unitOfWork, UserManager<User> userManager)
         {
             _logger = logger;
             _unitOfWork = unitOfWork;
             _userManager = userManager;
         }
+
 
         public async Task<List<AuthenticationError>> CreateUserAsync(User user, string password)
         {
