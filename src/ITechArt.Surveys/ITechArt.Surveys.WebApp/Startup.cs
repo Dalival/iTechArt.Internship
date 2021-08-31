@@ -91,7 +91,7 @@ namespace ITechArt.Surveys.WebApp
 
             app.UseRouting();
 
-            DbInitializer.Initialize(app.ApplicationServices);
+            app.AddSeedDataToDatabase();
 
             app.UseAuthentication();
             app.UseAuthorization();
