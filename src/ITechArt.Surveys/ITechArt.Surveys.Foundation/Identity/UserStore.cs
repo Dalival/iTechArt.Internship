@@ -182,7 +182,9 @@ namespace ITechArt.Surveys.Foundation.Identity
                 throw new ArgumentException("Not a valid Guid id", nameof(userId));
             }
 
-            return await _userRepository.GetByIdAsync(idGuid);
+            var targetUser = await _userRepository.GetByIdAsync(idGuid);
+
+            return targetUser;
         }
 
         public async Task<User> FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken = default)
@@ -193,7 +195,9 @@ namespace ITechArt.Surveys.Foundation.Identity
                 throw new ArgumentNullException(nameof(normalizedUserName));
             }
 
-            return await _userRepository.GetSingleOrDefaultAsync(u => u.NormalizedUserName == normalizedUserName);
+            var targetUser = await _userRepository.GetSingleOrDefaultAsync(u => u.NormalizedUserName == normalizedUserName);
+
+            return targetUser;
         }
 
         public Task SetPasswordHashAsync(User user, string passwordHash, CancellationToken cancellationToken = default)
@@ -297,7 +301,9 @@ namespace ITechArt.Surveys.Foundation.Identity
                 throw new ArgumentNullException(nameof(normalizedEmail));
             }
 
-            return await _userRepository.GetSingleOrDefaultAsync(u => u.NormalizedEmail == normalizedEmail);
+            var targetUser = await _userRepository.GetSingleOrDefaultAsync(u => u.NormalizedEmail == normalizedEmail);
+
+            return targetUser;
         }
 
         public Task<string> GetNormalizedEmailAsync(User user, CancellationToken cancellationToken = default)
@@ -408,9 +414,11 @@ namespace ITechArt.Surveys.Foundation.Identity
                 throw new ArgumentNullException(nameof(normalizedRoleName));
             }
 
-            return await _userRoleRepository
+            var isInRole = await _userRoleRepository
                 .AnyAsync(ur => ur.UserId == user.Id && ur.Role.NormalizedName == normalizedRoleName,
                     ur => ur.Role);
+
+            return isInRole;
         }
 
         public async Task<IList<User>> GetUsersInRoleAsync(string normalizedRoleName, CancellationToken cancellationToken = default)
@@ -426,7 +434,9 @@ namespace ITechArt.Surveys.Foundation.Identity
                 .GetWhereAsync(ur => ur.Role.NormalizedName == normalizedRoleName,
                     ur => ur.Role, ur => ur.User);
 
-            return targetUserRoles.Select(ur => ur.User).ToList();
+            var userInRole = targetUserRoles.Select(ur => ur.User).ToList();
+
+            return userInRole;
         }
 
         public void Dispose()

@@ -102,7 +102,7 @@ namespace ITechArt.Surveys.Foundation.Identity
                 throw new ArgumentNullException(nameof(role));
             }
 
-            return Task.FromResult(role.Id.ToString());
+            return Task.FromResult(role.Id);
         }
 
         public Task<string> GetRoleNameAsync(Role role, CancellationToken cancellationToken = default)
@@ -176,7 +176,9 @@ namespace ITechArt.Surveys.Foundation.Identity
                 throw new ArgumentException("Not a valid Guid id", nameof(roleId));
             }
 
-            return await _roleRepository.GetByIdAsync(idGuid);
+            var targetRole =  await _roleRepository.GetByIdAsync(idGuid);
+
+            return targetRole;
         }
 
         public async Task<Role> FindByNameAsync(string normalizedRoleName, CancellationToken cancellationToken = default)
@@ -187,7 +189,9 @@ namespace ITechArt.Surveys.Foundation.Identity
                 throw new ArgumentNullException(nameof(normalizedRoleName));
             }
 
-            return await _roleRepository.GetSingleOrDefaultAsync(r => r.NormalizedName == normalizedRoleName);
+            var targetRole = await _roleRepository.GetSingleOrDefaultAsync(r => r.NormalizedName == normalizedRoleName);
+
+            return targetRole;
         }
 
         public void Dispose()
