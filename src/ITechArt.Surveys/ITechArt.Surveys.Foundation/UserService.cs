@@ -33,6 +33,12 @@ namespace ITechArt.Surveys.Foundation
                 errors = ConvertErrors(result.Errors);
             }
 
+            result = await _userManager.AddToRoleAsync(user, "User");
+            if (!result.Succeeded)
+            {
+                errors.AddRange(ConvertErrors(result.Errors));
+            }
+
             return errors;
         }
 
