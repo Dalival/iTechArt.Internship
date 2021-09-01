@@ -414,9 +414,8 @@ namespace ITechArt.Surveys.Foundation.Identity
                 throw new ArgumentNullException(nameof(normalizedRoleName));
             }
 
-            var isInRole = await _userRoleRepository
-                .AnyAsync(ur => ur.UserId == user.Id && ur.Role.NormalizedName == normalizedRoleName,
-                    ur => ur.Role);
+            var isInRole = await _userRoleRepository.AnyAsync(ur => ur.UserId == user.Id
+                                                                    && ur.Role.NormalizedName == normalizedRoleName);
 
             return isInRole;
         }

@@ -28,6 +28,6 @@ namespace ITechArt.Repositories.Interfaces
 
         void DeleteRange(IReadOnlyCollection<T> entities);
 
-        Task<bool> AnyAsync(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includes);
+        Task<bool> AnyAsync(Expression<Func<T, bool>> predicate);
     }
 }

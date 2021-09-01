@@ -88,10 +88,9 @@ namespace ITechArt.Repositories
             _dbSet.RemoveRange(entities);
         }
 
-        public async Task<bool> AnyAsync(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includes)
+        public async Task<bool> AnyAsync(Expression<Func<T, bool>> predicate)
         {
             var query = _dbSet.AsQueryable();
-            query = includes.Aggregate(query, (current, property) => current.Include(property));
             var target = await query.Where(predicate).AnyAsync();
 
             return target;
