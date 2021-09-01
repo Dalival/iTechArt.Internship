@@ -26,31 +26,36 @@ namespace ITechArt.Repositories
 
         public async Task<T> GetByIdAsync(params object[] id)
         {
-            return await _dbContext.FindAsync<T>(id);
+            var target = await _dbContext.FindAsync<T>(id);
+
+            return target;
         }
 
         public async Task<IReadOnlyCollection<T>> GetAllAsync(params Expression<Func<T, object>>[] includes)
         {
             var query = _dbSet.AsQueryable();
             query = includes.Aggregate(query, (current, property) => current.Include(property));
+            var target = await query.ToListAsync();
 
-            return await query.ToListAsync();
+            return target;
         }
 
         public async Task<IReadOnlyCollection<T>> GetWhereAsync(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includes)
         {
             var query = _dbSet.AsQueryable();
             query = includes.Aggregate(query, (current, property) => current.Include(property));
+            var target = await query.Where(predicate).ToListAsync();
 
-            return await query.Where(predicate).ToListAsync();
+            return target;
         }
 
         public async Task<T> GetSingleOrDefaultAsync(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includes)
         {
             var query = _dbSet.AsQueryable();
             query = includes.Aggregate(query, (current, property) => current.Include(property));
+            var target = await query.Where(predicate).SingleOrDefaultAsync();
 
-            return await query.Where(predicate).SingleOrDefaultAsync();
+            return target;
         }
 
         public void Add(T entity)
@@ -87,8 +92,9 @@ namespace ITechArt.Repositories
         {
             var query = _dbSet.AsQueryable();
             query = includes.Aggregate(query, (current, property) => current.Include(property));
+            var target = await query.Where(predicate).AnyAsync();
 
-            return await query.Where(predicate).AnyAsync();
+            return target;
         }
     }
 }
