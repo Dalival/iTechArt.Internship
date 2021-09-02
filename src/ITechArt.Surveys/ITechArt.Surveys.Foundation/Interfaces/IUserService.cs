@@ -6,6 +6,6 @@ namespace ITechArt.Surveys.Foundation.Interfaces
 {
     public interface IUserService
     {
-        Task<List<AuthenticationError>> CreateUserAsync(User user, string password);
+        Task<RegistrationResult> CreateUserAsync(User user, string password, string passwordConfirmation);
     }
 }

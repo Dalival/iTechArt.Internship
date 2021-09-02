@@ -24,6 +24,6 @@ namespace ITechArt.Surveys.WebApp.Models
 
         [DataType(DataType.Password)]
         [DisplayName("Confirm password")]
-        public string ConfirmPassword { get; set; }
+        public string PasswordConfirmation { get; set; }
     }
 }

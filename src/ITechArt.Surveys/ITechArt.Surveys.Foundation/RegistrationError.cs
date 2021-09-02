@@ -1,6 +1,6 @@
 ﻿namespace ITechArt.Surveys.Foundation
 {
-    public enum AuthenticationError
+    public enum RegistrationError
     {
         UnknownError,
         InvalidUserName,

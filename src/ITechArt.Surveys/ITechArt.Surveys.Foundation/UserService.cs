@@ -23,71 +23,71 @@ namespace ITechArt.Surveys.Foundation
         }
 
 
-        public async Task<List<AuthenticationError>> CreateUserAsync(User user, string password)
+        public async Task<RegistrationResult> CreateUserAsync(User user, string password, string passwordConfirmation)
         {
-            var errors = new List<AuthenticationError>();
-
-            var result = await _userManager.CreateAsync(user, password);
-            if (!result.Succeeded)
+            if (password != passwordConfirmation)
             {
-                errors = ConvertErrors(result.Errors);
+                return RegistrationResult.Failed(RegistrationError.PasswordConfirmationIncorrect);
             }
 
-            result = await _userManager.AddToRoleAsync(user, "User");
-            if (!result.Succeeded)
+            var identityResult = await _userManager.CreateAsync(user, password);
+            if (!identityResult.Succeeded)
             {
-                errors.AddRange(ConvertErrors(result.Errors));
+                var errors = ConvertErrors(identityResult.Errors).ToArray();
+                return RegistrationResult.Failed(errors);
             }
 
-            return errors;
+            await _userManager.AddToRoleAsync(user, "User");
+
+            return RegistrationResult.Success;
         }
 
 
-        private List<AuthenticationError> ConvertErrors(IEnumerable<IdentityError> identityErrors)
+        private List<RegistrationError> ConvertErrors(IEnumerable<IdentityError> identityErrors)
         {
-            var authErrors = new List<AuthenticationError>();
+            var registrationErrors = new List<RegistrationError>();
 
             foreach (var identityError in identityErrors)
             {
                 switch (identityError.Code)
                 {
                     case nameof(IdentityErrorDescriber.InvalidUserName):
-                        authErrors.Add(AuthenticationError.InvalidUserName);
+                        registrationErrors.Add(RegistrationError.InvalidUserName);
                         break;
                     case nameof(IdentityErrorDescriber.DuplicateUserName):
-                        authErrors.Add(AuthenticationError.DuplicateUserName);
+                        registrationErrors.Add(RegistrationError.DuplicateUserName);
                         break;
                     case nameof(IdentityErrorDescriber.InvalidEmail):
-                        authErrors.Add(AuthenticationError.InvalidEmail);
+                        registrationErrors.Add(RegistrationError.InvalidEmail);
                         break;
                     case nameof(IdentityErrorDescriber.DuplicateEmail):
-                        authErrors.Add(AuthenticationError.DuplicateEmail);
+                        registrationErrors.Add(RegistrationError.DuplicateEmail);
                         break;
                     case nameof(IdentityErrorDescriber.PasswordTooShort):
-                        authErrors.Add(AuthenticationError.PasswordTooShort);
+                        registrationErrors.Add(RegistrationError.PasswordTooShort);
                         break;
                     case nameof(IdentityErrorDescriber.PasswordRequiresDigit):
-                        authErrors.Add(AuthenticationError.PasswordRequiresDigit);
+                        registrationErrors.Add(RegistrationError.PasswordRequiresDigit);
                         break;
                     case nameof(IdentityErrorDescriber.PasswordRequiresLower):
-                        authErrors.Add(AuthenticationError.PasswordRequiresLower);
+                        registrationErrors.Add(RegistrationError.PasswordRequiresLower);
                         break;
                     case nameof(IdentityErrorDescriber.PasswordRequiresUpper):
-                        authErrors.Add(AuthenticationError.PasswordRequiresUpper);
+                        registrationErrors.Add(RegistrationError.PasswordRequiresUpper);
                         break;
                     case nameof(IdentityErrorDescriber):
-                        authErrors.Add(AuthenticationError.PasswordRequiresUniqueChars);
+                        registrationErrors.Add(RegistrationError.PasswordRequiresUniqueChars);
                         break;
                     case nameof(IdentityErrorDescriber.PasswordRequiresNonAlphanumeric):
-                        authErrors.Add(AuthenticationError.PasswordRequiresNonAlphanumeric);
+                        registrationErrors.Add(RegistrationError.PasswordRequiresNonAlphanumeric);
                         break;
                     default:
-                        authErrors.Add(AuthenticationError.UnknownError);
+                        registrationErrors.Add(RegistrationError.UnknownError);
                         break;
                 }
             }
 
-            return authErrors;
+            return registrationErrors;
         }
     }
 }
