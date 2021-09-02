@@ -24,40 +24,6 @@ namespace ITechArt.Repositories
         }
 
 
-        public async Task<T> GetByIdAsync(params object[] id)
-        {
-            var target = await _dbContext.FindAsync<T>(id);
-
-            return target;
-        }
-
-        public async Task<IReadOnlyCollection<T>> GetAllAsync(params Expression<Func<T, object>>[] includes)
-        {
-            var query = _dbSet.AsQueryable();
-            query = includes.Aggregate(query, (current, property) => current.Include(property));
-            var target = await query.ToListAsync();
-
-            return target;
-        }
-
-        public async Task<IReadOnlyCollection<T>> GetWhereAsync(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includes)
-        {
-            var query = _dbSet.AsQueryable();
-            query = includes.Aggregate(query, (current, property) => current.Include(property));
-            var target = await query.Where(predicate).ToListAsync();
-
-            return target;
-        }
-
-        public async Task<T> GetSingleOrDefaultAsync(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includes)
-        {
-            var query = _dbSet.AsQueryable();
-            query = includes.Aggregate(query, (current, property) => current.Include(property));
-            var target = await query.Where(predicate).SingleOrDefaultAsync();
-
-            return target;
-        }
-
         public void Add(T entity)
         {
             _dbSet.Add(entity);
@@ -88,10 +54,41 @@ namespace ITechArt.Repositories
             _dbSet.RemoveRange(entities);
         }
 
-        public async Task<bool> AnyAsync(Expression<Func<T, bool>> predicate)
+        public async Task<T> GetByIdAsync(params object[] id)
+        {
+            var target = await _dbContext.FindAsync<T>(id);
+
+            return target;
+        }
+
+        public async Task<IReadOnlyCollection<T>> GetAllAsync(params Expression<Func<T, object>>[] includes)
         {
             var query = _dbSet.AsQueryable();
-            var target = await query.Where(predicate).AnyAsync();
+            query = includes.Aggregate(query, (current, navigationProperty) => current.Include(navigationProperty));
+            var target = await query.ToListAsync();
+
+            return target;
+        }
+
+        public async Task<IReadOnlyCollection<T>> GetWhereAsync(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includes)
+        {
+            var query = _dbSet.AsQueryable();
+            query = includes.Aggregate(query, (current, property) => current.Include(property));
+            var target = await query.Where(predicate).ToListAsync();
+
+            return target;
+        }
+
+        public async Task<T> GetSingleOrDefaultAsync(Expression<Func<T, bool>> predicate)
+        {
+            var target = await _dbSet.SingleOrDefaultAsync(predicate);
+
+            return target;
+        }
+
+        public async Task<bool> AnyAsync(Expression<Func<T, bool>> predicate)
+        {
+            var target = await _dbSet.AnyAsync(predicate);
 
             return target;
         }
