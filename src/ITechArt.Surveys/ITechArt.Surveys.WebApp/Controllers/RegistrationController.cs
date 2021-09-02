@@ -58,59 +58,36 @@ namespace ITechArt.Surveys.WebApp.Controllers
         {
             foreach (var error in errors)
             {
-                switch (error)
+                (string key, string message) modelError = error switch
                 {
-                    case RegistrationError.UnknownError:
-                        ModelState.AddModelError(string.Empty,
-                            "Something went wrong. Try to enter another data.");
-                        break;
-                    case RegistrationError.InvalidUserName:
-                        ModelState.AddModelError(nameof(RegistrationViewModel.UserName),
-                            "Invalid username. Allowed symbols: -._@+");
-                        break;
-                    case RegistrationError.DuplicateUserName:
-                        ModelState.AddModelError(nameof(RegistrationViewModel.UserName),
-                            "User with such username already exists");
-                        break;
-                    case RegistrationError.InvalidEmail:
-                        ModelState.AddModelError(nameof(RegistrationViewModel.Email),
-                            "Invalid email");
-                        break;
-                    case RegistrationError.DuplicateEmail:
-                        ModelState.AddModelError(nameof(RegistrationViewModel.Email),
-                            "User with such email already exists");
-                        break;
-                    case RegistrationError.PasswordTooShort:
-                        ModelState.AddModelError(nameof(RegistrationViewModel.Password),
-                            "Password should contain 6-30 characters");
-                        break;
-                    case RegistrationError.PasswordRequiresDigit:
-                        ModelState.AddModelError(nameof(RegistrationViewModel.Password),
-                            "Password should contain at least one digit");
-                        break;
-                    case RegistrationError.PasswordRequiresLower:
-                        ModelState.AddModelError(nameof(RegistrationViewModel.Password),
-                            "Password should contain at least one lowercase letter");
-                        break;
-                    case RegistrationError.PasswordRequiresUpper:
-                        ModelState.AddModelError(nameof(RegistrationViewModel.Password),
-                            "Password should contain at least one uppercase letter");
-                        break;
-                    case RegistrationError.PasswordRequiresUniqueChars:
-                        ModelState.AddModelError(nameof(RegistrationViewModel.Password),
-                            "Please add more unique symbols");
-                        break;
-                    case RegistrationError.PasswordRequiresNonAlphanumeric:
-                        ModelState.AddModelError(nameof(RegistrationViewModel.Password),
-                            "Password should contain at least one non alphanumeric symbol. Please add one of these: -._@+");
-                        break;
-                    case RegistrationError.PasswordConfirmationIncorrect:
-                        ModelState.AddModelError(nameof(RegistrationViewModel.PasswordConfirmation),
-                            "The password and the confirmation password do not match.");
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException(error.ToString());
-                }
+                    RegistrationError.UnknownError => (string.Empty,
+                        "Something went wrong. Try to enter another data."),
+                    RegistrationError.InvalidUserName => (nameof(RegistrationViewModel.UserName),
+                        "Invalid username. Allowed symbols: -._@+"),
+                    RegistrationError.DuplicateUserName => (nameof(RegistrationViewModel.UserName),
+                        "User with such username already exists"),
+                    RegistrationError.InvalidEmail => (nameof(RegistrationViewModel.Email),
+                        "Invalid email"),
+                    RegistrationError.DuplicateEmail => (nameof(RegistrationViewModel.Email),
+                        "User with such email already exists"),
+                    RegistrationError.PasswordTooShort => (nameof(RegistrationViewModel.Password),
+                        "Password should contain 6-30 characters"),
+                    RegistrationError.PasswordRequiresDigit => (nameof(RegistrationViewModel.Password),
+                        "Password should contain at least one digit"),
+                    RegistrationError.PasswordRequiresLower => (nameof(RegistrationViewModel.Password),
+                        "Password should contain at least one lowercase letter"),
+                    RegistrationError.PasswordRequiresUpper => (nameof(RegistrationViewModel.Password),
+                        "Password should contain at least one uppercase letter"),
+                    RegistrationError.PasswordRequiresMoreUniqueChars => (nameof(RegistrationViewModel.Password),
+                        "Please add more unique symbols"),
+                    RegistrationError.PasswordRequiresNonAlphanumeric => (nameof(RegistrationViewModel.Password),
+                        "Password should contain at least one non alphanumeric symbol. Please add one of these: -._@+"),
+                    RegistrationError.PasswordConfirmationIncorrect => (nameof(RegistrationViewModel.PasswordConfirmation),
+                        "The password and the confirmation password do not match."),
+                    _ => throw new ArgumentOutOfRangeException(error.ToString())
+                };
+
+                ModelState.AddModelError(modelError.key, modelError.message);
             }
         }
     }

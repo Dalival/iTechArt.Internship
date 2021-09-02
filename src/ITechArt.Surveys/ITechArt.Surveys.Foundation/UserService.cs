@@ -76,7 +76,7 @@ namespace ITechArt.Surveys.Foundation
                         registrationErrors.Add(RegistrationError.PasswordRequiresUpper);
                         break;
                     case nameof(IdentityErrorDescriber):
-                        registrationErrors.Add(RegistrationError.PasswordRequiresUniqueChars);
+                        registrationErrors.Add(RegistrationError.PasswordRequiresMoreUniqueChars);
                         break;
                     case nameof(IdentityErrorDescriber.PasswordRequiresNonAlphanumeric):
                         registrationErrors.Add(RegistrationError.PasswordRequiresNonAlphanumeric);
