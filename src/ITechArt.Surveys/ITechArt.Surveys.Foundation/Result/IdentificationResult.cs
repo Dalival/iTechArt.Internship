@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace ITechArt.Surveys.Foundation.Result
 {
-    public class IdentificationResult<TError>
+    public readonly struct IdentificationResult<TError>
     {
         public static IdentificationResult<TError> Success { get; } = new(null);
 
@@ -19,6 +19,7 @@ namespace ITechArt.Surveys.Foundation.Result
             if (errors == null || !errors.Any())
             {
                 Succeeded = true;
+                Errors = null;
             }
             else
             {
