@@ -4,17 +4,17 @@ using System.Linq;
 
 namespace ITechArt.Surveys.Foundation.Result
 {
-    public class RegistrationResult
+    public class IdentificationResult<TError>
     {
-        public static RegistrationResult Success { get; } = new(null);
+        public static IdentificationResult<TError> Success { get; } = new(null);
 
 
         public bool Succeeded { get; }
 
-        public IReadOnlyCollection<RegistrationError> Errors { get; }
+        public IReadOnlyCollection<TError> Errors { get; }
 
 
-        private RegistrationResult(IReadOnlyCollection<RegistrationError> errors)
+        private IdentificationResult(IReadOnlyCollection<TError> errors)
         {
             if (errors == null || !errors.Any())
             {
@@ -28,11 +28,12 @@ namespace ITechArt.Surveys.Foundation.Result
         }
 
 
-        public static RegistrationResult Failed(IReadOnlyCollection<RegistrationError> errors)
+        public static IdentificationResult<TError> Failed(IReadOnlyCollection<TError> errors)
         {
             if (errors == null)
             {
-                throw new ArgumentNullException(nameof(errors), "If result is failed, then collection of errors shouldn't be null.");
+                throw new ArgumentNullException(nameof(errors),
+                    "If result is failed, then collection of errors shouldn't be null.");
             }
 
             if (!errors.Any())
@@ -41,15 +42,15 @@ namespace ITechArt.Surveys.Foundation.Result
                     nameof(errors));
             }
 
-            var result = new RegistrationResult(errors);
+            var result = new IdentificationResult<TError>(errors);
 
             return result;
         }
 
-        public static RegistrationResult Failed(RegistrationError error)
+        public static IdentificationResult<TError> Failed(TError error)
         {
-            var errors = new List<RegistrationError> { error };
-            var result = new RegistrationResult(errors);
+            var errors = new List<TError> { error };
+            var result = new IdentificationResult<TError>(errors);
 
             return result;
         }

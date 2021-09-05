@@ -24,23 +24,23 @@ namespace ITechArt.Surveys.Foundation
         }
 
 
-        public async Task<RegistrationResult> CreateUserAsync(User user, string password, string passwordConfirmation)
+        public async Task<IdentificationResult<RegistrationError>> CreateUserAsync(User user, string password, string passwordConfirmation)
         {
             if (password != passwordConfirmation)
             {
-                return RegistrationResult.Failed(RegistrationError.PasswordConfirmationIncorrect);
+                return IdentificationResult<RegistrationError>.Failed(RegistrationError.PasswordConfirmationIncorrect);
             }
 
             var identityResult = await _userManager.CreateAsync(user, password);
             if (!identityResult.Succeeded)
             {
                 var errors = ConvertErrors(identityResult.Errors);
-                return RegistrationResult.Failed(errors);
+                return IdentificationResult<RegistrationError>.Failed(errors);
             }
 
             await _userManager.AddToRoleAsync(user, "User");
 
-            return RegistrationResult.Success;
+            return IdentificationResult<RegistrationError>.Success;
         }
 
 
