@@ -35,6 +35,7 @@ namespace ITechArt.Surveys.Foundation
             if (!identityResult.Succeeded)
             {
                 var errors = ConvertErrors(identityResult.Errors);
+
                 return IdentificationResult<RegistrationError>.Failed(errors);
             }
 

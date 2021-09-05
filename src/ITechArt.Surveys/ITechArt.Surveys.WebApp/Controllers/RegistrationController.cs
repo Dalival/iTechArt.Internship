@@ -48,6 +48,7 @@ namespace ITechArt.Surveys.WebApp.Controllers
             if (!result.Succeeded)
             {
                 AddAuthErrors(result.Errors);
+
                 return View(model);
             }
 
