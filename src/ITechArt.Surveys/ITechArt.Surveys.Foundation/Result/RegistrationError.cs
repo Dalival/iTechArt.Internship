@@ -1,4 +1,4 @@
-﻿namespace ITechArt.Surveys.Foundation
+﻿namespace ITechArt.Surveys.Foundation.Result
 {
     public enum RegistrationError
     {

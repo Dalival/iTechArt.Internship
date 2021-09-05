@@ -4,6 +4,7 @@ using ITechArt.Common.Logger;
 using ITechArt.Repositories.Interfaces;
 using ITechArt.Surveys.DomainModel;
 using ITechArt.Surveys.Foundation.Interfaces;
+using ITechArt.Surveys.Foundation.Result;
 using Microsoft.AspNetCore.Identity;
 
 namespace ITechArt.Surveys.Foundation
@@ -33,7 +34,7 @@ namespace ITechArt.Surveys.Foundation
             var identityResult = await _userManager.CreateAsync(user, password);
             if (!identityResult.Succeeded)
             {
-                var errors = ConvertErrors(identityResult.Errors).ToArray();
+                var errors = ConvertErrors(identityResult.Errors);
                 return RegistrationResult.Failed(errors);
             }
 
