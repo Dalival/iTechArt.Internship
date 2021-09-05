@@ -68,7 +68,7 @@ namespace ITechArt.Surveys.WebApp.Controllers
         {
             foreach (var error in errors)
             {
-                (string key, string message) modelError = error switch
+                var (key, message) = error switch
                 {
                     RegistrationError.UnknownError => (string.Empty,
                         "Something went wrong. Try to enter another data."),
@@ -95,7 +95,7 @@ namespace ITechArt.Surveys.WebApp.Controllers
                     _ => throw new ArgumentOutOfRangeException(error.ToString())
                 };
 
-                ModelState.AddModelError(modelError.key, modelError.message);
+                ModelState.AddModelError(key, message);
             }
         }
     }
