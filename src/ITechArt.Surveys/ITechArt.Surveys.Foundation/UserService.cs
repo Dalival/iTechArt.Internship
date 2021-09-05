@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using ITechArt.Common.Logger;
 using ITechArt.Repositories.Interfaces;
@@ -42,47 +43,21 @@ namespace ITechArt.Surveys.Foundation
 
         private List<RegistrationError> ConvertErrors(IEnumerable<IdentityError> identityErrors)
         {
-            var registrationErrors = new List<RegistrationError>();
-
-            foreach (var identityError in identityErrors)
-            {
-                switch (identityError.Code)
+            var registrationErrors = identityErrors.Select(identityError => identityError.Code switch
                 {
-                    case nameof(IdentityErrorDescriber.InvalidUserName):
-                        registrationErrors.Add(RegistrationError.InvalidUserName);
-                        break;
-                    case nameof(IdentityErrorDescriber.DuplicateUserName):
-                        registrationErrors.Add(RegistrationError.DuplicateUserName);
-                        break;
-                    case nameof(IdentityErrorDescriber.InvalidEmail):
-                        registrationErrors.Add(RegistrationError.InvalidEmail);
-                        break;
-                    case nameof(IdentityErrorDescriber.DuplicateEmail):
-                        registrationErrors.Add(RegistrationError.DuplicateEmail);
-                        break;
-                    case nameof(IdentityErrorDescriber.PasswordTooShort):
-                        registrationErrors.Add(RegistrationError.PasswordTooShort);
-                        break;
-                    case nameof(IdentityErrorDescriber.PasswordRequiresDigit):
-                        registrationErrors.Add(RegistrationError.PasswordRequiresDigit);
-                        break;
-                    case nameof(IdentityErrorDescriber.PasswordRequiresLower):
-                        registrationErrors.Add(RegistrationError.PasswordRequiresLower);
-                        break;
-                    case nameof(IdentityErrorDescriber.PasswordRequiresUpper):
-                        registrationErrors.Add(RegistrationError.PasswordRequiresUpper);
-                        break;
-                    case nameof(IdentityErrorDescriber):
-                        registrationErrors.Add(RegistrationError.PasswordRequiresMoreUniqueChars);
-                        break;
-                    case nameof(IdentityErrorDescriber.PasswordRequiresNonAlphanumeric):
-                        registrationErrors.Add(RegistrationError.PasswordRequiresNonAlphanumeric);
-                        break;
-                    default:
-                        registrationErrors.Add(RegistrationError.UnknownError);
-                        break;
-                }
-            }
+                    nameof(IdentityErrorDescriber.InvalidUserName) => RegistrationError.InvalidUserName,
+                    nameof(IdentityErrorDescriber.DuplicateUserName) => RegistrationError.DuplicateUserName,
+                    nameof(IdentityErrorDescriber.InvalidEmail) => RegistrationError.InvalidEmail,
+                    nameof(IdentityErrorDescriber.DuplicateEmail) => RegistrationError.DuplicateEmail,
+                    nameof(IdentityErrorDescriber.PasswordTooShort) => RegistrationError.PasswordTooShort,
+                    nameof(IdentityErrorDescriber.PasswordRequiresDigit) => RegistrationError.PasswordRequiresDigit,
+                    nameof(IdentityErrorDescriber.PasswordRequiresLower) => RegistrationError.PasswordRequiresLower,
+                    nameof(IdentityErrorDescriber.PasswordRequiresUpper) => RegistrationError.PasswordRequiresUpper,
+                    nameof(IdentityErrorDescriber.PasswordRequiresUniqueChars) => RegistrationError.PasswordRequiresMoreUniqueChars,
+                    nameof(IdentityErrorDescriber.PasswordRequiresNonAlphanumeric) => RegistrationError.PasswordRequiresNonAlphanumeric,
+                    _ => RegistrationError.UnknownError
+                })
+                .ToList();
 
             return registrationErrors;
         }
