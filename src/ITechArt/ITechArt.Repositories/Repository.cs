@@ -5,6 +5,7 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using ITechArt.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 
 namespace ITechArt.Repositories
 {
@@ -63,18 +64,17 @@ namespace ITechArt.Repositories
 
         public async Task<IReadOnlyCollection<T>> GetAllAsync(params Expression<Func<T, object>>[] includes)
         {
-            var query = _dbSet.AsQueryable();
-            query = includes.Aggregate(query, (current, navigationProperty) => current.Include(navigationProperty));
-            var target = await query.ToListAsync();
+            var queryWithIncludes = GetQueryWithIncludes(includes);
+            var target = await queryWithIncludes.ToListAsync();
 
             return target;
         }
 
-        public async Task<IReadOnlyCollection<T>> GetWhereAsync(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includes)
+        public async Task<IReadOnlyCollection<T>> GetWhereAsync(Expression<Func<T, bool>> predicate,
+            params Expression<Func<T, object>>[] includes)
         {
-            var query = _dbSet.AsQueryable();
-            query = includes.Aggregate(query, (current, property) => current.Include(property));
-            var target = await query.Where(predicate).ToListAsync();
+            var queryWithIncludes = GetQueryWithIncludes(includes);
+            var target = await queryWithIncludes.Where(predicate).ToListAsync();
 
             return target;
         }
@@ -91,6 +91,17 @@ namespace ITechArt.Repositories
             var target = await _dbSet.AnyAsync(predicate);
 
             return target;
+        }
+
+
+        private IIncludableQueryable<T, object> GetQueryWithIncludes(params Expression<Func<T, object>>[] includes)
+        {
+            var queryWithIncludes = includes
+                .Skip(1)
+                .Aggregate(_dbSet.Include(includes.First()),
+                    (current, include) => current.Include(include));
+
+            return queryWithIncludes;
         }
     }
 }
