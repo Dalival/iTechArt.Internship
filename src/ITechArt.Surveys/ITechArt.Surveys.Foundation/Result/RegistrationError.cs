@@ -12,7 +12,6 @@
         PasswordRequiresLower,
         PasswordRequiresUpper,
         PasswordRequiresMoreUniqueChars,
-        PasswordRequiresNonAlphanumeric,
-        PasswordConfirmationIncorrect
+        PasswordRequiresNonAlphanumeric
     }
 }

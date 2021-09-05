@@ -26,11 +26,6 @@ namespace ITechArt.Surveys.Foundation
 
         public async Task<IdentificationResult<RegistrationError>> CreateUserAsync(User user, string password, string passwordConfirmation)
         {
-            if (password != passwordConfirmation)
-            {
-                return IdentificationResult<RegistrationError>.Failed(RegistrationError.PasswordConfirmationIncorrect);
-            }
-
             var identityResult = await _userManager.CreateAsync(user, password);
             if (!identityResult.Succeeded)
             {

@@ -38,6 +38,14 @@ namespace ITechArt.Surveys.WebApp.Controllers
                 return View(model);
             }
 
+            if (model.Password != model.PasswordConfirmation)
+            {
+                ModelState.AddModelError(nameof(model.PasswordConfirmation),
+                    "The password and the confirmation password do not match.");
+
+                return View(model);
+            }
+
             var user = new User
             {
                 UserName = model.UserName,
@@ -84,8 +92,6 @@ namespace ITechArt.Surveys.WebApp.Controllers
                         "Please add more unique symbols"),
                     RegistrationError.PasswordRequiresNonAlphanumeric => (nameof(RegistrationViewModel.Password),
                         "Password should contain at least one non alphanumeric symbol. Please add one of these: -._@+"),
-                    RegistrationError.PasswordConfirmationIncorrect => (nameof(RegistrationViewModel.PasswordConfirmation),
-                        "The password and the confirmation password do not match."),
                     _ => throw new ArgumentOutOfRangeException(error.ToString())
                 };
 
