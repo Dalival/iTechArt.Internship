@@ -4,9 +4,9 @@ using System.Linq;
 
 namespace ITechArt.Surveys.Foundation.Result
 {
-    public readonly struct IdentificationResult<TError>
+    public readonly struct OperationResult<TError>
     {
-        public static IdentificationResult<TError> Success { get; } = new(null);
+        public static OperationResult<TError> Success { get; } = new(null);
 
 
         public bool Succeeded { get; }
@@ -14,7 +14,7 @@ namespace ITechArt.Surveys.Foundation.Result
         public IReadOnlyCollection<TError> Errors { get; }
 
 
-        private IdentificationResult(IReadOnlyCollection<TError> errors)
+        private OperationResult(IReadOnlyCollection<TError> errors)
         {
             if (errors == null || !errors.Any())
             {
@@ -29,7 +29,7 @@ namespace ITechArt.Surveys.Foundation.Result
         }
 
 
-        public static IdentificationResult<TError> Failed(IReadOnlyCollection<TError> errors)
+        public static OperationResult<TError> Failed(IReadOnlyCollection<TError> errors)
         {
             if (errors == null)
             {
@@ -43,15 +43,15 @@ namespace ITechArt.Surveys.Foundation.Result
                     nameof(errors));
             }
 
-            var result = new IdentificationResult<TError>(errors);
+            var result = new OperationResult<TError>(errors);
 
             return result;
         }
 
-        public static IdentificationResult<TError> Failed(TError error)
+        public static OperationResult<TError> Failed(TError error)
         {
             var errors = new List<TError> { error };
-            var result = new IdentificationResult<TError>(errors);
+            var result = new OperationResult<TError>(errors);
 
             return result;
         }

@@ -25,19 +25,19 @@ namespace ITechArt.Surveys.Foundation
         }
 
 
-        public async Task<IdentificationResult<RegistrationError>> CreateUserAsync(User user, string password, string passwordConfirmation)
+        public async Task<OperationResult<RegistrationError>> CreateUserAsync(User user, string password, string passwordConfirmation)
         {
             var identityResult = await _userManager.CreateAsync(user, password);
             if (!identityResult.Succeeded)
             {
                 var errors = ConvertErrors(identityResult.Errors);
 
-                return IdentificationResult<RegistrationError>.Failed(errors);
+                return OperationResult<RegistrationError>.Failed(errors);
             }
 
             await _userManager.AddToRoleAsync(user, "User");
 
-            return IdentificationResult<RegistrationError>.Success;
+            return OperationResult<RegistrationError>.Success;
         }
 
 
