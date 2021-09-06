@@ -5,16 +5,17 @@ using ITechArt.Surveys.DomainModel;
 using ITechArt.Surveys.Foundation.Interfaces;
 using ITechArt.Surveys.Foundation.Result;
 using ITechArt.Surveys.WebApp.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ITechArt.Surveys.WebApp.Controllers
 {
-    public class RegistrationController : Controller
+    public class AuthenticationController : Controller
     {
         private readonly IUserService _userService;
 
 
-        public RegistrationController(IUserService userService)
+        public AuthenticationController(IUserService userService)
         {
             _userService = userService;
         }
@@ -53,7 +54,7 @@ namespace ITechArt.Surveys.WebApp.Controllers
             var result = await _userService.CreateUserAsync(user, model.Password, model.PasswordConfirmation);
             if (!result.Succeeded)
             {
-                AddAuthErrors(result.Errors);
+                AddErrorsToModel(result.Errors);
 
                 return View(model);
             }
@@ -61,8 +62,44 @@ namespace ITechArt.Surveys.WebApp.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+        [HttpGet]
+        public IActionResult Login()
+        {
+            var model = new LoginViewModel();
 
-        private void AddAuthErrors(IEnumerable<RegistrationError> errors)
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Login(LoginViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var result = await _userService.LoginAsync(model.EmailOrUserName, model.Password);
+            if (!result.Succeeded)
+            {
+                AddErrorsToModel(result.Errors);
+
+                return View(model);
+            }
+
+            return RedirectToAction("Index", "Home");
+        }
+
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> Logout()
+        {
+            await _userService.LogoutAsync();
+
+            return RedirectToAction("Index", "Home");
+        }
+
+
+        private void AddErrorsToModel(IEnumerable<RegistrationError> errors)
         {
             foreach (var error in errors)
             {
@@ -90,6 +127,27 @@ namespace ITechArt.Surveys.WebApp.Controllers
                         "Please add more unique symbols"),
                     RegistrationError.PasswordRequiresNonAlphanumeric => (nameof(RegistrationViewModel.Password),
                         "Password should contain at least one non alphanumeric symbol. Please add one of these: -._@+"),
+                    _ => throw new ArgumentOutOfRangeException(error.ToString())
+                };
+
+                ModelState.AddModelError(key, message);
+            }
+        }
+
+        private void AddErrorsToModel(IEnumerable<LoginError> errors)
+        {
+            foreach (var error in errors)
+            {
+                var (key, message) = error switch
+                {
+                    LoginError.AccountLockedOut => (nameof(LoginViewModel.EmailOrUserName),
+                        "Account is locked out now. Try again later."),
+                    LoginError.NotAllowedToLogin => (nameof(LoginViewModel.EmailOrUserName),
+                        "Sorry, you are not allowed to login. Try again later."),
+                    LoginError.EmailAndUserNameNotFound => (nameof(LoginViewModel.EmailOrUserName),
+                        "User is not found"),
+                    LoginError.WrongPassword => (nameof(LoginViewModel.Password),
+                        "Wrong password"),
                     _ => throw new ArgumentOutOfRangeException(error.ToString())
                 };
 

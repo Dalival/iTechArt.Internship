@@ -1,13 +1,13 @@
 ﻿@model RegistrationViewModel
 @{
-    ViewData["Title"] = "Register";
+    ViewData["Title"] = "Registration";
 }
 
 <h1>@ViewData["Title"]</h1>
 
 <div class="row">
     <div class="col-md-4">
-        <form action="/Registration/Registration" method="post">
+        <form asp-controller="Authentication" asp-action="Registration" method="post">
             <h4>Create a new account.</h4>
             <hr/>
             <div class="form-group">
