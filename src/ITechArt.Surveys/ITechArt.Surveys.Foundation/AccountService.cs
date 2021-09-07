@@ -25,8 +25,13 @@ namespace ITechArt.Surveys.Foundation
 
         public async Task<OperationResult<LoginError>> LoginAsync(string emailOrUserName, string password)
         {
-            var user = await _userManager.FindByEmailAsync(emailOrUserName)
-                       ?? await _userManager.FindByNameAsync(emailOrUserName);
+            var user = await _userManager.FindByEmailAsync(emailOrUserName);
+
+            if (user == null)
+            {
+                user = await _userManager.FindByNameAsync(emailOrUserName);
+            }
+
             if (user == null)
             {
                 return OperationResult<LoginError>.Failed(LoginError.EmailAndUserNameNotFound);
