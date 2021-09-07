@@ -3,7 +3,6 @@
     public enum LoginError
     {
         AccountLockedOut,
-        NotAllowedToLogin,
         EmailAndUserNameNotFound,
         WrongPassword
     }

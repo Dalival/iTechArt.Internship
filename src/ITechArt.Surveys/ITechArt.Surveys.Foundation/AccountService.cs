@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using ITechArt.Common.Logger;
 using ITechArt.Surveys.DomainModel;
 using ITechArt.Surveys.Foundation.Interfaces;
@@ -56,9 +57,9 @@ namespace ITechArt.Surveys.Foundation
                 return OperationResult<LoginError>.Success;
             }
 
-            var error = signInResult.IsLockedOut ? LoginError.AccountLockedOut :
-                signInResult.IsNotAllowed ? LoginError.NotAllowedToLogin :
-                LoginError.WrongPassword;
+            var error = signInResult.IsLockedOut
+                ? LoginError.AccountLockedOut
+                : LoginError.WrongPassword;
 
             return OperationResult<LoginError>.Failed(error);
         }

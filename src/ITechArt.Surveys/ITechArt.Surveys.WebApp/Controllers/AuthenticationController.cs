@@ -144,8 +144,6 @@ namespace ITechArt.Surveys.WebApp.Controllers
                 {
                     LoginError.AccountLockedOut => (nameof(LoginViewModel.EmailOrUserName),
                         "Account is locked out now. Try again later."),
-                    LoginError.NotAllowedToLogin => (nameof(LoginViewModel.EmailOrUserName),
-                        "Sorry, you are not allowed to login. Try again later."),
                     LoginError.EmailAndUserNameNotFound => (nameof(LoginViewModel.EmailOrUserName),
                         "User is not found"),
                     LoginError.WrongPassword => (nameof(LoginViewModel.Password),
