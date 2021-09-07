@@ -4,20 +4,37 @@ using ITechArt.Surveys.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ITechArt.Surveys.Repositories.Migrations
 {
     [DbContext(typeof(SurveysDbContext))]
-    partial class SurveysDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210823142739_AddUserAndRole")]
+    partial class AddUserAndRole
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("ProductVersion", "5.0.9")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("ITechArt.Surveys.DomainModel.Counter", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("Value")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Counter");
+                });
 
             modelBuilder.Entity("ITechArt.Surveys.DomainModel.Role", b =>
                 {
@@ -44,22 +61,6 @@ namespace ITechArt.Surveys.Repositories.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("Roles");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "76e401a9-1e91-4dff-adb7-c455cefe6fa9",
-                            ConcurrencyStamp = "4179d8bd-907e-4293-bf2b-5a4598e34551",
-                            Name = "User",
-                            NormalizedName = "USER"
-                        },
-                        new
-                        {
-                            Id = "b03bd4cc-93a8-4623-ab9d-606823a1547e",
-                            ConcurrencyStamp = "a00343f0-cc82-452e-b00b-663216eadce8",
-                            Name = "Admin",
-                            NormalizedName = "ADMIN"
-                        });
                 });
 
             modelBuilder.Entity("ITechArt.Surveys.DomainModel.User", b =>
@@ -127,24 +128,6 @@ namespace ITechArt.Surveys.Repositories.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("Users");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "4beb0654-3b7a-4601-8b81-b284cc25a903",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "01fbbd27-bd79-4f36-a892-384df2a5cea6",
-                            Email = "egorfedorenko.w@gmail.com",
-                            EmailConfirmed = false,
-                            LockoutEnabled = false,
-                            NormalizedEmail = "EGORFEDORENKO.W@GMAIL.COM",
-                            NormalizedUserName = "EGORFEDORENKO",
-                            PasswordHash = "AQAAAAEAACcQAAAAEDxts21ZFCTO9PJMekWmZIcRpZFtuqrjSI4xwd76L0h5zF3WoQlhE015Xr+kBSDqsw==",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "9dd2b025-477a-4ab2-af59-dfe6f16ea4e7",
-                            TwoFactorEnabled = false,
-                            UserName = "EgorFedorenko"
-                        });
                 });
 
             modelBuilder.Entity("ITechArt.Surveys.DomainModel.UserRole", b =>
@@ -160,47 +143,21 @@ namespace ITechArt.Surveys.Repositories.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("UserRoles");
-
-                    b.HasData(
-                        new
-                        {
-                            UserId = "4beb0654-3b7a-4601-8b81-b284cc25a903",
-                            RoleId = "76e401a9-1e91-4dff-adb7-c455cefe6fa9"
-                        },
-                        new
-                        {
-                            UserId = "4beb0654-3b7a-4601-8b81-b284cc25a903",
-                            RoleId = "b03bd4cc-93a8-4623-ab9d-606823a1547e"
-                        });
                 });
 
             modelBuilder.Entity("ITechArt.Surveys.DomainModel.UserRole", b =>
                 {
-                    b.HasOne("ITechArt.Surveys.DomainModel.Role", "Role")
-                        .WithMany("UserRoles")
+                    b.HasOne("ITechArt.Surveys.DomainModel.Role", null)
+                        .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ITechArt.Surveys.DomainModel.User", "User")
-                        .WithMany("UserRoles")
+                    b.HasOne("ITechArt.Surveys.DomainModel.User", null)
+                        .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Role");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("ITechArt.Surveys.DomainModel.Role", b =>
-                {
-                    b.Navigation("UserRoles");
-                });
-
-            modelBuilder.Entity("ITechArt.Surveys.DomainModel.User", b =>
-                {
-                    b.Navigation("UserRoles");
                 });
 #pragma warning restore 612, 618
         }

@@ -1,3 +1,4 @@
+using System;
 using ITechArt.Common.Logger;
 using ITechArt.Repositories;
 using Microsoft.AspNetCore.Builder;
@@ -6,10 +7,13 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using ITechArt.Repositories.Interfaces;
+using ITechArt.Surveys.DomainModel;
+using ITechArt.Surveys.Foundation;
 using ITechArt.Surveys.Repositories;
 using Microsoft.EntityFrameworkCore;
-using ITechArt.Surveys.Foundation;
+using ITechArt.Surveys.Foundation.Identity;
 using ITechArt.Surveys.Foundation.Interfaces;
+using Microsoft.AspNetCore.Identity;
 
 namespace ITechArt.Surveys.WebApp
 {
@@ -30,11 +34,34 @@ namespace ITechArt.Surveys.WebApp
             var connectionString = Configuration.GetValue<string>("connectionString");
             services.AddDbContext<SurveysDbContext>(x => x.UseSqlServer(connectionString));
 
+            services.AddIdentity<User, Role>()
+                .AddDefaultTokenProviders()
+                .AddUserStore<UserStore>()
+                .AddRoleStore<RoleStore>();
+
             services.AddScoped<IUnitOfWork, UnitOfWork<SurveysDbContext>>();
-            services.AddScoped<ICounterService, CounterService>();
             services.AddScoped<ICustomLogger, CustomLogger>();
+            services.AddScoped<IUserService, UserService>();
 
             services.AddControllersWithViews();
+
+            services.Configure<IdentityOptions>(options =>
+            {
+                options.Password.RequireDigit = true;
+                options.Password.RequireLowercase = true;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequiredLength = 6;
+                options.Password.RequiredUniqueChars = 1;
+
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+                options.Lockout.MaxFailedAccessAttempts = 10;
+                options.Lockout.AllowedForNewUsers = true;
+
+                options.User.AllowedUserNameCharacters =
+                    "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
+                options.User.RequireUniqueEmail = true;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -56,6 +83,7 @@ namespace ITechArt.Surveys.WebApp
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

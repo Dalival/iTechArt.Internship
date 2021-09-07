@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace ITechArt.Repositories.Interfaces
@@ -6,10 +8,6 @@ namespace ITechArt.Repositories.Interfaces
     public interface IRepository<T>
         where T : class
     {
-        Task<T> GetByIdAsync(params object[] id);
-
-        Task<IReadOnlyCollection<T>> GetAllAsync();
-
         void Add(T entity);
 
         void AddRange(IReadOnlyCollection<T> entities);
@@ -21,5 +19,15 @@ namespace ITechArt.Repositories.Interfaces
         void Delete(T entity);
 
         void DeleteRange(IReadOnlyCollection<T> entities);
+
+        Task<T> GetByIdAsync(params object[] id);
+
+        Task<IReadOnlyCollection<T>> GetAllAsync(params Expression<Func<T, object>>[] includes);
+
+        Task<IReadOnlyCollection<T>> GetWhereAsync(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includes);
+
+        Task<T> GetSingleOrDefaultAsync(Expression<Func<T, bool>> predicate);
+
+        Task<bool> AnyAsync(Expression<Func<T, bool>> predicate);
     }
 }
