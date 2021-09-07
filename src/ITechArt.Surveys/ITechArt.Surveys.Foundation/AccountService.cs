@@ -45,8 +45,15 @@ namespace ITechArt.Surveys.Foundation
 
         public async Task LogoutAsync()
         {
-            await _signInManager.SignOutAsync();
-            _logger.LogInformation("User logged out.");
+            try
+            {
+                await _signInManager.SignOutAsync();
+                _logger.LogInformation("User logged out.");
+            }
+            catch(Exception exception)
+            {
+                _logger.LogError(exception, "User can't sign out!");
+            }
         }
 
 
