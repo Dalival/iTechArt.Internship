@@ -42,6 +42,7 @@ namespace ITechArt.Surveys.WebApp
             services.AddScoped<IUnitOfWork, UnitOfWork<SurveysDbContext>>();
             services.AddScoped<ICustomLogger, CustomLogger>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IAccountService, AccountService>();
 
             services.AddControllersWithViews();
 
@@ -58,8 +59,7 @@ namespace ITechArt.Surveys.WebApp
                 options.Lockout.MaxFailedAccessAttempts = 10;
                 options.Lockout.AllowedForNewUsers = true;
 
-                options.User.AllowedUserNameCharacters =
-                    "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
+                options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
                 options.User.RequireUniqueEmail = true;
             });
         }

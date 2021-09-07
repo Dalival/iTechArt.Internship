@@ -4,8 +4,10 @@ using ITechArt.Surveys.Foundation.Result;
 
 namespace ITechArt.Surveys.Foundation.Interfaces
 {
-    public interface IUserService
+    public interface IAccountService
     {
-        Task<OperationResult<RegistrationError>> CreateUserAsync(User user, string password);
+        Task<OperationResult<LoginError>> LoginAsync(string emailOrUserName, string password);
+
+        Task LogoutAsync();
     }
 }

@@ -13,11 +13,13 @@ namespace ITechArt.Surveys.WebApp.Controllers
     public class AuthenticationController : Controller
     {
         private readonly IUserService _userService;
+        private readonly IAccountService _accountService;
 
 
-        public AuthenticationController(IUserService userService)
+        public AuthenticationController(IUserService userService, IAccountService accountService)
         {
             _userService = userService;
+            _accountService = accountService;
         }
 
 
@@ -51,7 +53,7 @@ namespace ITechArt.Surveys.WebApp.Controllers
                 Email = model.Email
             };
 
-            var result = await _userService.CreateUserAsync(user, model.Password, model.PasswordConfirmation);
+            var result = await _userService.CreateUserAsync(user, model.Password);
             if (!result.Succeeded)
             {
                 AddErrorsToModel(result.Errors);
@@ -78,7 +80,7 @@ namespace ITechArt.Surveys.WebApp.Controllers
                 return View(model);
             }
 
-            var result = await _userService.LoginAsync(model.EmailOrUserName, model.Password);
+            var result = await _accountService.LoginAsync(model.EmailOrUserName, model.Password);
             if (!result.Succeeded)
             {
                 AddErrorsToModel(result.Errors);
@@ -93,7 +95,7 @@ namespace ITechArt.Surveys.WebApp.Controllers
         [Authorize]
         public async Task<IActionResult> Logout()
         {
-            await _userService.LogoutAsync();
+            await _accountService.LogoutAsync();
 
             return RedirectToAction("Index", "Home");
         }
