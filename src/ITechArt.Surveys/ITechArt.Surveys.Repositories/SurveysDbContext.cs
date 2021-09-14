@@ -44,7 +44,8 @@ namespace ITechArt.Surveys.Repositories
                     TwoFactorEnabled = false,
                     LockoutEnd = null,
                     LockoutEnabled = false,
-                    AccessFailedCount = 0
+                    AccessFailedCount = 0,
+                    RegistrationDate = new System.DateTime(2021, 9, 14, 13, 02, 32)
                 });
             });
 

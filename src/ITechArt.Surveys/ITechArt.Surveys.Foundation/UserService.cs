@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using ITechArt.Common.Logger;
 using ITechArt.Surveys.DomainModel;
@@ -23,6 +24,7 @@ namespace ITechArt.Surveys.Foundation
 
         public async Task<OperationResult<RegistrationError>> CreateUserAsync(User user, string password)
         {
+            user.RegistrationDate = DateTime.Now;
             var identityResult = await _userManager.CreateAsync(user, password);
             var operationResult = ConvertResult(identityResult);
 
