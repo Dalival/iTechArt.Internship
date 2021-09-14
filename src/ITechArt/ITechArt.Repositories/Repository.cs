@@ -70,6 +70,11 @@ namespace ITechArt.Repositories
             return target;
         }
 
+        public IQueryable<T> GetAllAsQueryable()
+        {
+            return _dbSet.AsQueryable();
+        }
+
         public async Task<IReadOnlyCollection<T>> GetWhereAsync(Expression<Func<T, bool>> predicate,
             params Expression<Func<T, object>>[] includes)
         {

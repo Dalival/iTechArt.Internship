@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
@@ -23,6 +24,8 @@ namespace ITechArt.Repositories.Interfaces
         Task<T> GetByIdAsync(params object[] id);
 
         Task<IReadOnlyCollection<T>> GetAllAsync(params Expression<Func<T, object>>[] includes);
+
+        IQueryable<T> GetAllAsQueryable();
 
         Task<IReadOnlyCollection<T>> GetWhereAsync(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includes);
 
