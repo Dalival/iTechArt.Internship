@@ -1,11 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ITechArt.Common.Logger;
 using ITechArt.Surveys.DomainModel;
 using ITechArt.Surveys.Foundation.Interfaces;
+using ITechArt.Surveys.Foundation.Model;
 using ITechArt.Surveys.Foundation.Result;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace ITechArt.Surveys.Foundation
 {
@@ -36,6 +39,19 @@ namespace ITechArt.Surveys.Foundation
             return operationResult;
         }
 
+        public async Task<IReadOnlyCollection<UserDataForTable>> GetUsersShortData()
+        {
+            var usersForTable = await _userManager.Users.Select(u => new UserDataForTable
+                {
+                    Name = u.UserName,
+                    Role = u.UserRoles.Single().Role.Name,
+                    RegistrationDate = u.RegistrationDate
+                })
+                .ToListAsync();
+
+            return usersForTable;
+        }
+
 
         private OperationResult<RegistrationError> ConvertResult(IdentityResult identityResult)
         {
@@ -54,8 +70,10 @@ namespace ITechArt.Surveys.Foundation
                     nameof(IdentityErrorDescriber.PasswordRequiresDigit) => RegistrationError.PasswordRequiresDigit,
                     nameof(IdentityErrorDescriber.PasswordRequiresLower) => RegistrationError.PasswordRequiresLower,
                     nameof(IdentityErrorDescriber.PasswordRequiresUpper) => RegistrationError.PasswordRequiresUpper,
-                    nameof(IdentityErrorDescriber.PasswordRequiresUniqueChars) => RegistrationError.PasswordRequiresMoreUniqueChars,
-                    nameof(IdentityErrorDescriber.PasswordRequiresNonAlphanumeric) => RegistrationError.PasswordRequiresNonAlphanumeric,
+                    nameof(IdentityErrorDescriber.PasswordRequiresUniqueChars) => RegistrationError
+                        .PasswordRequiresMoreUniqueChars,
+                    nameof(IdentityErrorDescriber.PasswordRequiresNonAlphanumeric) => RegistrationError
+                        .PasswordRequiresNonAlphanumeric,
                     _ => RegistrationError.UnknownError
                 })
                 .ToList();
