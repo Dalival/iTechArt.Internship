@@ -39,7 +39,7 @@ namespace ITechArt.Surveys.Foundation
             return operationResult;
         }
 
-        public async Task<IReadOnlyCollection<UserDataForTable>> GetUsersShortData()
+        public async Task<List<UserDataForTable>> GetUsersShortData()
         {
             var usersForTable = await _userManager.Users.Select(u => new UserDataForTable
                 {

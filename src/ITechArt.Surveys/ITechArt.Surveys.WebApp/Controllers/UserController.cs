@@ -16,22 +16,11 @@ namespace ITechArt.Surveys.WebApp.Controllers
         }
 
 
+        [HttpGet]
         public async Task<IActionResult> UserTable()
         {
             var users = await _userService.GetUsersShortData();
-            var viewModel = new UserTableViewModel();
-            foreach (var user in users)
-            {
-                var userViewModel = new UserInTableViewModel
-                {
-                    Name = user.Name,
-                    RegistrationDate = user.RegistrationDate,
-                    Role = user.Role
-                };
-                viewModel.Users.Add(userViewModel);
-            }
-
-            viewModel.UsersCounter = viewModel.Users.Capacity;
+            var viewModel = new UserTableViewModel(users);
 
             return View(viewModel);
         }

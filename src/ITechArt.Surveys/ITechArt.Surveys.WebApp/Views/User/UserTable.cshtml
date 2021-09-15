@@ -1,0 +1,32 @@
+﻿@model UserTableViewModel
+
+@{
+    ViewData["Title"] = "Log in";
+}
+
+<link rel="stylesheet" href="~/css/tableView.css"/>
+
+<h1>@ViewData["Title"]</h1>
+<div class="row">
+    <div class="col-md-4">
+        <section>
+            <div class="grid">
+                <span>
+                    <strong>Name</strong>
+                </span>
+                <span>
+                    <strong>Role</strong>
+                </span>
+                <span>
+                    <strong>Registrated</strong>
+                </span>
+                @foreach (var user in @Model.Users)
+                {
+                    <span>@user.Name</span>
+                    <span>@user.Role</span>
+                    <span>@user.RegistrationDate.Date</span>
+                }
+            </div>
+        </section>
+    </div>
+</div>

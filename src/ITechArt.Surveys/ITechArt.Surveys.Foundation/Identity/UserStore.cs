@@ -180,12 +180,7 @@ namespace ITechArt.Surveys.Foundation.Identity
                 throw new ArgumentNullException(nameof(userId));
             }
 
-            if (!Guid.TryParse(userId, out var idGuid))
-            {
-                throw new ArgumentException("Not a valid Guid id", nameof(userId));
-            }
-
-            var targetUser = await _userRepository.GetByIdAsync(idGuid);
+            var targetUser = await _userRepository.GetByIdAsync(userId);
 
             return targetUser;
         }
