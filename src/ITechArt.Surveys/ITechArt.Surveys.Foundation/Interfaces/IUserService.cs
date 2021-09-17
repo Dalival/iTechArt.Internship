@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using ITechArt.Surveys.DomainModel;
-using ITechArt.Surveys.Foundation.Model;
 using ITechArt.Surveys.Foundation.Result;
 
 namespace ITechArt.Surveys.Foundation.Interfaces
@@ -10,6 +9,6 @@ namespace ITechArt.Surveys.Foundation.Interfaces
     {
         Task<OperationResult<RegistrationError>> CreateUserAsync(User user, string password);
 
-        Task<IReadOnlyCollection<UserDataForTable>> GetUsersShortDataAsync();
+        Task<IReadOnlyCollection<User>> GetAllUsersIncludeRoles();
     }
 }

@@ -1,6 +1,5 @@
 using System;
 using ITechArt.Common.Logger;
-using ITechArt.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -39,7 +38,7 @@ namespace ITechArt.Surveys.WebApp
                 .AddUserStore<UserStore>()
                 .AddRoleStore<RoleStore>();
 
-            services.AddScoped<IUnitOfWork, UnitOfWork<SurveysDbContext>>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<ICustomLogger, CustomLogger>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IAccountService, AccountService>();

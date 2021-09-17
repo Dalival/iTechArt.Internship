@@ -14,7 +14,7 @@ namespace ITechArt.Repositories
     {
         private readonly DbContext _dbContext;
 
-        private readonly DbSet<T> _dbSet;
+        protected readonly DbSet<T> _dbSet;
 
 
         public Repository(DbContext dbContext)

@@ -1,4 +1,4 @@
-﻿@model UserTableViewModel
+﻿@model IReadOnlyCollection<UserInTableViewModel>
 
 @{
     ViewData["Title"] = "Log in";
@@ -20,7 +20,7 @@
                 <span>
                     <strong>Registrated</strong>
                 </span>
-                @foreach (var user in @Model.Users)
+                @foreach (var user in @Model)
                 {
                     <span>@user.Name</span>
                     <span>@user.Role</span>
