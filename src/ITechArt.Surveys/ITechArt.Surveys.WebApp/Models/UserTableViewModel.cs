@@ -7,9 +7,8 @@ namespace ITechArt.Surveys.WebApp.Models
     {
         public List<UserInTableViewModel> Users { get; set; }
 
-        public int UsersCounter { get; set; }
 
-        public UserTableViewModel(List<UserDataForTable> userDataForTable)
+        public UserTableViewModel(IEnumerable<UserDataForTable> userDataForTable)
         {
             Users = new List<UserInTableViewModel>();
 
@@ -22,8 +21,6 @@ namespace ITechArt.Surveys.WebApp.Models
                     Role = user.Role
                 });
             }
-
-            UsersCounter = Users.Capacity;
         }
     }
 }

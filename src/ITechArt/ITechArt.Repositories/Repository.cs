@@ -57,29 +57,42 @@ namespace ITechArt.Repositories
 
         public async Task<T> GetByIdAsync(params object[] id)
         {
-            var target = await _dbContext.FindAsync<T>(id);
+            var target = await _dbSet.FindAsync(id);
 
             return target;
         }
 
         public async Task<IReadOnlyCollection<T>> GetAllAsync(params Expression<Func<T, object>>[] includes)
         {
-            var queryWithIncludes = GetQueryWithIncludes(includes);
-            var target = await queryWithIncludes.ToListAsync();
+            List<T> target;
+
+            if (includes == null || includes.Length == 0)
+            {
+                target = await _dbSet.ToListAsync();
+            }
+            else
+            {
+                var queryWithIncludes = GetQueryWithIncludes(includes);
+                target = await queryWithIncludes.ToListAsync();
+            }
 
             return target;
-        }
-
-        public IQueryable<T> GetAllAsQueryable()
-        {
-            return _dbSet.AsQueryable();
         }
 
         public async Task<IReadOnlyCollection<T>> GetWhereAsync(Expression<Func<T, bool>> predicate,
             params Expression<Func<T, object>>[] includes)
         {
-            var queryWithIncludes = GetQueryWithIncludes(includes);
-            var target = await queryWithIncludes.Where(predicate).ToListAsync();
+            List<T> target;
+
+            if (includes == null || includes.Length == 0)
+            {
+                target = await _dbSet.Where(predicate).ToListAsync();
+            }
+            else
+            {
+                var queryWithIncludes = GetQueryWithIncludes(includes);
+                target = await queryWithIncludes.Where(predicate).ToListAsync();
+            }
 
             return target;
         }

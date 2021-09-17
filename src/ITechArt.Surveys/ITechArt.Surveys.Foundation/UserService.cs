@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ITechArt.Common.Logger;
+using ITechArt.Repositories.Interfaces;
 using ITechArt.Surveys.DomainModel;
 using ITechArt.Surveys.Foundation.Interfaces;
 using ITechArt.Surveys.Foundation.Model;
 using ITechArt.Surveys.Foundation.Result;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 
 namespace ITechArt.Surveys.Foundation
 {
@@ -16,12 +16,18 @@ namespace ITechArt.Surveys.Foundation
     {
         private readonly ICustomLogger _logger;
         private readonly UserManager<User> _userManager;
+        private readonly IUnitOfWork _unitOfWork;
+
+        private readonly IRepository<User> _userRepository;
 
 
-        public UserService(ICustomLogger logger, UserManager<User> userManager)
+        public UserService(ICustomLogger logger, UserManager<User> userManager, IUnitOfWork unitOfWork)
         {
             _logger = logger;
             _userManager = userManager;
+            _unitOfWork = unitOfWork;
+
+            _userRepository = _unitOfWork.GetRepository<User>();
         }
 
 
@@ -39,15 +45,16 @@ namespace ITechArt.Surveys.Foundation
             return operationResult;
         }
 
-        public async Task<List<UserDataForTable>> GetUsersShortData()
+        public async Task<IReadOnlyCollection<UserDataForTable>> GetUsersShortDataAsync()
         {
-            var usersForTable = await _userManager.Users.Select(u => new UserDataForTable
+            var users = await _userRepository.GetAllAsync(u => u.UserRoles);
+            var usersForTable = users.Select(u => new UserDataForTable
                 {
                     Name = u.UserName,
                     Role = u.UserRoles.Single().Role.Name,
                     RegistrationDate = u.RegistrationDate
                 })
-                .ToListAsync();
+                .ToList();
 
             return usersForTable;
         }

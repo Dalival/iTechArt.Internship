@@ -35,8 +35,7 @@ namespace ITechArt.Surveys.Repositories
                     Email = "egorfedorenko.w@gmail.com",
                     NormalizedEmail = "EGORFEDORENKO.W@GMAIL.COM",
                     EmailConfirmed = false,
-                    PasswordHash =
-                        "AQAAAAEAACcQAAAAEDxts21ZFCTO9PJMekWmZIcRpZFtuqrjSI4xwd76L0h5zF3WoQlhE015Xr+kBSDqsw==",
+                    PasswordHash = "AQAAAAEAACcQAAAAEDxts21ZFCTO9PJMekWmZIcRpZFtuqrjSI4xwd76L0h5zF3WoQlhE015Xr+kBSDqsw==",
                     SecurityStamp = "9dd2b025-477a-4ab2-af59-dfe6f16ea4e7",
                     ConcurrencyStamp = "01fbbd27-bd79-4f36-a892-384df2a5cea6",
                     PhoneNumber = null,

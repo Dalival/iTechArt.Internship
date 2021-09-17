@@ -10,6 +10,6 @@ namespace ITechArt.Surveys.Foundation.Interfaces
     {
         Task<OperationResult<RegistrationError>> CreateUserAsync(User user, string password);
 
-        Task<List<UserDataForTable>> GetUsersShortData();
+        Task<IReadOnlyCollection<UserDataForTable>> GetUsersShortDataAsync();
     }
 }

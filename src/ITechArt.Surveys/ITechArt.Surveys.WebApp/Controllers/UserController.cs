@@ -19,7 +19,7 @@ namespace ITechArt.Surveys.WebApp.Controllers
         [HttpGet]
         public async Task<IActionResult> UserTable()
         {
-            var users = await _userService.GetUsersShortData();
+            var users = await _userService.GetUsersShortDataAsync();
             var viewModel = new UserTableViewModel(users);
 
             return View(viewModel);
