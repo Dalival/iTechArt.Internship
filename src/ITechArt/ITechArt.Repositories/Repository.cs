@@ -111,6 +111,29 @@ namespace ITechArt.Repositories
             return target;
         }
 
+        public async Task<IReadOnlyCollection<T>> TakeFrom(int startPosition, int amount, params Expression<Func<T, object>>[] includes)
+        {
+            List<T> target;
+
+            if (includes == null || includes.Length == 0)
+            {
+                target = await _dbSet
+                    .Skip(startPosition)
+                    .Take(amount)
+                    .ToListAsync();
+            }
+            else
+            {
+                var queryWithIncludes = GetQueryWithIncludes(includes);
+                target = await queryWithIncludes
+                    .Skip(startPosition)
+                    .Take(amount)
+                    .ToListAsync();
+            }
+
+            return target;
+        }
+
 
         private IIncludableQueryable<T, object> GetQueryWithIncludes(params Expression<Func<T, object>>[] includes)
         {

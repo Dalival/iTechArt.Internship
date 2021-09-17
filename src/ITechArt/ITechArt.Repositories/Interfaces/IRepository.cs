@@ -29,5 +29,7 @@ namespace ITechArt.Repositories.Interfaces
         Task<T> GetSingleOrDefaultAsync(Expression<Func<T, bool>> predicate);
 
         Task<bool> AnyAsync(Expression<Func<T, bool>> predicate);
+
+        Task<IReadOnlyCollection<T>> TakeFrom(int startPosition, int amount, params Expression<Func<T, object>>[] includes);
     }
 }
