@@ -16,7 +16,6 @@ namespace ITechArt.Surveys.Foundation
     {
         private readonly ICustomLogger _logger;
         private readonly UserManager<User> _userManager;
-        private readonly IUnitOfWork _unitOfWork;
 
         private readonly UserRepository _userRepository;
 
@@ -25,9 +24,8 @@ namespace ITechArt.Surveys.Foundation
         {
             _logger = logger;
             _userManager = userManager;
-            _unitOfWork = unitOfWork;
 
-            _userRepository = (UserRepository)_unitOfWork.GetRepository<User>();
+            _userRepository = (UserRepository)unitOfWork.GetRepository<User>();
         }
 
 
