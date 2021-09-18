@@ -1,7 +1,7 @@
 ﻿@model IReadOnlyCollection<UserInTableViewModel>
 
 @{
-    ViewData["Title"] = "Log in";
+    ViewData["Title"] = "Users";
 }
 
 <link rel="stylesheet" href="~/css/tableView.css"/>
@@ -24,4 +24,10 @@
         <span>@user.Role</span>
         <span>@user.RegistrationDate.Date.ToShortDateString()</span>
     }
+</div>
+<div class="flip-pages-arrows">
+    <span class="material-icons-outlined">keyboard_double_arrow_left</span>
+    <span class="material-icons-outlined">keyboard_arrow_left</span>
+    <span class="material-icons-outlined">keyboard_arrow_right</span>
+    <span class="material-icons-outlined">keyboard_double_arrow_right</span>
 </div>

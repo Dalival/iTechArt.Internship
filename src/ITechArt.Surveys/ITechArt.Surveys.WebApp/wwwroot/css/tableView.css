@@ -10,3 +10,9 @@
     border-left: 1px solid black;
     border-bottom: 1px solid black;
 }
+
+.flip-pages-arrows {
+    display: flex;
+    justify-content: right;
+    margin: 10px;
+}
