@@ -22,12 +22,9 @@ namespace ITechArt.Surveys.WebApp.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> UserTable(int page = 1)
         {
-            var allUsers = await _userService.GetAllUsersIncludeRoles();
+            var users = await _userService.GetUsersRangeAsync(5, 5 * (page - 1));
 
-            var usersForTable = allUsers
-                .Skip(5 * (page - 1))
-                .Take(5)
-                .Select(u => new UserDataForTable
+            var usersForTable = users.Select(u => new UserDataForTable
                 {
                     Name = u.UserName,
                     RegistrationDate = u.RegistrationDate,
@@ -41,7 +38,7 @@ namespace ITechArt.Surveys.WebApp.Controllers
             {
                 Users = usersForTable,
                 Page = page,
-                TotalUsersAmount = allUsers.Count
+                TotalUsersAmount = await _userService.CountUsersAsync()
             };
 
             return View(userTableViewModel);

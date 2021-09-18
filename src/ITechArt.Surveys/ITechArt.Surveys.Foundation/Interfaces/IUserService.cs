@@ -9,6 +9,10 @@ namespace ITechArt.Surveys.Foundation.Interfaces
     {
         Task<OperationResult<RegistrationError>> CreateUserAsync(User user, string password);
 
-        Task<IReadOnlyCollection<User>> GetAllUsersIncludeRoles();
+        Task<IReadOnlyCollection<User>> GetAllUsersAsync();
+
+        Task<IReadOnlyCollection<User>> GetUsersRangeAsync(int amount, int fromPosition);
+
+        Task<int> CountUsersAsync();
     }
 }

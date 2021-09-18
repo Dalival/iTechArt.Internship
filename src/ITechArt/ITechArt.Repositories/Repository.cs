@@ -107,14 +107,14 @@ namespace ITechArt.Repositories
             return target;
         }
 
-        public async Task<IReadOnlyCollection<T>> TakeFrom(int startPosition, int amount, params Expression<Func<T, object>>[] includes)
+        public async Task<IReadOnlyCollection<T>> GetRangeAsync(int amount, int fromPosition = 0, params Expression<Func<T, object>>[] includes)
         {
             List<T> target;
 
             if (includes == null || includes.Length == 0)
             {
                 target = await _dbSet
-                    .Skip(startPosition)
+                    .Skip(fromPosition)
                     .Take(amount)
                     .ToListAsync();
             }
@@ -122,7 +122,7 @@ namespace ITechArt.Repositories
             {
                 var queryWithIncludes = GetQueryWithIncludes(includes);
                 target = await queryWithIncludes
-                    .Skip(startPosition)
+                    .Skip(fromPosition)
                     .Take(amount)
                     .ToListAsync();
             }
@@ -130,7 +130,7 @@ namespace ITechArt.Repositories
             return target;
         }
 
-        public async Task<int> Count()
+        public async Task<int> CountAsync()
         {
             var recordsAmount = await _dbSet.CountAsync();
 

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using ITechArt.Repositories;
 using ITechArt.Surveys.DomainModel;
@@ -10,12 +11,23 @@ namespace ITechArt.Surveys.Repositories.Repositories
     {
         public UserRepository(DbContext dbContext) : base(dbContext) { }
 
-
-        public async Task<IReadOnlyCollection<User>> GetAllWithRolesAsync()
+        public async Task<IReadOnlyCollection<User>> GetAllIncludeRolesAsync()
         {
             var usersWithRoles = await _dbSet
                 .Include(u => u.UserRoles)
-                    .ThenInclude(ur => ur.Role)
+                .ThenInclude(ur => ur.Role)
+                .ToListAsync();
+
+            return usersWithRoles;
+        }
+
+        public async Task<IReadOnlyCollection<User>> GetRangeIncludeRolesAsync(int amount, int fromPosition = 0)
+        {
+            var usersWithRoles = await _dbSet
+                .Include(u => u.UserRoles)
+                .ThenInclude(ur => ur.Role)
+                .Skip(fromPosition)
+                .Take(amount)
                 .ToListAsync();
 
             return usersWithRoles;

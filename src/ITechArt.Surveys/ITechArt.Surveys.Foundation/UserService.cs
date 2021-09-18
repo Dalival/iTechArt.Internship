@@ -43,11 +43,25 @@ namespace ITechArt.Surveys.Foundation
             return operationResult;
         }
 
-        public async Task<IReadOnlyCollection<User>> GetAllUsersIncludeRoles()
+        public async Task<IReadOnlyCollection<User>> GetAllUsersAsync()
         {
-            var users = await _userRepository.GetAllWithRolesAsync();
+            var users = await _userRepository.GetAllIncludeRolesAsync();
 
             return users;
+        }
+
+        public async Task<IReadOnlyCollection<User>> GetUsersRangeAsync(int amount, int fromPosition)
+        {
+            var users = await _userRepository.GetRangeIncludeRolesAsync(amount, fromPosition);
+
+            return users;
+        }
+
+        public async Task<int> CountUsersAsync()
+        {
+            var amount = await _userRepository.CountAsync();
+
+            return amount;
         }
 
 
