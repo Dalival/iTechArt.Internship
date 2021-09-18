@@ -6,11 +6,12 @@
     <title>@ViewData["Title"]</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="~/css/site.css"/>
+    <link rel="stylesheet" href="~/css/layout.css"/>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp">
 </head>
 <body>
 <header>
-    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow">
         <div class="container">
             <a class="navbar-brand" asp-controller="Home" asp-action="Index">iTechArt</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
@@ -29,6 +30,10 @@
     </nav>
 </header>
 <div class="container">
+    <div class="sidenav">
+      <a href="/User/UserTable">Users</a>
+      <a href="/Home/Index">Home</a>
+    </div>
     <main role="main" class="pb-3">
         @RenderBody()
     </main>
