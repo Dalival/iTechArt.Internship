@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using ITechArt.Surveys.Foundation.Interfaces;
 using ITechArt.Surveys.WebApp.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ITechArt.Surveys.WebApp.Controllers
@@ -18,10 +19,15 @@ namespace ITechArt.Surveys.WebApp.Controllers
 
 
         [HttpGet]
-        public async Task<IActionResult> UserTable()
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> UserTable(int page = 1)
         {
-            var users = await _userService.GetAllUsersIncludeRoles();
-            var usersForTable = users.Select(u => new UserInTableViewModel
+            var allUsers = await _userService.GetAllUsersIncludeRoles();
+
+            var usersForTable = allUsers
+                .Skip(5 * (page - 1))
+                .Take(5)
+                .Select(u => new UserDataForTable
                 {
                     Name = u.UserName,
                     RegistrationDate = u.RegistrationDate,
@@ -31,7 +37,14 @@ namespace ITechArt.Surveys.WebApp.Controllers
                 })
                 .ToList();
 
-            return View(usersForTable);
+            var userTableViewModel = new UserTableViewModel
+            {
+                Users = usersForTable,
+                Page = page,
+                TotalUsersAmount = allUsers.Count
+            };
+
+            return View(userTableViewModel);
         }
     }
 }

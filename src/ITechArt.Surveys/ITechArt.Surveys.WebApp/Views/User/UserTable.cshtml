@@ -1,14 +1,14 @@
-﻿@model IReadOnlyCollection<UserInTableViewModel>
+﻿@model UserTableViewModel
 
 @{
     ViewData["Title"] = "Users";
 }
 
-<link rel="stylesheet" href="~/css/tableView.css"/>
+<link rel="stylesheet" href="~/css/userTable.css"/>
 
 <h1>@ViewData["Title"]</h1>
 
-<div class="grid">
+<div class="user-table">
     <span>
         <strong>Name</strong>
     </span>
@@ -18,16 +18,36 @@
     <span>
         <strong>Registrated</strong>
     </span>
-    @foreach (var user in @Model)
+    @foreach (var user in @Model.Users)
     {
         <span>@user.Name</span>
         <span>@user.Role</span>
         <span>@user.RegistrationDate.Date.ToShortDateString()</span>
     }
 </div>
-<div class="flip-pages-arrows">
-    <span class="material-icons-outlined">keyboard_double_arrow_left</span>
-    <span class="material-icons-outlined">keyboard_arrow_left</span>
-    <span class="material-icons-outlined">keyboard_arrow_right</span>
-    <span class="material-icons-outlined">keyboard_double_arrow_right</span>
+
+<div class="navbar-for-table">
+    <div class="users-counter">
+        Total users: @Model.TotalUsersAmount
+    </div>
+    <div class="flip-pages-arrows">
+        @if (Model.Page != 1)
+        {
+            <a href="/User/UserTable?page=1">
+                <span class="material-icons-outlined">keyboard_double_arrow_left</span>
+            </a>
+            <a href="/User/UserTable?page=@(Model.Page - 1)">
+                <span class="material-icons-outlined">keyboard_arrow_left</span>
+            </a>
+        }
+        @if (Model.Page != Model.TotalUsersAmount / 5 + 1)
+        {
+            <a href="/User/UserTable?page=@(Model.Page + 1)">
+                <span class="material-icons-outlined">keyboard_arrow_right</span>
+            </a>
+            <a href="/User/UserTable?page=@(Model.TotalUsersAmount / 5 + 1)">
+                <span class="material-icons-outlined">keyboard_double_arrow_right</span>
+            </a>
+        }
+    </div>
 </div>
