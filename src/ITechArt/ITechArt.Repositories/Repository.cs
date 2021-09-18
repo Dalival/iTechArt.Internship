@@ -134,6 +134,13 @@ namespace ITechArt.Repositories
             return target;
         }
 
+        public async Task<int> Count()
+        {
+            var recordsAmount = await _dbSet.CountAsync();
+
+            return recordsAmount;
+        }
+
 
         private IIncludableQueryable<T, object> GetQueryWithIncludes(params Expression<Func<T, object>>[] includes)
         {
