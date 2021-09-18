@@ -12,16 +12,12 @@ namespace ITechArt.Repositories
     public class Repository<T> : IRepository<T>
         where T : class
     {
-        private readonly DbContext _dbContext;
-
         protected readonly DbSet<T> _dbSet;
 
 
         public Repository(DbContext dbContext)
         {
-            _dbContext = dbContext;
-
-            _dbSet = _dbContext.Set<T>();
+            _dbSet = dbContext.Set<T>();
         }
 
 
