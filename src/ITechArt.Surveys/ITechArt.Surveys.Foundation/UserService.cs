@@ -82,10 +82,8 @@ namespace ITechArt.Surveys.Foundation
                     nameof(IdentityErrorDescriber.PasswordRequiresDigit) => RegistrationError.PasswordRequiresDigit,
                     nameof(IdentityErrorDescriber.PasswordRequiresLower) => RegistrationError.PasswordRequiresLower,
                     nameof(IdentityErrorDescriber.PasswordRequiresUpper) => RegistrationError.PasswordRequiresUpper,
-                    nameof(IdentityErrorDescriber.PasswordRequiresUniqueChars) => RegistrationError
-                        .PasswordRequiresMoreUniqueChars,
-                    nameof(IdentityErrorDescriber.PasswordRequiresNonAlphanumeric) => RegistrationError
-                        .PasswordRequiresNonAlphanumeric,
+                    nameof(IdentityErrorDescriber.PasswordRequiresUniqueChars) => RegistrationError.PasswordRequiresMoreUniqueChars,
+                    nameof(IdentityErrorDescriber.PasswordRequiresNonAlphanumeric) => RegistrationError.PasswordRequiresNonAlphanumeric,
                     _ => RegistrationError.UnknownError
                 })
                 .ToList();
