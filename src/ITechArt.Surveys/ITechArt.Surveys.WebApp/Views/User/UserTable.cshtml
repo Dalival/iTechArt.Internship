@@ -40,6 +40,7 @@
                 <span class="material-icons-outlined">keyboard_arrow_left</span>
             </a>
         }
+        <span>@Model.Page</span>
         @if (Model.Page != Model.TotalUsersAmount / 5 + 1)
         {
             <a href="/User/UserTable?page=@(Model.Page + 1)">

@@ -14,24 +14,24 @@
 .navbar-for-table {
     display: flex;
     justify-content: space-between;
+    margin-top: 15px;
 }
 
-.navbar-for-table > div {
-    margin: 10px;
-}
-
-.navbar-for-table > .users-counter {
-    margin-top: 14px;
+.flip-pages-arrows {
+    display: flex;
 }
 
 .flip-pages-arrows > a {
     color: #4285F4;
     text-decoration: none;
-    font-size: 28px;
 }
 
 .flip-pages-arrows > a:hover {
     color: #346be3;
-    text-decoration:none;
-    cursor:pointer;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.flip-pages-arrows > span {
+    margin: 0 4px 0 4px;
 }
