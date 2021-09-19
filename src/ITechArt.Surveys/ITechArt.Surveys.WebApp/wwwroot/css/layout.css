@@ -26,11 +26,6 @@ main {
     margin-left: 220px; /* A little more than the width of the sidenav */
 }
 
-@media screen and (max-height: 450px) {
-    .sidenav {padding-top: 15px;}
-    .sidenav a {font-size: 18px;}
-}
-
 footer {
     background-color: white;
 }
