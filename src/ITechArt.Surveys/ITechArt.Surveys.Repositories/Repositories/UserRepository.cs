@@ -21,7 +21,7 @@ namespace ITechArt.Surveys.Repositories.Repositories
             return usersWithRoles;
         }
 
-        public async Task<IReadOnlyCollection<User>> GetRangeWithRolesAsync(int amount, int fromPosition = 0)
+        public async Task<IReadOnlyCollection<User>> GetPaginatedWithRolesAsync(int fromPosition, int amount)
         {
             var usersWithRoles = await _dbSet
                 .Include(u => u.UserRoles)

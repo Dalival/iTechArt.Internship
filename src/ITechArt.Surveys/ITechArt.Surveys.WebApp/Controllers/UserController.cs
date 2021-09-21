@@ -25,7 +25,7 @@ namespace ITechArt.Surveys.WebApp.Controllers
         public async Task<IActionResult> UserTable(int page = 1)
         {
             var skippedPages = page - 1;
-            var users = await _userService.GetUsersRangeAsync(UsersPerPage, UsersPerPage * skippedPages);
+            var users = await _userService.GetPaginatedUsersAsync(UsersPerPage * skippedPages, UsersPerPage);
 
             var usersForTable = users.Select(u => new UserDataForTable
                 {

@@ -11,7 +11,7 @@ namespace ITechArt.Surveys.Foundation.Interfaces
 
         Task<IReadOnlyCollection<User>> GetAllUsersAsync();
 
-        Task<IReadOnlyCollection<User>> GetUsersRangeAsync(int amount, int fromPosition);
+        Task<IReadOnlyCollection<User>> GetPaginatedUsersAsync(int fromPosition, int amount);
 
         Task<int> CountUsersAsync();
     }

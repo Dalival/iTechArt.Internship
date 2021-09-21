@@ -107,7 +107,7 @@ namespace ITechArt.Repositories
             return target;
         }
 
-        public async Task<IReadOnlyCollection<T>> GetRangeAsync(int amount, int fromPosition = 0, params Expression<Func<T, object>>[] includes)
+        public async Task<IReadOnlyCollection<T>> GetPaginatedAsync(int fromPosition, int amount, params Expression<Func<T, object>>[] includes)
         {
             List<T> target;
 
