@@ -45,14 +45,14 @@ namespace ITechArt.Surveys.Foundation
 
         public async Task<IReadOnlyCollection<User>> GetAllUsersAsync()
         {
-            var users = await _userRepository.GetAllIncludeRolesAsync();
+            var users = await _userRepository.GetAllWithRolesAsync();
 
             return users;
         }
 
         public async Task<IReadOnlyCollection<User>> GetUsersRangeAsync(int amount, int fromPosition)
         {
-            var users = await _userRepository.GetRangeIncludeRolesAsync(amount, fromPosition);
+            var users = await _userRepository.GetRangeWithRolesAsync(amount, fromPosition);
 
             return users;
         }

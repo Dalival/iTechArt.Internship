@@ -11,7 +11,7 @@ namespace ITechArt.Surveys.Repositories.Repositories
     {
         public UserRepository(DbContext dbContext) : base(dbContext) { }
 
-        public async Task<IReadOnlyCollection<User>> GetAllIncludeRolesAsync()
+        public async Task<IReadOnlyCollection<User>> GetAllWithRolesAsync()
         {
             var usersWithRoles = await _dbSet
                 .Include(u => u.UserRoles)
@@ -21,7 +21,7 @@ namespace ITechArt.Surveys.Repositories.Repositories
             return usersWithRoles;
         }
 
-        public async Task<IReadOnlyCollection<User>> GetRangeIncludeRolesAsync(int amount, int fromPosition = 0)
+        public async Task<IReadOnlyCollection<User>> GetRangeWithRolesAsync(int amount, int fromPosition = 0)
         {
             var usersWithRoles = await _dbSet
                 .Include(u => u.UserRoles)
