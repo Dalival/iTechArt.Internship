@@ -3,18 +3,19 @@ using System.Threading;
 using System.Threading.Tasks;
 using ITechArt.Repositories.Interfaces;
 using ITechArt.Surveys.DomainModel;
+using ITechArt.Surveys.Repositories;
 using Microsoft.AspNetCore.Identity;
 
 namespace ITechArt.Surveys.Foundation.Identity
 {
     public class RoleStore : IRoleStore<Role>
     {
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly ISurveysUnitOfWork _unitOfWork;
 
         private readonly IRepository<Role> _roleRepository;
 
 
-        public RoleStore(IUnitOfWork unitOfWork)
+        public RoleStore(ISurveysUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
 
