@@ -9,7 +9,9 @@ namespace ITechArt.Surveys.Repositories.Repositories
 {
     public class UserRepository : Repository<User>
     {
-        public UserRepository(DbContext dbContext) : base(dbContext) { }
+        public UserRepository(DbContext dbContext)
+            : base(dbContext) { }
+
 
         public async Task<IReadOnlyCollection<User>> GetAllWithRolesAsync()
         {
