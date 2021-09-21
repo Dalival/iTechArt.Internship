@@ -25,7 +25,7 @@ namespace ITechArt.Surveys.Foundation
             _logger = logger;
             _userManager = userManager;
 
-            _userRepository = (UserRepository)unitOfWork.GetRepository<User>();
+            _userRepository = (UserRepository) unitOfWork.GetRepository<User>();
         }
 
 
