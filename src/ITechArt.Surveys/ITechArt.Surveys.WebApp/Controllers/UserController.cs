@@ -9,6 +9,8 @@ namespace ITechArt.Surveys.WebApp.Controllers
 {
     public class UserController : Controller
     {
+        private const int UsersPerPage = 5;
+
         private readonly IUserService _userService;
 
 
@@ -22,7 +24,8 @@ namespace ITechArt.Surveys.WebApp.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> UserTable(int page = 1)
         {
-            var users = await _userService.GetUsersRangeAsync(5, 5 * (page - 1));
+            var skippedPages = page - 1;
+            var users = await _userService.GetUsersRangeAsync(UsersPerPage, UsersPerPage * skippedPages);
 
             var usersForTable = users.Select(u => new UserDataForTable
                 {
