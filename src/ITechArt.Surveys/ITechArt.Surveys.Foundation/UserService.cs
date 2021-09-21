@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ITechArt.Common.Logger;
-using ITechArt.Repositories.Interfaces;
 using ITechArt.Surveys.DomainModel;
 using ITechArt.Surveys.Foundation.Interfaces;
 using ITechArt.Surveys.Foundation.Result;
+using ITechArt.Surveys.Repositories;
 using ITechArt.Surveys.Repositories.Repositories;
 using Microsoft.AspNetCore.Identity;
 
@@ -20,12 +20,12 @@ namespace ITechArt.Surveys.Foundation
         private readonly UserRepository _userRepository;
 
 
-        public UserService(ICustomLogger logger, UserManager<User> userManager, IUnitOfWork unitOfWork)
+        public UserService(ICustomLogger logger, UserManager<User> userManager, ISurveysUnitOfWork unitOfWork)
         {
             _logger = logger;
             _userManager = userManager;
 
-            _userRepository = (UserRepository) unitOfWork.GetRepository<User>();
+            _userRepository = unitOfWork.UserRepository;
         }
 
 
