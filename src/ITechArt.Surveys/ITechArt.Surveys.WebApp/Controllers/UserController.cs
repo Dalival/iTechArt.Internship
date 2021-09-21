@@ -35,11 +35,12 @@ namespace ITechArt.Surveys.WebApp.Controllers
                 })
                 .ToList();
 
+            var totalUsersAmount = await _userService.CountUsersAsync();
             var userTableViewModel = new UserTableViewModel
             {
                 Users = usersForTable,
                 Page = page,
-                TotalUsersAmount = await _userService.CountUsersAsync()
+                TotalUsersAmount = totalUsersAmount
             };
 
             return View(userTableViewModel);
