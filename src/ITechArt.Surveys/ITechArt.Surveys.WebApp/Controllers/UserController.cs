@@ -31,9 +31,7 @@ namespace ITechArt.Surveys.WebApp.Controllers
                 {
                     Name = u.UserName,
                     RegistrationDate = u.RegistrationDate,
-                    Role = u.UserRoles.Any(ur => ur.Role.Name != "User")
-                        ? string.Join(", ", u.UserRoles.Select(ur => ur.Role.Name).Where(n => n != "User"))
-                        : "User"
+                    Role = string.Join(", ", u.UserRoles.Select(ur => ur.Role.Name))
                 })
                 .ToList();
 
