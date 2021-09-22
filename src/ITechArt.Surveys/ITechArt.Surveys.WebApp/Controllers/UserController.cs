@@ -29,6 +29,7 @@ namespace ITechArt.Surveys.WebApp.Controllers
 
             var usersForTable = users.Select(u => new UserDataForTable
                 {
+                    Id = u.Id,
                     Name = u.UserName,
                     RegistrationDate = u.RegistrationDate,
                     Role = string.Join(", ", u.UserRoles.Select(ur => ur.Role.Name))
