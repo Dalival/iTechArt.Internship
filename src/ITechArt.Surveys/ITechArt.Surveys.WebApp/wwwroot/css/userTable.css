@@ -4,6 +4,10 @@
     border: 1px solid #dee2e6;
 }
 
+.user-table .table-header {
+    background-color: #f2f3f5;
+}
+
 .user-table > span {
     padding: 8px;
     text-align: center;
