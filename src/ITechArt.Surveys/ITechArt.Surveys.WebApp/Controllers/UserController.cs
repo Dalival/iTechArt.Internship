@@ -45,5 +45,13 @@ namespace ITechArt.Surveys.WebApp.Controllers
 
             return View(userTableViewModel);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> DeleteUser(string id)
+        {
+            await _userService.DeleteUserAsync(id);
+
+            return RedirectToAction("UserTable");
+        }
     }
 }
