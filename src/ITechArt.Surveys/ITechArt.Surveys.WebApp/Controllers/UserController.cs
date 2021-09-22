@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ITechArt.Surveys.WebApp.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class UserController : Controller
     {
         private const int UsersPerPage = 5;
@@ -21,7 +22,6 @@ namespace ITechArt.Surveys.WebApp.Controllers
 
 
         [HttpGet]
-        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> UserTable(int page = 1)
         {
             var skippedPages = page - 1;
