@@ -4,14 +4,16 @@ using ITechArt.Surveys.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ITechArt.Surveys.Repositories.Migrations
 {
     [DbContext(typeof(SurveysDbContext))]
-    partial class SurveysDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210914100327_RegistrationDateForUsers")]
+    partial class RegistrationDateForUsers
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -166,6 +168,11 @@ namespace ITechArt.Surveys.Repositories.Migrations
                     b.ToTable("UserRoles");
 
                     b.HasData(
+                        new
+                        {
+                            UserId = "4beb0654-3b7a-4601-8b81-b284cc25a903",
+                            RoleId = "76e401a9-1e91-4dff-adb7-c455cefe6fa9"
+                        },
                         new
                         {
                             UserId = "4beb0654-3b7a-4601-8b81-b284cc25a903",

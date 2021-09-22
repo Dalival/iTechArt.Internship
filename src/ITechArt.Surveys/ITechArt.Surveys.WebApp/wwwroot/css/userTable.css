@@ -1,0 +1,37 @@
+﻿.user-table {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    border-top: 1px solid black;
+    border-right: 1px solid black;
+}
+
+.user-table > span {
+    padding: 8px 4px;
+    border-left: 1px solid black;
+    border-bottom: 1px solid black;
+}
+
+.navbar-for-table {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+}
+
+.flip-pages-arrows {
+    display: flex;
+}
+
+.flip-pages-arrows > a {
+    color: #4285F4;
+    text-decoration: none;
+}
+
+.flip-pages-arrows > a:hover {
+    color: #346be3;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.flip-pages-arrows > span {
+    margin: 0 4px 0 4px;
+}

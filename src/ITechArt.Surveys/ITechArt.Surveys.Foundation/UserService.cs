@@ -1,9 +1,13 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using ITechArt.Common.Logger;
 using ITechArt.Surveys.DomainModel;
 using ITechArt.Surveys.Foundation.Interfaces;
 using ITechArt.Surveys.Foundation.Result;
+using ITechArt.Surveys.Repositories;
+using ITechArt.Surveys.Repositories.Repositories;
 using Microsoft.AspNetCore.Identity;
 
 namespace ITechArt.Surveys.Foundation
@@ -13,16 +17,21 @@ namespace ITechArt.Surveys.Foundation
         private readonly ICustomLogger _logger;
         private readonly UserManager<User> _userManager;
 
+        private readonly IUserRepository _userRepository;
 
-        public UserService(ICustomLogger logger, UserManager<User> userManager)
+
+        public UserService(ICustomLogger logger, UserManager<User> userManager, ISurveysUnitOfWork unitOfWork)
         {
             _logger = logger;
             _userManager = userManager;
+
+            _userRepository = unitOfWork.UserRepository;
         }
 
 
         public async Task<OperationResult<RegistrationError>> CreateUserAsync(User user, string password)
         {
+            user.RegistrationDate = DateTime.Now;
             var identityResult = await _userManager.CreateAsync(user, password);
             var operationResult = ConvertResult(identityResult);
 
@@ -32,6 +41,27 @@ namespace ITechArt.Surveys.Foundation
             }
 
             return operationResult;
+        }
+
+        public async Task<IReadOnlyCollection<User>> GetAllUsersAsync()
+        {
+            var users = await _userRepository.GetAllWithRolesAsync();
+
+            return users;
+        }
+
+        public async Task<IReadOnlyCollection<User>> GetPaginatedUsersAsync(int fromPosition, int amount)
+        {
+            var users = await _userRepository.GetPaginatedWithRolesAsync(fromPosition, amount);
+
+            return users;
+        }
+
+        public async Task<int> CountUsersAsync()
+        {
+            var amount = await _userRepository.CountAsync();
+
+            return amount;
         }
 
 

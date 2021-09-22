@@ -12,16 +12,12 @@ namespace ITechArt.Repositories
     public class Repository<T> : IRepository<T>
         where T : class
     {
-        private readonly DbContext _dbContext;
-
-        private readonly DbSet<T> _dbSet;
+        protected readonly DbSet<T> _dbSet;
 
 
         public Repository(DbContext dbContext)
         {
-            _dbContext = dbContext;
-
-            _dbSet = _dbContext.Set<T>();
+            _dbSet = dbContext.Set<T>();
         }
 
 
@@ -57,26 +53,40 @@ namespace ITechArt.Repositories
 
         public async Task<T> GetByIdAsync(params object[] id)
         {
-            var target = await _dbContext.FindAsync<T>(id);
+            var target = await _dbSet.FindAsync(id);
 
             return target;
         }
 
         public async Task<IReadOnlyCollection<T>> GetAllAsync(params Expression<Func<T, object>>[] includes)
         {
-            var queryWithIncludes = GetQueryWithIncludes(includes);
-            var target = await queryWithIncludes.ToListAsync();
+            if (includes == null || includes.Length == 0)
+            {
+                var entities = await _dbSet.ToListAsync();
 
-            return target;
+                return entities;
+            }
+
+            var queryWithIncludes = GetQueryWithIncludes(includes);
+            var entitiesWithIncludes = await queryWithIncludes.ToListAsync();
+
+            return entitiesWithIncludes;
         }
 
         public async Task<IReadOnlyCollection<T>> GetWhereAsync(Expression<Func<T, bool>> predicate,
             params Expression<Func<T, object>>[] includes)
         {
-            var queryWithIncludes = GetQueryWithIncludes(includes);
-            var target = await queryWithIncludes.Where(predicate).ToListAsync();
+            if (includes == null || includes.Length == 0)
+            {
+                var target = await _dbSet.Where(predicate).ToListAsync();
 
-            return target;
+                return target;
+            }
+
+            var queryWithIncludes = GetQueryWithIncludes(includes);
+            var entitiesWithIncludes = await queryWithIncludes.Where(predicate).ToListAsync();
+
+            return entitiesWithIncludes;
         }
 
         public async Task<T> GetSingleOrDefaultAsync(Expression<Func<T, bool>> predicate)
@@ -91,6 +101,35 @@ namespace ITechArt.Repositories
             var target = await _dbSet.AnyAsync(predicate);
 
             return target;
+        }
+
+        public async Task<IReadOnlyCollection<T>> GetPaginatedAsync(int fromPosition, int amount,
+            params Expression<Func<T, object>>[] includes)
+        {
+            if (includes == null || includes.Length == 0)
+            {
+                var target = await _dbSet
+                    .Skip(fromPosition)
+                    .Take(amount)
+                    .ToListAsync();
+
+                return target;
+            }
+
+            var queryWithIncludes = GetQueryWithIncludes(includes);
+            var targetWithIncludes = await queryWithIncludes
+                .Skip(fromPosition)
+                .Take(amount)
+                .ToListAsync();
+
+            return targetWithIncludes;
+        }
+
+        public async Task<int> CountAsync()
+        {
+            var recordsAmount = await _dbSet.CountAsync();
+
+            return recordsAmount;
         }
 
 

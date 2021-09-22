@@ -35,8 +35,7 @@ namespace ITechArt.Surveys.Repositories
                     Email = "egorfedorenko.w@gmail.com",
                     NormalizedEmail = "EGORFEDORENKO.W@GMAIL.COM",
                     EmailConfirmed = false,
-                    PasswordHash =
-                        "AQAAAAEAACcQAAAAEDxts21ZFCTO9PJMekWmZIcRpZFtuqrjSI4xwd76L0h5zF3WoQlhE015Xr+kBSDqsw==",
+                    PasswordHash = "AQAAAAEAACcQAAAAEDxts21ZFCTO9PJMekWmZIcRpZFtuqrjSI4xwd76L0h5zF3WoQlhE015Xr+kBSDqsw==",
                     SecurityStamp = "9dd2b025-477a-4ab2-af59-dfe6f16ea4e7",
                     ConcurrencyStamp = "01fbbd27-bd79-4f36-a892-384df2a5cea6",
                     PhoneNumber = null,
@@ -44,7 +43,8 @@ namespace ITechArt.Surveys.Repositories
                     TwoFactorEnabled = false,
                     LockoutEnd = null,
                     LockoutEnabled = false,
-                    AccessFailedCount = 0
+                    AccessFailedCount = 0,
+                    RegistrationDate = new System.DateTime(2021, 9, 14, 13, 02, 32)
                 });
             });
 
@@ -80,17 +80,11 @@ namespace ITechArt.Surveys.Repositories
             {
                 b.HasKey(r => new { r.UserId, r.RoleId });
                 b.ToTable("UserRoles");
-                b.HasData(
-                    new UserRole
-                    {
-                        UserId = "4beb0654-3b7a-4601-8b81-b284cc25a903",
-                        RoleId = "76e401a9-1e91-4dff-adb7-c455cefe6fa9",
-                    },
-                    new UserRole
-                    {
-                        UserId = "4beb0654-3b7a-4601-8b81-b284cc25a903",
-                        RoleId = "b03bd4cc-93a8-4623-ab9d-606823a1547e",
-                    });
+                b.HasData(new UserRole
+                {
+                    UserId = "4beb0654-3b7a-4601-8b81-b284cc25a903",
+                    RoleId = "b03bd4cc-93a8-4623-ab9d-606823a1547e",
+                });
             });
         }
     }

@@ -5,20 +5,21 @@ using System.Threading;
 using System.Threading.Tasks;
 using ITechArt.Repositories.Interfaces;
 using ITechArt.Surveys.DomainModel;
+using ITechArt.Surveys.Repositories;
 using Microsoft.AspNetCore.Identity;
 
 namespace ITechArt.Surveys.Foundation.Identity
 {
     public class UserStore : IUserPasswordStore<User>, IUserEmailStore<User>, IUserRoleStore<User>
     {
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly ISurveysUnitOfWork _unitOfWork;
 
         private readonly IRepository<User> _userRepository;
         private readonly IRepository<UserRole> _userRoleRepository;
         private readonly IRepository<Role> _roleRepository;
 
 
-        public UserStore(IUnitOfWork unitOfWork)
+        public UserStore(ISurveysUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
 
@@ -177,12 +178,7 @@ namespace ITechArt.Surveys.Foundation.Identity
                 throw new ArgumentNullException(nameof(userId));
             }
 
-            if (!Guid.TryParse(userId, out var idGuid))
-            {
-                throw new ArgumentException("Not a valid Guid id", nameof(userId));
-            }
-
-            var targetUser = await _userRepository.GetByIdAsync(idGuid);
+            var targetUser = await _userRepository.GetByIdAsync(userId);
 
             return targetUser;
         }
