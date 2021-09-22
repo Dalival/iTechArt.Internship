@@ -6,7 +6,7 @@ namespace ITechArt.Surveys.Repositories
 {
     public class SurveysUnitOfWork : UnitOfWork<SurveysDbContext>, ISurveysUnitOfWork
     {
-        public UserRepository UserRepository => (UserRepository) GetRepository<User>();
+        public IUserRepository UserRepository => (IUserRepository) GetRepository<User>();
 
 
         public SurveysUnitOfWork(SurveysDbContext context)

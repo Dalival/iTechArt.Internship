@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ITechArt.Surveys.Repositories.Repositories
 {
-    public class UserRepository : Repository<User>
+    public class UserRepository : Repository<User>, IUserRepository
     {
         public UserRepository(DbContext dbContext)
             : base(dbContext) { }

@@ -17,7 +17,7 @@ namespace ITechArt.Surveys.Foundation
         private readonly ICustomLogger _logger;
         private readonly UserManager<User> _userManager;
 
-        private readonly UserRepository _userRepository;
+        private readonly IUserRepository _userRepository;
 
 
         public UserService(ICustomLogger logger, UserManager<User> userManager, ISurveysUnitOfWork unitOfWork)
