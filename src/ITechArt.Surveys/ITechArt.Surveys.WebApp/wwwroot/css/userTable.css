@@ -1,14 +1,16 @@
 ﻿.user-table {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    border-top: 1px solid black;
-    border-right: 1px solid black;
+    grid-template-columns: repeat(4, 1fr);
+    border: 1px solid #dee2e6;
 }
 
 .user-table > span {
-    padding: 8px 4px;
-    border-left: 1px solid black;
-    border-bottom: 1px solid black;
+    padding: 8px;
+    text-align: center;
+}
+
+.user-table > .align-left {
+    text-align: left;
 }
 
 .navbar-for-table {
@@ -21,15 +23,22 @@
     display: flex;
 }
 
-.flip-pages-arrows > a {
-    color: #4285F4;
+.flip-pages-arrows > a,
+.user-table > span > a {
+    color: #5f6368;
     text-decoration: none;
 }
 
-.flip-pages-arrows > a:hover {
+.flip-pages-arrows > a:hover,
+.user-table > span > a:hover {
     color: #346be3;
     text-decoration: none;
     cursor: pointer;
+}
+
+.cannot-delete {
+    color: #b7b7b7;
+    cursor: default;
 }
 
 .flip-pages-arrows > span {
