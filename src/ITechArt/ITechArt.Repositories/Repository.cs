@@ -60,37 +60,33 @@ namespace ITechArt.Repositories
 
         public async Task<IReadOnlyCollection<T>> GetAllAsync(params Expression<Func<T, object>>[] includes)
         {
-            List<T> target;
-
             if (includes == null || includes.Length == 0)
             {
-                target = await _dbSet.ToListAsync();
-            }
-            else
-            {
-                var queryWithIncludes = GetQueryWithIncludes(includes);
-                target = await queryWithIncludes.ToListAsync();
+                var entities = await _dbSet.ToListAsync();
+
+                return entities;
             }
 
-            return target;
+            var queryWithIncludes = GetQueryWithIncludes(includes);
+            var entitiesWithIncludes = await queryWithIncludes.ToListAsync();
+
+            return entitiesWithIncludes;
         }
 
         public async Task<IReadOnlyCollection<T>> GetWhereAsync(Expression<Func<T, bool>> predicate,
             params Expression<Func<T, object>>[] includes)
         {
-            List<T> target;
-
             if (includes == null || includes.Length == 0)
             {
-                target = await _dbSet.Where(predicate).ToListAsync();
-            }
-            else
-            {
-                var queryWithIncludes = GetQueryWithIncludes(includes);
-                target = await queryWithIncludes.Where(predicate).ToListAsync();
+                var target = await _dbSet.Where(predicate).ToListAsync();
+
+                return target;
             }
 
-            return target;
+            var queryWithIncludes = GetQueryWithIncludes(includes);
+            var entitiesWithIncludes = await queryWithIncludes.Where(predicate).ToListAsync();
+
+            return entitiesWithIncludes;
         }
 
         public async Task<T> GetSingleOrDefaultAsync(Expression<Func<T, bool>> predicate)
@@ -107,27 +103,26 @@ namespace ITechArt.Repositories
             return target;
         }
 
-        public async Task<IReadOnlyCollection<T>> GetPaginatedAsync(int fromPosition, int amount, params Expression<Func<T, object>>[] includes)
+        public async Task<IReadOnlyCollection<T>> GetPaginatedAsync(int fromPosition, int amount,
+            params Expression<Func<T, object>>[] includes)
         {
-            List<T> target;
-
             if (includes == null || includes.Length == 0)
             {
-                target = await _dbSet
+                var target = await _dbSet
                     .Skip(fromPosition)
                     .Take(amount)
                     .ToListAsync();
-            }
-            else
-            {
-                var queryWithIncludes = GetQueryWithIncludes(includes);
-                target = await queryWithIncludes
-                    .Skip(fromPosition)
-                    .Take(amount)
-                    .ToListAsync();
+
+                return target;
             }
 
-            return target;
+            var queryWithIncludes = GetQueryWithIncludes(includes);
+            var targetWithIncludes = await queryWithIncludes
+                .Skip(fromPosition)
+                .Take(amount)
+                .ToListAsync();
+
+            return targetWithIncludes;
         }
 
         public async Task<int> CountAsync()
