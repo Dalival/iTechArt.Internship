@@ -14,5 +14,7 @@ namespace ITechArt.Surveys.Foundation.Interfaces
         Task<IReadOnlyCollection<User>> GetPaginatedUsersAsync(int fromPosition, int amount);
 
         Task<int> CountUsersAsync();
+
+        Task<OperationResult<UserManagementError>>  DeleteUserAsync(string id);
     }
 }
