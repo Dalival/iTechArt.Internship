@@ -4,6 +4,7 @@
     {
         UserNotFound,
         CannotDeleteUser,
-        UserAlreadyInRole
+        UserAlreadyInRole,
+        UserNotInRole
     }
 }

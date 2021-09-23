@@ -27,23 +27,36 @@
     </span>
     @{
         var currentUserName = _contextAccessor.HttpContext?.User.Identity?.Name;
-        @foreach (var user in Model.Users)
+        foreach (var user in Model.Users)
         {
             <span class="align-left">@user.Name</span>
             <span>@user.Role</span>
             <span>@user.RegistrationDate.Date.ToShortDateString()</span>
-            if (user.Name != null && user.Name != currentUserName)
+            if (user.Name == currentUserName)
             {
-                <span>
-                    <a href="/User/DeleteUser?id=@user.Id">
-                        <span class="material-icons-outlined">delete</span>
-                    </a>
+                <span class="inactive-icon">
+                    <span class="material-icons-outlined">delete</span>
+                    <span class="material-icons-outlined">person_outline</span>
                 </span>
             }
             else
             {
-                <span class="cannot-delete">
-                    <span class="material-icons-outlined">delete_forever</span>
+                <span>
+                    <a href="/User/DeleteUser?id=@user.Id" class="delete-button">
+                        <span class="material-icons-outlined" title="Delete">delete</span>
+                    </a>
+                    @if (user.Role.Contains("Admin"))
+                    {
+                        <a href="/User/RemoveFromRole?userId=@user.Id&roleName=admin">
+                            <span class="material-icons-outlined" title="Revoke admin rights">person_outline</span>
+                        </a>
+                    }
+                    else
+                    {
+                        <a href="/User/AddToRole?userId=@user.Id&roleName=admin">
+                            <span class="material-icons-outlined" title="Give admin rights">manage_accounts</span>
+                        </a>
+                    }
                 </span>
             }
         }

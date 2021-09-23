@@ -40,7 +40,15 @@
     cursor: pointer;
 }
 
-.cannot-delete {
+.user-table > span > .delete-button:hover {
+    color: #db4437;
+}
+
+.user-table .material-icons-outlined {
+    margin: 0 4px 0 4px;
+}
+
+.inactive-icon {
     color: #b7b7b7;
     cursor: default;
 }

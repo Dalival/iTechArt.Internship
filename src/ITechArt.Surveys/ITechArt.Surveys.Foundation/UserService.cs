@@ -90,7 +90,7 @@ namespace ITechArt.Surveys.Foundation
             return operationResult;
         }
 
-        public async Task<OperationResult<UserManagementError>> AssignRoleAsync(string userId, string roleName)
+        public async Task<OperationResult<UserManagementError>> AddToRoleAsync(string userId, string roleName)
         {
             var user = await _userRepository.GetByIdAsync(userId);
             if (user == null)
@@ -102,6 +102,22 @@ namespace ITechArt.Surveys.Foundation
             var operationResult = identityResult.Succeeded
                 ? OperationResult<UserManagementError>.Success
                 : OperationResult<UserManagementError>.Failed(UserManagementError.UserAlreadyInRole);
+
+            return operationResult;
+        }
+
+        public async Task<OperationResult<UserManagementError>> RemoveFromRoleAsync(string userId, string roleName)
+        {
+            var user = await _userRepository.GetByIdAsync(userId);
+            if (user == null)
+            {
+                return OperationResult<UserManagementError>.Failed(UserManagementError.UserNotFound);
+            }
+
+            var identityResult = await _userManager.RemoveFromRoleAsync(user, roleName);
+            var operationResult = identityResult.Succeeded
+                ? OperationResult<UserManagementError>.Success
+                : OperationResult<UserManagementError>.Failed(UserManagementError.UserNotInRole);
 
             return operationResult;
         }
