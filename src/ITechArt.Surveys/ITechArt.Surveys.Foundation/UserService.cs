@@ -79,13 +79,29 @@ namespace ITechArt.Surveys.Foundation
             var user = await _userRepository.GetByIdAsync(id);
             if (user == null)
             {
-                return OperationResult<UserManagementError>.Failed(UserManagementError.CannotDeleteUser);
+                return OperationResult<UserManagementError>.Failed(UserManagementError.UserNotFound);
             }
 
             var identityResult = await _userManager.DeleteAsync(user);
             var operationResult = identityResult.Succeeded
                 ? OperationResult<UserManagementError>.Success
                 : OperationResult<UserManagementError>.Failed(UserManagementError.CannotDeleteUser);
+
+            return operationResult;
+        }
+
+        public async Task<OperationResult<UserManagementError>> AssignRoleAsync(string userId, string roleName)
+        {
+            var user = await _userRepository.GetByIdAsync(userId);
+            if (user == null)
+            {
+                return OperationResult<UserManagementError>.Failed(UserManagementError.UserNotFound);
+            }
+
+            var identityResult = await _userManager.AddToRoleAsync(user, roleName);
+            var operationResult = identityResult.Succeeded
+                ? OperationResult<UserManagementError>.Success
+                : OperationResult<UserManagementError>.Failed(UserManagementError.UserAlreadyInRole);
 
             return operationResult;
         }

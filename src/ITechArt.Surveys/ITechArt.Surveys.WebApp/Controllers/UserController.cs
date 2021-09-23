@@ -59,5 +59,13 @@ namespace ITechArt.Surveys.WebApp.Controllers
 
             return RedirectToAction("UserTable");
         }
+
+        [HttpGet]
+        public async Task<IActionResult> AssignRole(string userId, string roleName)
+        {
+            await _userService.AssignRoleAsync(userId, roleName);
+
+            return RedirectToAction("UserTable");
+        }
     }
 }
