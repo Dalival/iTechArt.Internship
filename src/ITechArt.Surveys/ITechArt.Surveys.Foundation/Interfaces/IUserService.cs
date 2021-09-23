@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using ITechArt.Common.Result;
 using ITechArt.Surveys.DomainModel;
-using ITechArt.Surveys.Foundation.Result;
 
 namespace ITechArt.Surveys.Foundation.Interfaces
 {

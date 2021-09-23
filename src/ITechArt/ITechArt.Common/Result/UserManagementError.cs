@@ -1,4 +1,4 @@
-﻿namespace ITechArt.Surveys.Foundation.Result
+﻿namespace ITechArt.Common.Result
 {
     public enum UserManagementError
     {
