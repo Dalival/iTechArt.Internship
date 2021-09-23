@@ -67,8 +67,12 @@ namespace ITechArt.Surveys.Foundation
         public async Task<OperationResult<UserManagementError>> DeleteUserAsync(string id)
         {
             var user = await _userRepository.GetByIdAsync(id);
-            var identityResult = await _userManager.DeleteAsync(user);
+            if (user == null)
+            {
+                return OperationResult<UserManagementError>.Failed(UserManagementError.CannotDeleteUser);
+            }
 
+            var identityResult = await _userManager.DeleteAsync(user);
             var operationResult = identityResult.Succeeded
                 ? OperationResult<UserManagementError>.Success
                 : OperationResult<UserManagementError>.Failed(UserManagementError.CannotDeleteUser);
