@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using ITechArt.Common.Logger;
 using ITechArt.Common.Result;
+using ITechArt.Repositories.Interfaces;
 using ITechArt.Surveys.DomainModel;
 using ITechArt.Surveys.Foundation.Interfaces;
 using ITechArt.Surveys.Repositories;
@@ -18,6 +19,7 @@ namespace ITechArt.Surveys.Foundation
         private readonly UserManager<User> _userManager;
 
         private readonly IUserRepository _userRepository;
+        private readonly IRepository<Role> _roleRepository;
 
 
         public UserService(ICustomLogger logger, UserManager<User> userManager, ISurveysUnitOfWork unitOfWork)
@@ -26,6 +28,7 @@ namespace ITechArt.Surveys.Foundation
             _userManager = userManager;
 
             _userRepository = unitOfWork.UserRepository;
+            _roleRepository = unitOfWork.GetRepository<Role>();
         }
 
 
@@ -48,6 +51,13 @@ namespace ITechArt.Surveys.Foundation
             var users = await _userRepository.GetAllWithRolesAsync();
 
             return users;
+        }
+
+        public async Task<IReadOnlyCollection<Role>> GetAllRolesAsync()
+        {
+            var roles = await _roleRepository.GetAllAsync();
+
+            return roles;
         }
 
         public async Task<IReadOnlyCollection<User>> GetPaginatedUsersAsync(int fromPosition, int amount)
