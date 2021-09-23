@@ -9,5 +9,7 @@ namespace ITechArt.Surveys.WebApp.Models
         public int Page { get; set; }
 
         public int TotalUsersAmount { get; set; }
+
+        public IEnumerable<string> Roles { get; set; }
     }
 }
