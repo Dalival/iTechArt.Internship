@@ -47,13 +47,13 @@
                     </a>
                     @if (user.Role.Contains("Admin"))
                     {
-                        <a href="/User/RemoveFromRole?userId=@user.Id&roleName=admin">
+                        <a href="/User/RevokeAdminRights?userId=@user.Id">
                             <span class="material-icons-outlined" title="Revoke admin rights">person_outline</span>
                         </a>
                     }
                     else
                     {
-                        <a href="/User/AddToRole?userId=@user.Id&roleName=admin">
+                        <a href="/User/GiveAdminRights?userId=@user.Id">
                             <span class="material-icons-outlined" title="Give admin rights">manage_accounts</span>
                         </a>
                     }

@@ -61,17 +61,19 @@ namespace ITechArt.Surveys.WebApp.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> AddToRole(string userId, string roleName)
+        public async Task<IActionResult> GiveAdminRights(string userId)
         {
-            await _userService.AddToRoleAsync(userId, roleName);
+            await _userService.RemoveFromRoleAsync(userId, "User");
+            await _userService.AddToRoleAsync(userId, "Admin");
 
             return RedirectToAction("UserTable");
         }
 
         [HttpGet]
-        public async Task<IActionResult> RemoveFromRole(string userId, string roleName)
+        public async Task<IActionResult> RevokeAdminRights(string userId)
         {
-            await _userService.RemoveFromRoleAsync(userId, roleName);
+            await _userService.RemoveFromRoleAsync(userId, "Admin");
+            await _userService.AddToRoleAsync(userId, "User");
 
             return RedirectToAction("UserTable");
         }
