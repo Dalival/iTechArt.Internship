@@ -32,7 +32,11 @@ namespace ITechArt.Surveys.WebApp.Controllers
                     Id = u.Id,
                     Name = u.UserName,
                     RegistrationDate = u.RegistrationDate,
-                    Role = string.Join(", ", u.UserRoles.Select(ur => ur.Role.Name))
+                    Roles = u.UserRoles.Select(ur => new RoleViewModel
+                    {
+                        Id = ur.RoleId,
+                        Name = ur.Role.Name
+                    })
                 })
                 .ToList();
 
