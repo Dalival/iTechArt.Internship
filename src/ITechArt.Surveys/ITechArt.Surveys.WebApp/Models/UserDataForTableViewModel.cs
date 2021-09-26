@@ -2,7 +2,7 @@
 
 namespace ITechArt.Surveys.WebApp.Models
 {
-    public class UserDataForTable
+    public class UserDataForTableViewModel
     {
         public string Id { get; set; }
 

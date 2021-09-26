@@ -27,7 +27,7 @@ namespace ITechArt.Surveys.WebApp.Controllers
             var skippedPages = page - 1;
             var users = await _userService.GetPaginatedUsersAsync(UsersPerPage * skippedPages, UsersPerPage);
 
-            var usersForTable = users.Select(u => new UserDataForTable
+            var usersForTable = users.Select(u => new UserDataForTableViewModel
                 {
                     Id = u.Id,
                     Name = u.UserName,
