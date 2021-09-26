@@ -64,20 +64,19 @@ namespace ITechArt.Surveys.Foundation
             return amount;
         }
 
-        public async Task<OperationResult<UserManagementError>> DeleteUserAsync(string id)
+        public async Task<bool> DeleteUserAsync(string id)
         {
             var user = await _userRepository.GetByIdAsync(id);
             if (user == null)
             {
-                return OperationResult<UserManagementError>.Failed(UserManagementError.CannotDeleteUser);
+                _logger.LogWarning("Admin tried to delete non-existent user.");
+
+                return false;
             }
 
-            var identityResult = await _userManager.DeleteAsync(user);
-            var operationResult = identityResult.Succeeded
-                ? OperationResult<UserManagementError>.Success
-                : OperationResult<UserManagementError>.Failed(UserManagementError.CannotDeleteUser);
+            var result = await _userManager.DeleteAsync(user);
 
-            return operationResult;
+            return result.Succeeded;
         }
 
 
