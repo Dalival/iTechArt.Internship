@@ -17,7 +17,7 @@ namespace ITechArt.Surveys.Foundation.Interfaces
 
         Task<int> CountUsersAsync();
 
-        Task<OperationResult<UserManagementError>>  DeleteUserAsync(string id);
+        Task<bool>  DeleteUserAsync(string id);
 
         Task<OperationResult<UserManagementError>> AddToRoleAsync(string userId, string roleName);
 

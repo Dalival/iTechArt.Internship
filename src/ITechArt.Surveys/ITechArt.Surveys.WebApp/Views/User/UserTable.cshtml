@@ -30,7 +30,7 @@
         foreach (var user in Model.Users)
         {
             <span class="align-left">@user.Name</span>
-            <span>@user.Role</span>
+            <span>@string.Join(", ", user.Roles.Select(r => r.Name))</span>
             <span>@user.RegistrationDate.Date.ToShortDateString()</span>
             if (user.Name == currentUserName)
             {

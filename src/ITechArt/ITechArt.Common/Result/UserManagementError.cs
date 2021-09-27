@@ -3,7 +3,6 @@
     public enum UserManagementError
     {
         UserNotFound,
-        CannotDeleteUser,
         UserAlreadyInRole,
         UserNotInRole
     }
