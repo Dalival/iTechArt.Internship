@@ -13,35 +13,35 @@
 <h1>@ViewData["Title"]</h1>
 
 <div class="user-table">
-    <span class="table-header align-left">
+    <div class="table-header align-left">
         <strong>Name</strong>
-    </span>
-    <span class="table-header">
+    </div>
+    <div class="table-header">
         <strong>Role</strong>
-    </span>
-    <span class="table-header">
+    </div>
+    <div class="table-header">
         <strong>Registrated</strong>
-    </span>
-    <span class="table-header">
+    </div>
+    <div class="table-header">
         <strong>Actions</strong>
-    </span>
+    </div>
     @{
         var currentUserName = _contextAccessor.HttpContext?.User.Identity?.Name;
         foreach (var user in Model.Users)
         {
-            <span class="align-left">@user.Name</span>
-            <span>@string.Join(", ", user.Roles.Select(r => r.Name))</span>
-            <span>@user.RegistrationDate.Date.ToShortDateString()</span>
+            <div class="align-left">@user.Name</div>
+            <div>@string.Join(", ", user.Roles.Select(r => r.Name))</div>
+            <div>@user.RegistrationDate.Date.ToShortDateString()</div>
             if (user.Name == currentUserName)
             {
-                <span class="inactive-icon">
-                    <span class="material-icons-outlined">delete</span>
-                    <span class="material-icons-outlined">person_outline</span>
-                </span>
+                <div>
+                    <span class="material-icons-outlined inactive-icon">delete</span>
+                    <span class="material-icons-outlined inactive-icon">person_outline</span>
+                </div>
             }
             else
             {
-                <span>
+                <div>
                     <a href="/User/DeleteUser?id=@user.Id" class="delete-button">
                         <span class="material-icons-outlined" title="Delete">delete</span>
                     </a>
@@ -57,7 +57,7 @@
                             <span class="material-icons-outlined" title="Give admin rights">manage_accounts</span>
                         </a>
                     }
-                </span>
+                </div>
             }
         }
     }

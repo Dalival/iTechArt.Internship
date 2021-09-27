@@ -8,7 +8,7 @@
     background-color: #f2f3f5;
 }
 
-.user-table > span {
+.user-table > div {
     padding: 8px;
     text-align: center;
 }
@@ -28,19 +28,19 @@
 }
 
 .flip-pages-arrows > a,
-.user-table > span > a {
+.user-table > div > a {
     color: #5f6368;
     text-decoration: none;
 }
 
 .flip-pages-arrows > a:hover,
-.user-table > span > a:hover {
+.user-table > div > a:hover {
     color: #346be3;
     text-decoration: none;
     cursor: pointer;
 }
 
-.user-table > span > .delete-button:hover {
+.user-table > div > .delete-button:hover {
     color: #db4437;
 }
 
