@@ -45,7 +45,7 @@
                     <a href="/User/DeleteUser?id=@user.Id" class="delete-button">
                         <span class="material-icons-outlined" title="Delete">delete</span>
                     </a>
-                    @if (user.Role.Contains("Admin"))
+                    @if (user.Roles.Any(r => r.Name == "Admin"))
                     {
                         <a href="/User/RevokeAdminRights?userId=@user.Id">
                             <span class="material-icons-outlined" title="Revoke admin rights">person_outline</span>
