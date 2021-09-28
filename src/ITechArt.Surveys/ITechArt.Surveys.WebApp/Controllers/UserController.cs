@@ -62,8 +62,7 @@ namespace ITechArt.Surveys.WebApp.Controllers
         [HttpGet]
         public async Task<IActionResult> GiveAdminRights(string userId)
         {
-            await _userService.RemoveFromRoleAsync(userId, "User");
-            await _userService.AddToRoleAsync(userId, "Admin");
+            await _userService.GiveAdminRights(userId);
 
             return RedirectToAction("UserTable");
         }
@@ -71,8 +70,7 @@ namespace ITechArt.Surveys.WebApp.Controllers
         [HttpGet]
         public async Task<IActionResult> RevokeAdminRights(string userId)
         {
-            await _userService.RemoveFromRoleAsync(userId, "Admin");
-            await _userService.AddToRoleAsync(userId, "User");
+            await _userService.RevokeAdminRights(userId);
 
             return RedirectToAction("UserTable");
         }

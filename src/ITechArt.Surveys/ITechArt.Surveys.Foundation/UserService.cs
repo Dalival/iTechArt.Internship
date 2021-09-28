@@ -82,7 +82,49 @@ namespace ITechArt.Surveys.Foundation
             return result.Succeeded;
         }
 
-        public async Task<OperationResult<AddToRoleError>> AddToRoleAsync(string userId, string roleName)
+        public async Task<OperationResult<GiveAdminRightsError>> GiveAdminRights(string userId)
+        {
+            var resultOfAdd = await AddToRoleAsync(userId, "admin");
+            if (!resultOfAdd.Succeeded)
+            {
+                var result = resultOfAdd.Errors.Single() switch
+                {
+                    AddToRoleError.UserNotFound => OperationResult<GiveAdminRightsError>.Failed(GiveAdminRightsError.UserNotFound),
+                    AddToRoleError.RoleNotFound => OperationResult<GiveAdminRightsError>.Failed(GiveAdminRightsError.AdminRoleNotFound),
+                    AddToRoleError.UserAlreadyInRole => OperationResult<GiveAdminRightsError>.Failed(GiveAdminRightsError.UserIsAlreadyAdmin),
+                    _ => throw new ArgumentOutOfRangeException()
+                };
+
+                return result;
+            }
+
+            await RemoveFromRoleAsync(userId, "user");
+
+            return OperationResult<GiveAdminRightsError>.Success;
+        }
+
+        public async Task<OperationResult<RevokeAdminRightsError>> RevokeAdminRights(string userId)
+        {
+            var resultOfAdd = await RemoveFromRoleAsync(userId, "admin");
+            if (!resultOfAdd.Succeeded)
+            {
+                var result = resultOfAdd.Errors.Single() switch
+                {
+                    RemoveFromRoleError.UserNotFound => OperationResult<RevokeAdminRightsError>.Failed(RevokeAdminRightsError.UserNotFound),
+                    RemoveFromRoleError.UserNotInRole => OperationResult<RevokeAdminRightsError>.Failed(RevokeAdminRightsError.UserNotAnAdmin),
+                    _ => throw new ArgumentOutOfRangeException()
+                };
+
+                return result;
+            }
+
+            await AddToRoleAsync(userId, "user");
+
+            return OperationResult<RevokeAdminRightsError>.Success;
+        }
+
+
+        private async Task<OperationResult<AddToRoleError>> AddToRoleAsync(string userId, string roleName)
         {
             var isRoleExist = await _roleRepository.AnyAsync(r => r.NormalizedName == roleName.Normalize());
             if (!isRoleExist)
@@ -104,7 +146,7 @@ namespace ITechArt.Surveys.Foundation
             return operationResult;
         }
 
-        public async Task<OperationResult<RemoveFromRoleError>> RemoveFromRoleAsync(string userId, string roleName)
+        private async Task<OperationResult<RemoveFromRoleError>> RemoveFromRoleAsync(string userId, string roleName)
         {
             var user = await _userRepository.GetByIdAsync(userId);
             if (user == null)
@@ -119,7 +161,6 @@ namespace ITechArt.Surveys.Foundation
 
             return operationResult;
         }
-
 
         private OperationResult<RegistrationError> ConvertResult(IdentityResult identityResult)
         {
@@ -138,10 +179,8 @@ namespace ITechArt.Surveys.Foundation
                     nameof(IdentityErrorDescriber.PasswordRequiresDigit) => RegistrationError.PasswordRequiresDigit,
                     nameof(IdentityErrorDescriber.PasswordRequiresLower) => RegistrationError.PasswordRequiresLower,
                     nameof(IdentityErrorDescriber.PasswordRequiresUpper) => RegistrationError.PasswordRequiresUpper,
-                    nameof(IdentityErrorDescriber.PasswordRequiresUniqueChars) => RegistrationError
-                        .PasswordRequiresMoreUniqueChars,
-                    nameof(IdentityErrorDescriber.PasswordRequiresNonAlphanumeric) => RegistrationError
-                        .PasswordRequiresNonAlphanumeric,
+                    nameof(IdentityErrorDescriber.PasswordRequiresUniqueChars) => RegistrationError.PasswordRequiresMoreUniqueChars,
+                    nameof(IdentityErrorDescriber.PasswordRequiresNonAlphanumeric) => RegistrationError.PasswordRequiresNonAlphanumeric,
                     _ => RegistrationError.UnknownError
                 })
                 .ToList();
