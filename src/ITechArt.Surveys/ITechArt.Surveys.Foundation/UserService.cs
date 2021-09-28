@@ -36,7 +36,7 @@ namespace ITechArt.Surveys.Foundation
         {
             user.RegistrationDate = DateTime.Now;
             var identityResult = await _userManager.CreateAsync(user, password);
-            var operationResult = ConvertResult(identityResult);
+            var operationResult = ConvertRegistrationResult(identityResult);
 
             if (operationResult.Succeeded)
             {
@@ -84,85 +84,60 @@ namespace ITechArt.Surveys.Foundation
 
         public async Task<OperationResult<GiveAdminRightsError>> GiveAdminRights(string userId)
         {
-            var resultOfAdd = await AddToRoleAsync(userId, "admin");
-            if (!resultOfAdd.Succeeded)
+            var user = await _userRepository.GetByIdAsync(userId);
+            if (user == null)
             {
-                var result = resultOfAdd.Errors.Single() switch
-                {
-                    AddToRoleError.UserNotFound => OperationResult<GiveAdminRightsError>.Failed(GiveAdminRightsError.UserNotFound),
-                    AddToRoleError.RoleNotFound => OperationResult<GiveAdminRightsError>.Failed(GiveAdminRightsError.AdminRoleNotFound),
-                    AddToRoleError.UserAlreadyInRole => OperationResult<GiveAdminRightsError>.Failed(GiveAdminRightsError.UserIsAlreadyAdmin),
-                    _ => throw new ArgumentOutOfRangeException()
-                };
-
-                return result;
+                return OperationResult<GiveAdminRightsError>.Failed(GiveAdminRightsError.UserNotFound);
             }
 
-            await RemoveFromRoleAsync(userId, "user");
+            var isAdminRoleExist = await _roleRepository.AnyAsync(r => r.NormalizedName == "ADMIN");
+            if (!isAdminRoleExist)
+            {
+                return OperationResult<GiveAdminRightsError>.Failed(GiveAdminRightsError.AdminRoleNotFound);
+            }
+
+            var identityResult = await _userManager.AddToRoleAsync(user, "admin");
+            if (!identityResult.Succeeded)
+            {
+                return identityResult.Errors.Any(e => e.Code is nameof(IdentityErrorDescriber.UserAlreadyInRole))
+                    ? OperationResult<GiveAdminRightsError>.Failed(GiveAdminRightsError.UserAlreadyAdmin)
+                    : OperationResult<GiveAdminRightsError>.Failed(GiveAdminRightsError.UnknownError);
+            }
+
+            await _userManager.RemoveFromRoleAsync(user, "user");
 
             return OperationResult<GiveAdminRightsError>.Success;
         }
 
         public async Task<OperationResult<RevokeAdminRightsError>> RevokeAdminRights(string userId)
         {
-            var resultOfAdd = await RemoveFromRoleAsync(userId, "admin");
-            if (!resultOfAdd.Succeeded)
+            var user = await _userRepository.GetByIdAsync(userId);
+            if (user == null)
             {
-                var result = resultOfAdd.Errors.Single() switch
-                {
-                    RemoveFromRoleError.UserNotFound => OperationResult<RevokeAdminRightsError>.Failed(RevokeAdminRightsError.UserNotFound),
-                    RemoveFromRoleError.UserNotInRole => OperationResult<RevokeAdminRightsError>.Failed(RevokeAdminRightsError.UserNotAnAdmin),
-                    _ => throw new ArgumentOutOfRangeException()
-                };
-
-                return result;
+                return OperationResult<RevokeAdminRightsError>.Failed(RevokeAdminRightsError.UserNotFound);
             }
 
-            await AddToRoleAsync(userId, "user");
+            var isUserRoleExist = await _roleRepository.AnyAsync(r => r.NormalizedName == "USER");
+            if (!isUserRoleExist)
+            {
+                return OperationResult<RevokeAdminRightsError>.Failed(RevokeAdminRightsError.UserRoleNotFound);
+            }
+
+            var identityResult = await _userManager.RemoveFromRoleAsync(user, "admin");
+            if (!identityResult.Succeeded)
+            {
+                return identityResult.Errors.Any(e => e.Code is nameof(IdentityErrorDescriber.UserNotInRole))
+                    ? OperationResult<RevokeAdminRightsError>.Failed(RevokeAdminRightsError.UserNotAdmin)
+                    : OperationResult<RevokeAdminRightsError>.Failed(RevokeAdminRightsError.UnknownError);
+            }
+
+            await _userManager.AddToRoleAsync(user, "user");
 
             return OperationResult<RevokeAdminRightsError>.Success;
         }
 
 
-        private async Task<OperationResult<AddToRoleError>> AddToRoleAsync(string userId, string roleName)
-        {
-            var isRoleExist = await _roleRepository.AnyAsync(r => r.NormalizedName == roleName.Normalize());
-            if (!isRoleExist)
-            {
-                return OperationResult<AddToRoleError>.Failed(AddToRoleError.RoleNotFound);
-            }
-
-            var user = await _userRepository.GetByIdAsync(userId);
-            if (user == null)
-            {
-                return OperationResult<AddToRoleError>.Failed(AddToRoleError.UserNotFound);
-            }
-
-            var identityResult = await _userManager.AddToRoleAsync(user, roleName);
-            var operationResult = identityResult.Succeeded
-                ? OperationResult<AddToRoleError>.Success
-                : OperationResult<AddToRoleError>.Failed(AddToRoleError.UserAlreadyInRole);
-
-            return operationResult;
-        }
-
-        private async Task<OperationResult<RemoveFromRoleError>> RemoveFromRoleAsync(string userId, string roleName)
-        {
-            var user = await _userRepository.GetByIdAsync(userId);
-            if (user == null)
-            {
-                return OperationResult<RemoveFromRoleError>.Failed(RemoveFromRoleError.UserNotFound);
-            }
-
-            var identityResult = await _userManager.RemoveFromRoleAsync(user, roleName);
-            var operationResult = identityResult.Succeeded
-                ? OperationResult<RemoveFromRoleError>.Success
-                : OperationResult<RemoveFromRoleError>.Failed(RemoveFromRoleError.UserNotInRole);
-
-            return operationResult;
-        }
-
-        private OperationResult<RegistrationError> ConvertResult(IdentityResult identityResult)
+        private OperationResult<RegistrationError> ConvertRegistrationResult(IdentityResult identityResult)
         {
             if (identityResult.Succeeded)
             {

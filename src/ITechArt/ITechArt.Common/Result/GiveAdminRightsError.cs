@@ -2,8 +2,9 @@
 {
     public enum GiveAdminRightsError
     {
+        UnknownError,
         UserNotFound,
         AdminRoleNotFound,
-        UserIsAlreadyAdmin
+        UserAlreadyAdmin
     }
 }

@@ -2,7 +2,9 @@
 {
     public enum RevokeAdminRightsError
     {
+        UnknownError,
         UserNotFound,
-        UserNotAnAdmin
+        UserRoleNotFound,
+        UserNotAdmin
     }
 }
