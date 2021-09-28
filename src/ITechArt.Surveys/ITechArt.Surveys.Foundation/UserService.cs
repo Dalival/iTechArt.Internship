@@ -46,13 +46,6 @@ namespace ITechArt.Surveys.Foundation
             return operationResult;
         }
 
-        public async Task<IReadOnlyCollection<User>> GetAllUsersAsync()
-        {
-            var users = await _userRepository.GetAllWithRolesAsync();
-
-            return users;
-        }
-
         public async Task<IReadOnlyCollection<User>> GetPaginatedUsersAsync(int fromPosition, int amount)
         {
             var users = await _userRepository.GetPaginatedWithRolesAsync(fromPosition, amount);
