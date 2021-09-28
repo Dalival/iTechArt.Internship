@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
 using ITechArt.Common.Logger;
+using ITechArt.Common.Result;
 using ITechArt.Surveys.DomainModel;
 using ITechArt.Surveys.Foundation.Interfaces;
-using ITechArt.Surveys.Foundation.Result;
 using Microsoft.AspNetCore.Identity;
 
 namespace ITechArt.Surveys.Foundation

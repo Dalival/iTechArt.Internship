@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using ITechArt.Surveys.Foundation.Result;
+using ITechArt.Common.Result;
 
 namespace ITechArt.Surveys.Foundation.Interfaces
 {

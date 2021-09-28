@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace ITechArt.Surveys.Foundation.Result
+namespace ITechArt.Common.Result
 {
     public readonly struct OperationResult<TError>
     {

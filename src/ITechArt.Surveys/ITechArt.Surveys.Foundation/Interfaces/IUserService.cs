@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using ITechArt.Common.Result;
 using ITechArt.Surveys.DomainModel;
-using ITechArt.Surveys.Foundation.Result;
 
 namespace ITechArt.Surveys.Foundation.Interfaces
 {
@@ -14,5 +14,7 @@ namespace ITechArt.Surveys.Foundation.Interfaces
         Task<IReadOnlyCollection<User>> GetPaginatedUsersAsync(int fromPosition, int amount);
 
         Task<int> CountUsersAsync();
+
+        Task<bool>  DeleteUserAsync(string id);
     }
 }

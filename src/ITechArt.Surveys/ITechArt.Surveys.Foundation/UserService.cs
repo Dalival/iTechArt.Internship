@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ITechArt.Common.Logger;
+using ITechArt.Common.Result;
 using ITechArt.Surveys.DomainModel;
 using ITechArt.Surveys.Foundation.Interfaces;
-using ITechArt.Surveys.Foundation.Result;
 using ITechArt.Surveys.Repositories;
 using ITechArt.Surveys.Repositories.Repositories;
 using Microsoft.AspNetCore.Identity;
@@ -62,6 +62,21 @@ namespace ITechArt.Surveys.Foundation
             var amount = await _userRepository.CountAsync();
 
             return amount;
+        }
+
+        public async Task<bool> DeleteUserAsync(string id)
+        {
+            var user = await _userRepository.GetByIdAsync(id);
+            if (user == null)
+            {
+                _logger.LogWarning("Admin tried to delete non-existent user.");
+
+                return false;
+            }
+
+            var result = await _userManager.DeleteAsync(user);
+
+            return result.Succeeded;
         }
 
 

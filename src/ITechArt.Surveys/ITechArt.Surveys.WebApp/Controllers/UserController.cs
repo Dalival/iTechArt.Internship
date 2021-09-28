@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ITechArt.Surveys.WebApp.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class UserController : Controller
     {
         private const int UsersPerPage = 5;
@@ -21,17 +22,21 @@ namespace ITechArt.Surveys.WebApp.Controllers
 
 
         [HttpGet]
-        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> UserTable(int page = 1)
         {
             var skippedPages = page - 1;
             var users = await _userService.GetPaginatedUsersAsync(UsersPerPage * skippedPages, UsersPerPage);
 
-            var usersForTable = users.Select(u => new UserDataForTable
+            var usersForTable = users.Select(u => new UserDataForTableViewModel
                 {
+                    Id = u.Id,
                     Name = u.UserName,
                     RegistrationDate = u.RegistrationDate,
-                    Role = string.Join(", ", u.UserRoles.Select(ur => ur.Role.Name))
+                    Roles = u.UserRoles.Select(ur => new RoleViewModel
+                    {
+                        Id = ur.RoleId,
+                        Name = ur.Role.Name
+                    })
                 })
                 .ToList();
 
@@ -44,6 +49,14 @@ namespace ITechArt.Surveys.WebApp.Controllers
             };
 
             return View(userTableViewModel);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> DeleteUser(string id)
+        {
+            await _userService.DeleteUserAsync(id);
+
+            return RedirectToAction("UserTable");
         }
     }
 }

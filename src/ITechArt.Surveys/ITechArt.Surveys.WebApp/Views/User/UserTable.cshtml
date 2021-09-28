@@ -1,4 +1,8 @@
-﻿@model UserTableViewModel
+﻿@using Microsoft.AspNetCore.Http
+
+@inject IHttpContextAccessor _contextAccessor
+
+@model UserTableViewModel
 
 @{
     ViewData["Title"] = "Users";
@@ -9,20 +13,40 @@
 <h1>@ViewData["Title"]</h1>
 
 <div class="user-table">
-    <span>
+    <span class="table-header align-left">
         <strong>Name</strong>
     </span>
-    <span>
+    <span class="table-header">
         <strong>Role</strong>
     </span>
-    <span>
+    <span class="table-header">
         <strong>Registrated</strong>
     </span>
-    @foreach (var user in @Model.Users)
-    {
-        <span>@user.Name</span>
-        <span>@user.Role</span>
-        <span>@user.RegistrationDate.Date.ToShortDateString()</span>
+    <span class="table-header">
+        <strong>Actions</strong>
+    </span>
+    @{
+        var currentUserName = _contextAccessor.HttpContext?.User.Identity?.Name;
+        @foreach (var user in Model.Users)
+        {
+            <span class="align-left">@user.Name</span>
+            <span>@string.Join(", ", user.Roles.Select(r => r.Name))</span>
+            <span>@user.RegistrationDate.Date.ToShortDateString()</span>
+            if (user.Name != null && user.Name != currentUserName)
+            {
+                <span>
+                    <a href="/User/DeleteUser?id=@user.Id">
+                        <span class="material-icons-outlined">delete</span>
+                    </a>
+                </span>
+            }
+            else
+            {
+                <span class="cannot-delete">
+                    <span class="material-icons-outlined">delete_forever</span>
+                </span>
+            }
+        }
     }
 </div>
 
