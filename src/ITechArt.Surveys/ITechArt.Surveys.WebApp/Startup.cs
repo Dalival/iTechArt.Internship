@@ -40,6 +40,7 @@ namespace ITechArt.Surveys.WebApp
             services.AddScoped<ISurveysUnitOfWork, SurveysUnitOfWork>();
             services.AddScoped<ICustomLogger, CustomLogger>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IRoleService, RoleService>();
             services.AddScoped<IAccountService, AccountService>();
 
             services.AddControllersWithViews();

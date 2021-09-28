@@ -13,11 +13,13 @@ namespace ITechArt.Surveys.WebApp.Controllers
         private const int UsersPerPage = 5;
 
         private readonly IUserService _userService;
+        private readonly IRoleService _roleService;
 
 
-        public UserController(IUserService userService)
+        public UserController(IUserService userService, IRoleService roleService)
         {
             _userService = userService;
+            _roleService = roleService;
         }
 
 
@@ -42,7 +44,7 @@ namespace ITechArt.Surveys.WebApp.Controllers
 
             var totalUsersAmount = await _userService.CountUsersAsync();
 
-            var allRoles = await _userService.GetAllRolesAsync();
+            var allRoles = await _roleService.GetAllRolesAsync();
             var rolesNames = allRoles.Select(r => r.Name);
 
             var userTableViewModel = new UserTableViewModel
