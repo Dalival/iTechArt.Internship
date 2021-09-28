@@ -3,6 +3,7 @@
     public enum AddToRoleError
     {
         UserNotFound,
+        RoleNotFound,
         UserAlreadyInRole
     }
 }
