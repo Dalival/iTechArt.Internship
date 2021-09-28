@@ -1,9 +1,8 @@
 ﻿namespace ITechArt.Common.Result
 {
-    public enum UserManagementError
+    public enum RemoveFromRoleError
     {
         UserNotFound,
-        UserAlreadyInRole,
         UserNotInRole
     }
 }

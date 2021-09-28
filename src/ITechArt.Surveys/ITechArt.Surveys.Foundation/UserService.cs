@@ -79,34 +79,34 @@ namespace ITechArt.Surveys.Foundation
             return result.Succeeded;
         }
 
-        public async Task<OperationResult<UserManagementError>> AddToRoleAsync(string userId, string roleName)
+        public async Task<OperationResult<AddToRoleError>> AddToRoleAsync(string userId, string roleName)
         {
             var user = await _userRepository.GetByIdAsync(userId);
             if (user == null)
             {
-                return OperationResult<UserManagementError>.Failed(UserManagementError.UserNotFound);
+                return OperationResult<AddToRoleError>.Failed(AddToRoleError.UserNotFound);
             }
 
             var identityResult = await _userManager.AddToRoleAsync(user, roleName);
             var operationResult = identityResult.Succeeded
-                ? OperationResult<UserManagementError>.Success
-                : OperationResult<UserManagementError>.Failed(UserManagementError.UserAlreadyInRole);
+                ? OperationResult<AddToRoleError>.Success
+                : OperationResult<AddToRoleError>.Failed(AddToRoleError.UserAlreadyInRole);
 
             return operationResult;
         }
 
-        public async Task<OperationResult<UserManagementError>> RemoveFromRoleAsync(string userId, string roleName)
+        public async Task<OperationResult<RemoveFromRoleError>> RemoveFromRoleAsync(string userId, string roleName)
         {
             var user = await _userRepository.GetByIdAsync(userId);
             if (user == null)
             {
-                return OperationResult<UserManagementError>.Failed(UserManagementError.UserNotFound);
+                return OperationResult<RemoveFromRoleError>.Failed(RemoveFromRoleError.UserNotFound);
             }
 
             var identityResult = await _userManager.RemoveFromRoleAsync(user, roleName);
             var operationResult = identityResult.Succeeded
-                ? OperationResult<UserManagementError>.Success
-                : OperationResult<UserManagementError>.Failed(UserManagementError.UserNotInRole);
+                ? OperationResult<RemoveFromRoleError>.Success
+                : OperationResult<RemoveFromRoleError>.Failed(RemoveFromRoleError.UserNotInRole);
 
             return operationResult;
         }
