@@ -1,4 +1,5 @@
 ﻿@using Microsoft.AspNetCore.Http
+@using Microsoft.AspNetCore.Http.Features
 
 @inject IHttpContextAccessor _contextAccessor
 
@@ -35,13 +36,14 @@
             if (user.Name != null && user.Name != currentUserName)
             {
                 <span>
-                    <form asp-controller="User" asp-action="DeleteUser" method="post">
+                    @using (Html.BeginForm("DeleteUser", "User", FormMethod.Post))
+                    {
                         @Html.Hidden("userId", user.Id)
                         <label class="delete-button">
                             <input type="submit" class="hide"/>
                             <span class="material-icons-outlined">delete</span>
                         </label>
-                    </form>
+                    }
                 </span>
             }
             else
