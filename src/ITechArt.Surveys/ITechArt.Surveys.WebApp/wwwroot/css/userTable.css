@@ -1,15 +1,15 @@
 ﻿.user-table {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    border: 1px solid #dee2e6;
+    border: 1px solid rgb(222, 226, 230);
 }
 
 .user-table .table-header {
-    background-color: #f2f3f5;
+    background-color: rgb(242, 243, 245);
     margin-bottom: 8px;
 }
 
-.user-table > span {
+.user-table > div {
     padding: 8px;
     text-align: center;
 }
@@ -18,53 +18,58 @@
     text-align: left;
 }
 
+.user-table .actions,
+.users-table .inactive-actions {
+    display: flex;
+    justify-content: center;
+}
+
 .navbar-for-table {
     display: flex;
     justify-content: space-between;
     margin-top: 15px;
+    padding-right: 5px;
 }
 
 .flip-pages-arrows {
     display: flex;
 }
 
+.flip-pages-arrows .users-counter {
+    margin: 0 6px 0 6px;
+}
+
 .flip-pages-arrows > a,
-.user-table > div > a,
-.delete-button {
-    color: #5f6368;
-    text-decoration: none;
+.delete-button,
+.change-role-button {
+    color: rgb(95, 99, 104);
 }
 
-.flip-pages-arrows > a:hover {
-    color: #346be3;
-    text-decoration: none;
+.actions > span,
+.inactive-actions > span {
+    margin: 0 5px 0 5px;
+}
+
+.flip-pages-arrows > a:hover,
+.change-role-button:hover {
+    color: rgb(52, 107, 227);
     cursor: pointer;
-}
-
-.cannot-delete {
-    color: #b7b7b7;
-    cursor: default;
 }
 
 .delete-button:hover {
-    color: #db4437;
-    text-decoration: none;
+    color: rgb(219, 68, 55);
     cursor: pointer;
 }
 
-.flip-pages-arrows > span {
-    margin: 0 4px 0 4px;
-}
-.user-table .material-icons-outlined {
-    margin: 0 4px 0 4px;
-}
-
-.inactive-icon,
-.cannot-delete {
-    color: #b7b7b7;
+.inactive-actions {
+    color: rgb(183, 183, 183);
     cursor: default;
 }
 
 label {
     margin: 0;
+}
+
+.hide {
+    display: none;
 }

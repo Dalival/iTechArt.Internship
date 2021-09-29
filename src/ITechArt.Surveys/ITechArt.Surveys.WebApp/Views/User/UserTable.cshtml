@@ -34,44 +34,48 @@
             <div>@user.RegistrationDate.Date.ToShortDateString()</div>
             if (user.Name == currentUserName)
             {
-                <div>
-                    <span class="material-icons-outlined inactive-icon">delete</span>
-                    <span class="material-icons-outlined inactive-icon">person_outline</span>
+                <div class="inactive-actions">
+                    <span class="material-icons-outlined">delete</span>
+                    <span class="material-icons-outlined">person_outline</span>
                 </div>
             }
             else
             {
-                <div>
-                    @using (Html.BeginForm("DeleteUser", "User", FormMethod.Post))
-                    {
-                        @Html.Hidden("userId", user.Id)
-                        <label class="delete-button">
-                            <input type="submit" class="hide"/>
-                            <span class="material-icons-outlined">delete</span>
-                        </label>
-                    }
-                    @if (user.Roles.Any(r => r.Name == "Admin"))
-                    {
-                        @using (Html.BeginForm("RevokeAdminRights", "User", FormMethod.Post))
+                <div class="actions">
+                    <span>
+                        @using (Html.BeginForm("DeleteUser", "User", FormMethod.Post))
                         {
                             @Html.Hidden("userId", user.Id)
-                            <label class="change-role-button">
+                            <label class="delete-button" title="Delete user">
                                 <input type="submit" class="hide"/>
-                                <span class="material-icons-outlined" title="Revoke admin rights">person_outline</span>
+                                <span class="material-icons-outlined">delete</span>
                             </label>
                         }
-                    }
-                    else
-                    {
-                        @using (Html.BeginForm("GiveAdminRights", "User", FormMethod.Post))
+                    </span>
+                    <span>
+                        @if (user.Roles.Any(r => r.Name == "Admin"))
                         {
-                            @Html.Hidden("userId", user.Id)
-                            <label class="change-role-button">
-                                <input type="submit" class="hide"/>
-                                <span class="material-icons-outlined" title="Give admin rights">manage_accounts</span>
-                            </label>
+                            @using (Html.BeginForm("RevokeAdminRights", "User", FormMethod.Post))
+                            {
+                                @Html.Hidden("userId", user.Id)
+                                <label class="change-role-button" title="Revoke admin rights">
+                                    <input type="submit" class="hide"/>
+                                    <span class="material-icons-outlined">person_outline</span>
+                                </label>
+                            }
                         }
-                    }
+                        else
+                        {
+                            @using (Html.BeginForm("GiveAdminRights", "User", FormMethod.Post))
+                            {
+                                @Html.Hidden("userId", user.Id)
+                                <label class="change-role-button" title="Give admin rights">
+                                    <input type="submit" class="hide"/>
+                                    <span class="material-icons-outlined">manage_accounts</span>
+                                </label>
+                            }
+                        }
+                    </span>
                 </div>
             }
         }
@@ -92,7 +96,7 @@
                 <span class="material-icons-outlined">keyboard_arrow_left</span>
             </a>
         }
-        <span>@Model.Page</span>
+        <span class="users-counter">@Model.Page</span>
         @{
             const int usersPerPage = 5;
             if (Model.Page != Model.TotalUsersAmount / usersPerPage + 1)
