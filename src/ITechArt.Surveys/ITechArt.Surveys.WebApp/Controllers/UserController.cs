@@ -45,7 +45,7 @@ namespace ITechArt.Surveys.WebApp.Controllers
             {
                 Users = usersForTable,
                 Page = page,
-                TotalUsersAmount = totalUsersAmount,
+                TotalUsersAmount = totalUsersAmount
             };
 
             return View(userTableViewModel);
