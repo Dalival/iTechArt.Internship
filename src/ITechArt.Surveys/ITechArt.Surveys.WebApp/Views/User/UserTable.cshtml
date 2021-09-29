@@ -35,9 +35,13 @@
             if (user.Name != null && user.Name != currentUserName)
             {
                 <span>
-                    <a href="/User/DeleteUser?id=@user.Id">
-                        <span class="material-icons-outlined">delete</span>
-                    </a>
+                    <form asp-controller="User" asp-action="DeleteUser" method="post">
+                        @Html.Hidden("userId", user.Id)
+                        <label class="delete-button">
+                            <input type="submit" class="hide"/>
+                            <span class="material-icons-outlined">delete</span>
+                        </label>
+                    </form>
                 </span>
             }
             else
