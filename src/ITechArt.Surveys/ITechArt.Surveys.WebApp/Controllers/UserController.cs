@@ -51,10 +51,10 @@ namespace ITechArt.Surveys.WebApp.Controllers
             return View(userTableViewModel);
         }
 
-        [HttpGet]
-        public async Task<IActionResult> DeleteUser(string id)
+        [HttpPost]
+        public async Task<IActionResult> DeleteUser(string userId)
         {
-            await _userService.DeleteUserAsync(id);
+            await _userService.DeleteUserAsync(userId);
 
             return RedirectToAction("UserTable");
         }

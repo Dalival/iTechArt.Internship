@@ -6,9 +6,10 @@
 
 .user-table .table-header {
     background-color: #f2f3f5;
+    margin-bottom: 8px;
 }
 
-.user-table > div {
+.user-table > span {
     padding: 8px;
     text-align: center;
 }
@@ -28,31 +29,42 @@
 }
 
 .flip-pages-arrows > a,
-.user-table > div > a {
+.user-table > div > a,
+.delete-button {
     color: #5f6368;
     text-decoration: none;
 }
 
-.flip-pages-arrows > a:hover,
-.user-table > div > a:hover {
+.flip-pages-arrows > a:hover {
     color: #346be3;
     text-decoration: none;
     cursor: pointer;
 }
 
-.user-table > div > .delete-button:hover {
-    color: #db4437;
-}
-
-.user-table .material-icons-outlined {
-    margin: 0 4px 0 4px;
-}
-
-.inactive-icon {
+.cannot-delete {
     color: #b7b7b7;
     cursor: default;
 }
 
+.delete-button:hover {
+    color: #db4437;
+    text-decoration: none;
+    cursor: pointer;
+}
+
 .flip-pages-arrows > span {
     margin: 0 4px 0 4px;
+}
+.user-table .material-icons-outlined {
+    margin: 0 4px 0 4px;
+}
+
+.inactive-icon,
+.cannot-delete {
+    color: #b7b7b7;
+    cursor: default;
+}
+
+label {
+    margin: 0;
 }

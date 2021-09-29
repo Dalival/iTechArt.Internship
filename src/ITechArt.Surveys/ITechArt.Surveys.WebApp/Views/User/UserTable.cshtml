@@ -42,9 +42,16 @@
             else
             {
                 <div>
-                    <a href="/User/DeleteUser?id=@user.Id" class="delete-button">
-                        <span class="material-icons-outlined" title="Delete">delete</span>
-                    </a>
+                    <span>
+                        @using (Html.BeginForm("DeleteUser", "User", FormMethod.Post))
+                        {
+                            @Html.Hidden("userId", user.Id)
+                            <label class="delete-button">
+                                <input type="submit" class="hide"/>
+                                <span class="material-icons-outlined">delete</span>
+                            </label>
+                        }
+                    </span>
                     @if (user.Roles.Any(r => r.Name == "Admin"))
                     {
                         <a href="/User/RevokeAdminRights?userId=@user.Id">
@@ -78,14 +85,17 @@
             </a>
         }
         <span>@Model.Page</span>
-        @if (Model.Page != Model.TotalUsersAmount / 5 + 1)
-        {
-            <a href="/User/UserTable?page=@(Model.Page + 1)">
-                <span class="material-icons-outlined">keyboard_arrow_right</span>
-            </a>
-            <a href="/User/UserTable?page=@(Model.TotalUsersAmount / 5 + 1)">
-                <span class="material-icons-outlined">keyboard_double_arrow_right</span>
-            </a>
+        @{
+            const int usersPerPage = 5;
+            if (Model.Page != Model.TotalUsersAmount / usersPerPage + 1)
+            {
+                <a href="/User/UserTable?page=@(Model.Page + 1)">
+                    <span class="material-icons-outlined">keyboard_arrow_right</span>
+                </a>
+                <a href="/User/UserTable?page=@(Model.TotalUsersAmount / usersPerPage + 1)">
+                    <span class="material-icons-outlined">keyboard_double_arrow_right</span>
+                </a>
+            }
         }
     </div>
 </div>
