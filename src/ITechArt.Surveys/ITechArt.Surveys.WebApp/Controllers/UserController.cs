@@ -59,7 +59,7 @@ namespace ITechArt.Surveys.WebApp.Controllers
             return RedirectToAction("UserTable");
         }
 
-        [HttpGet]
+        [HttpPost]
         public async Task<IActionResult> GiveAdminRights(string userId)
         {
             await _userService.GiveAdminRights(userId);
@@ -67,7 +67,7 @@ namespace ITechArt.Surveys.WebApp.Controllers
             return RedirectToAction("UserTable");
         }
 
-        [HttpGet]
+        [HttpPost]
         public async Task<IActionResult> RevokeAdminRights(string userId)
         {
             await _userService.RevokeAdminRights(userId);

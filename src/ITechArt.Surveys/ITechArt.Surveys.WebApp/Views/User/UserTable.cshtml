@@ -42,27 +42,35 @@
             else
             {
                 <div>
-                    <span>
-                        @using (Html.BeginForm("DeleteUser", "User", FormMethod.Post))
-                        {
-                            @Html.Hidden("userId", user.Id)
-                            <label class="delete-button">
-                                <input type="submit" class="hide"/>
-                                <span class="material-icons-outlined">delete</span>
-                            </label>
-                        }
-                    </span>
+                    @using (Html.BeginForm("DeleteUser", "User", FormMethod.Post))
+                    {
+                        @Html.Hidden("userId", user.Id)
+                        <label class="delete-button">
+                            <input type="submit" class="hide"/>
+                            <span class="material-icons-outlined">delete</span>
+                        </label>
+                    }
                     @if (user.Roles.Any(r => r.Name == "Admin"))
                     {
-                        <a href="/User/RevokeAdminRights?userId=@user.Id">
-                            <span class="material-icons-outlined" title="Revoke admin rights">person_outline</span>
-                        </a>
+                        @using (Html.BeginForm("RevokeAdminRights", "User", FormMethod.Post))
+                        {
+                            @Html.Hidden("userId", user.Id)
+                            <label class="change-role-button">
+                                <input type="submit" class="hide"/>
+                                <span class="material-icons-outlined" title="Revoke admin rights">person_outline</span>
+                            </label>
+                        }
                     }
                     else
                     {
-                        <a href="/User/GiveAdminRights?userId=@user.Id">
-                            <span class="material-icons-outlined" title="Give admin rights">manage_accounts</span>
-                        </a>
+                        @using (Html.BeginForm("GiveAdminRights", "User", FormMethod.Post))
+                        {
+                            @Html.Hidden("userId", user.Id)
+                            <label class="change-role-button">
+                                <input type="submit" class="hide"/>
+                                <span class="material-icons-outlined" title="Give admin rights">manage_accounts</span>
+                            </label>
+                        }
                     }
                 </div>
             }
