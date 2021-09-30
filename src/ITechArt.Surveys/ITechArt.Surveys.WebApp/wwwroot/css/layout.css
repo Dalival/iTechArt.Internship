@@ -2,8 +2,8 @@
     width: 200px;
     position: fixed;
     overflow-x: hidden;
-    border-right: 1px solid #dee2e6;
-    box-shadow: 1px -1px 5px -4px #888;
+    border-right: 1px solid rgb(222, 226, 230);
+    box-shadow: 1px -1px 5px -4px rgb(136, 136, 136);
 }
 
 .sidenav a {
@@ -18,7 +18,7 @@
 }
 
 .sidenav a:hover {
-    background-color: #f2f3f5;
+    background-color: rgb(242, 243, 245);
     transition-duration: 100ms;
 }
 
