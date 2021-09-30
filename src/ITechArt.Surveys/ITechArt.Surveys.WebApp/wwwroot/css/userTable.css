@@ -6,6 +6,7 @@
 
 .user-table .table-header {
     background-color: #f2f3f5;
+    margin-bottom: 8px;
 }
 
 .user-table > span {
@@ -28,16 +29,25 @@
 }
 
 .flip-pages-arrows > a,
-.user-table > span > a {
+.delete-button {
     color: #5f6368;
     text-decoration: none;
 }
 
-.flip-pages-arrows > a:hover,
-.user-table > span > a:hover {
+.flip-pages-arrows > a:hover {
     color: #346be3;
     text-decoration: none;
     cursor: pointer;
+}
+
+.delete-button:hover {
+    color: #e33448;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.delete-button .hide {
+    display: none;
 }
 
 .cannot-delete {
@@ -47,4 +57,8 @@
 
 .flip-pages-arrows > span {
     margin: 0 4px 0 4px;
+}
+
+label {
+    margin: 0;
 }
