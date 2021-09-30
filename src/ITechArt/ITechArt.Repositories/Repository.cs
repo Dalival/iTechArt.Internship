@@ -103,28 +103,6 @@ namespace ITechArt.Repositories
             return target;
         }
 
-        public async Task<IReadOnlyCollection<T>> GetPaginatedAsync(int fromPosition, int amount,
-            params Expression<Func<T, object>>[] includes)
-        {
-            if (includes == null || includes.Length == 0)
-            {
-                var target = await _dbSet
-                    .Skip(fromPosition)
-                    .Take(amount)
-                    .ToListAsync();
-
-                return target;
-            }
-
-            var queryWithIncludes = GetQueryWithIncludes(includes);
-            var targetWithIncludes = await queryWithIncludes
-                .Skip(fromPosition)
-                .Take(amount)
-                .ToListAsync();
-
-            return targetWithIncludes;
-        }
-
         public async Task<int> CountAsync()
         {
             var recordsAmount = await _dbSet.CountAsync();

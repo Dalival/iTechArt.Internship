@@ -48,7 +48,7 @@ namespace ITechArt.Surveys.Foundation
 
         public async Task<IReadOnlyCollection<User>> GetPaginatedUsersAsync(int fromPosition, int amount)
         {
-            var users = await _userRepository.GetPaginatedWithRolesAsync(fromPosition, amount);
+            var users = await _userRepository.GetPaginatedWithRolesAsync(fromPosition, amount, u => u.RegistrationDate);
 
             return users;
         }
