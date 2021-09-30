@@ -30,7 +30,10 @@
         foreach (var user in Model.Users)
         {
             <div class="align-left">@user.Name</div>
-            <div>@string.Join(", ", user.Roles.Select(r => r.Name))</div>
+            var roles = user.Roles.Any(r => r.Name != "User")
+                ? string.Join(", ", user.Roles.Select(r => r.Name).Where(r => r != "User"))
+                : "User";
+            <div>@roles</div>
             <div>@user.RegistrationDate.Date.ToShortDateString()</div>
             if (user.Name == currentUserName)
             {

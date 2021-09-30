@@ -1,10 +1,10 @@
 ﻿namespace ITechArt.Common.Result
 {
-    public enum RevokeAdminRightsError
+    public enum AddingRoleErrors
     {
         UnknownError,
         UserNotFound,
-        UserRoleNotFound,
-        UserNotAdmin
+        RoleNotFound,
+        UserAlreadyInRole
     }
 }

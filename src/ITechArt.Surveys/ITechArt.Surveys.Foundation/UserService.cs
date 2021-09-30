@@ -75,58 +75,48 @@ namespace ITechArt.Surveys.Foundation
             return result.Succeeded;
         }
 
-        public async Task<OperationResult<GiveAdminRightsError>> GiveAdminRights(string userId)
+        public async Task<OperationResult<AddingRoleErrors>> AddToRoleAsync(string userId, string roleName)
         {
             var user = await _userRepository.GetByIdAsync(userId);
             if (user == null)
             {
-                return OperationResult<GiveAdminRightsError>.Failed(GiveAdminRightsError.UserNotFound);
+                return OperationResult<AddingRoleErrors>.Failed(AddingRoleErrors.UserNotFound);
             }
 
-            var isAdminRoleExist = await _roleRepository.AnyAsync(r => r.NormalizedName == "ADMIN");
-            if (!isAdminRoleExist)
+            var isRoleExist = await _roleRepository.AnyAsync(r => r.NormalizedName == roleName.Normalize());
+            if (!isRoleExist)
             {
-                return OperationResult<GiveAdminRightsError>.Failed(GiveAdminRightsError.AdminRoleNotFound);
+                return OperationResult<AddingRoleErrors>.Failed(AddingRoleErrors.RoleNotFound);
             }
 
-            var identityResult = await _userManager.AddToRoleAsync(user, "admin");
+            var identityResult = await _userManager.AddToRoleAsync(user, roleName);
             if (!identityResult.Succeeded)
             {
                 return identityResult.Errors.Any(e => e.Code is nameof(IdentityErrorDescriber.UserAlreadyInRole))
-                    ? OperationResult<GiveAdminRightsError>.Failed(GiveAdminRightsError.UserAlreadyAdmin)
-                    : OperationResult<GiveAdminRightsError>.Failed(GiveAdminRightsError.UnknownError);
+                    ? OperationResult<AddingRoleErrors>.Failed(AddingRoleErrors.UserAlreadyInRole)
+                    : OperationResult<AddingRoleErrors>.Failed(AddingRoleErrors.UnknownError);
             }
 
-            await _userManager.RemoveFromRoleAsync(user, "user");
-
-            return OperationResult<GiveAdminRightsError>.Success;
+            return OperationResult<AddingRoleErrors>.Success;
         }
 
-        public async Task<OperationResult<RevokeAdminRightsError>> RevokeAdminRights(string userId)
+        public async Task<OperationResult<RemovingRoleError>> RemoveFromRoleAsync(string userId, string roleName)
         {
             var user = await _userRepository.GetByIdAsync(userId);
             if (user == null)
             {
-                return OperationResult<RevokeAdminRightsError>.Failed(RevokeAdminRightsError.UserNotFound);
+                return OperationResult<RemovingRoleError>.Failed(RemovingRoleError.UserNotFound);
             }
 
-            var isUserRoleExist = await _roleRepository.AnyAsync(r => r.NormalizedName == "USER");
-            if (!isUserRoleExist)
-            {
-                return OperationResult<RevokeAdminRightsError>.Failed(RevokeAdminRightsError.UserRoleNotFound);
-            }
-
-            var identityResult = await _userManager.RemoveFromRoleAsync(user, "admin");
+            var identityResult = await _userManager.RemoveFromRoleAsync(user, roleName);
             if (!identityResult.Succeeded)
             {
                 return identityResult.Errors.Any(e => e.Code is nameof(IdentityErrorDescriber.UserNotInRole))
-                    ? OperationResult<RevokeAdminRightsError>.Failed(RevokeAdminRightsError.UserNotAdmin)
-                    : OperationResult<RevokeAdminRightsError>.Failed(RevokeAdminRightsError.UnknownError);
+                    ? OperationResult<RemovingRoleError>.Failed(RemovingRoleError.UserNotInRole)
+                    : OperationResult<RemovingRoleError>.Failed(RemovingRoleError.UnknownError);
             }
 
-            await _userManager.AddToRoleAsync(user, "user");
-
-            return OperationResult<RevokeAdminRightsError>.Success;
+            return OperationResult<RemovingRoleError>.Success;
         }
 
 
