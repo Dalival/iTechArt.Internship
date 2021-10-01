@@ -1,7 +1,12 @@
-﻿using System.Linq;
+﻿using System;
+using System.Diagnostics;
+using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
+using ITechArt.Surveys.DomainModel;
 using ITechArt.Surveys.Foundation.Interfaces;
 using ITechArt.Surveys.WebApp.Models;
+using ITechArt.Surveys.WebApp.Models.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -22,10 +27,18 @@ namespace ITechArt.Surveys.WebApp.Controllers
 
 
         [HttpGet]
-        public async Task<IActionResult> UserTable(int page = 1)
+        public async Task<IActionResult> UserTable(int page = 1, UserSortingKey sortBy = UserSortingKey.RegistrationDate)
         {
             var skippedPages = page - 1;
-            var users = await _userService.GetPaginatedUsersAsync(UsersPerPage * skippedPages, UsersPerPage);
+            var users = sortBy switch
+            {
+                UserSortingKey.Name => await _userService.GetPaginatedUsersAsync(
+                    UsersPerPage * skippedPages, UsersPerPage, u => u.UserName),
+                UserSortingKey.Role => await _userService.GetPaginatedUsersAsync(
+                    UsersPerPage * skippedPages, UsersPerPage, u => u.UserRoles.Count),
+                _ => await _userService.GetPaginatedUsersAsync(
+                    UsersPerPage * skippedPages, UsersPerPage, u => u.RegistrationDate)
+            };
 
             var usersForTable = users.Select(u => new UserDataForTableViewModel
                 {
