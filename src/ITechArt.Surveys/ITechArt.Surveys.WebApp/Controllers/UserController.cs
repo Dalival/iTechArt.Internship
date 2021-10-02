@@ -66,27 +66,27 @@ namespace ITechArt.Surveys.WebApp.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> DeleteUser(string userId)
+        public async Task<IActionResult> DeleteUser(string userId, string sortOrder)
         {
             await _userService.DeleteUserAsync(userId);
 
-            return RedirectToAction("UserTable");
+            return RedirectToAction("UserTable", new { sortOrder });
         }
 
         [HttpPost]
-        public async Task<IActionResult> GiveAdminRights(string userId)
+        public async Task<IActionResult> GiveAdminRights(string userId, string sortOrder)
         {
             await _userService.AddToRoleAsync(userId, "admin");
 
-            return RedirectToAction("UserTable");
+            return RedirectToAction("UserTable", new { sortOrder });
         }
 
         [HttpPost]
-        public async Task<IActionResult> RevokeAdminRights(string userId)
+        public async Task<IActionResult> RevokeAdminRights(string userId, string sortOrder)
         {
             await _userService.RemoveFromRoleAsync(userId, "admin");
 
-            return RedirectToAction("UserTable");
+            return RedirectToAction("UserTable", new { sortOrder });
         }
     }
 }
