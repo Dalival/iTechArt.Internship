@@ -26,8 +26,8 @@ namespace ITechArt.Surveys.WebApp.Controllers
         {
             ViewBag.CurrentSort = sortOrder;
             ViewBag.SortByClickOnName = sortOrder == "name" ? "name_desc" : "name";
-            ViewBag.SortByClickOnRole = sortOrder == "role" ? "role_desc" : "role";
-            ViewBag.SortByClickOnDate = sortOrder == "date" ? "date_desc" : "date";
+            ViewBag.SortByClickOnRole = sortOrder == "role_desc" ? "role" : "role_desc";
+            ViewBag.SortByClickOnDate = sortOrder == "date_desc" ? "date" : "date_desc";
 
             var skippedUsers = (page - 1) * UsersPerPage;
             var users = sortOrder switch
