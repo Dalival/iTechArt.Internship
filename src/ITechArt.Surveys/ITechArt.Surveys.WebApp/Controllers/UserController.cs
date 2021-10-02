@@ -1,12 +1,7 @@
-﻿using System;
-using System.Diagnostics;
-using System.Linq;
-using System.Linq.Expressions;
+﻿using System.Linq;
 using System.Threading.Tasks;
-using ITechArt.Surveys.DomainModel;
 using ITechArt.Surveys.Foundation.Interfaces;
 using ITechArt.Surveys.WebApp.Models;
-using ITechArt.Surveys.WebApp.Models.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -27,17 +22,23 @@ namespace ITechArt.Surveys.WebApp.Controllers
 
 
         [HttpGet]
-        public async Task<IActionResult> UserTable(int page = 1, UserSortingKey sortBy = UserSortingKey.RegistrationDate)
+        public async Task<IActionResult> UserTable(int page = 1, string sortOrder = "date_desc")
         {
-            var skippedPages = page - 1;
-            var users = sortBy switch
+            ViewBag.CurrentSort = sortOrder;
+            ViewBag.SortByClickOnName = sortOrder == "name" ? "name_desc" : "name";
+            ViewBag.SortByClickOnRole = sortOrder == "role" ? "role_desc" : "role";
+            ViewBag.SortByClickOnDate = sortOrder == "date" ? "date_desc" : "date";
+
+            var skippedUsers = (page - 1) * UsersPerPage;
+            var users = sortOrder switch
             {
-                UserSortingKey.Name => await _userService.GetPaginatedUsersAsync(
-                    UsersPerPage * skippedPages, UsersPerPage, u => u.UserName),
-                UserSortingKey.Role => await _userService.GetPaginatedUsersAsync(
-                    UsersPerPage * skippedPages, UsersPerPage, u => u.UserRoles.Count),
-                _ => await _userService.GetPaginatedUsersAsync(
-                    UsersPerPage * skippedPages, UsersPerPage, u => u.RegistrationDate)
+                "name" => await _userService.GetPaginatedUsersAsync(skippedUsers, UsersPerPage, u => u.UserName),
+                "name_desc" => await _userService.GetPaginatedUsersAsync(skippedUsers, UsersPerPage, u => u.UserName, true),
+                "role" => await _userService.GetPaginatedUsersAsync(skippedUsers, UsersPerPage, u => u.UserRoles.Count),
+                "role_desc" => await _userService.GetPaginatedUsersAsync(skippedUsers, UsersPerPage, u => u.UserRoles.Count, true),
+                "date" => await _userService.GetPaginatedUsersAsync(skippedUsers, UsersPerPage, u => u.RegistrationDate),
+                "date_desc" => await _userService.GetPaginatedUsersAsync(skippedUsers, UsersPerPage, u => u.RegistrationDate, true),
+                _ => await _userService.GetPaginatedUsersAsync(skippedUsers, UsersPerPage, u => u.RegistrationDate, true)
             };
 
             var usersForTable = users.Select(u => new UserDataForTableViewModel

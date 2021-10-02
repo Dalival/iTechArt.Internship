@@ -14,16 +14,24 @@
 
 <div class="user-table">
     <div class="table-header align-left">
-        <strong>Name</strong>
+        <a href="/User/UserTable?page=@Model.Page&sortOrder=@ViewBag.SortByClickOnName">
+            <strong>Name</strong>
+        </a>
     </div>
     <div class="table-header">
-        <strong>Role</strong>
+        <a href="/User/UserTable?page=@Model.Page&sortOrder=@ViewBag.SortByClickOnRole">
+            <strong>Role</strong>
+        </a>
     </div>
     <div class="table-header">
-        <strong>Registrated</strong>
+        <a href="/User/UserTable?page=@Model.Page&sortOrder=@ViewBag.SortByClickOnDate">
+            <strong>Registrated</strong>
+        </a>
     </div>
     <div class="table-header">
-        <strong>Actions</strong>
+        <a>
+            <strong>Actions</strong>
+        </a>
     </div>
     @{
         var currentUserName = _contextAccessor.HttpContext?.User.Identity?.Name;
