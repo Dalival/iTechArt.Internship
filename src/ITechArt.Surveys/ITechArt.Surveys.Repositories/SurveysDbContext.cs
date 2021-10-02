@@ -80,11 +80,17 @@ namespace ITechArt.Surveys.Repositories
             {
                 b.HasKey(r => new { r.UserId, r.RoleId });
                 b.ToTable("UserRoles");
-                b.HasData(new UserRole
-                {
-                    UserId = "4beb0654-3b7a-4601-8b81-b284cc25a903",
-                    RoleId = "b03bd4cc-93a8-4623-ab9d-606823a1547e",
-                });
+                b.HasData(
+                    new UserRole
+                    {
+                        UserId = "4beb0654-3b7a-4601-8b81-b284cc25a903",
+                        RoleId = "b03bd4cc-93a8-4623-ab9d-606823a1547e"
+                    },
+                    new UserRole
+                    {
+                        UserId = "4beb0654-3b7a-4601-8b81-b284cc25a903",
+                        RoleId = "76e401a9-1e91-4dff-adb7-c455cefe6fa9"
+                    });
             });
         }
     }
