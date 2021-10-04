@@ -16,17 +16,41 @@
     <div class="table-header align-left">
         <a href="/User/UserTable?page=@Model.Page&sortOrder=@ViewBag.SortByClickOnName">
             <strong>Name</strong>
-        </a>
+            @if (ViewBag.CurrentSort == "name")
+            {
+                <span class="material-icons-outlined">arrow_drop_up</span>
+            }
+            @if (ViewBag.CurrentSort == "name_desc")
+            {
+                <span class="material-icons-outlined">arrow_drop_down</span>
+            }
+            </a>
     </div>
     <div class="table-header">
         <a href="/User/UserTable?page=@Model.Page&sortOrder=@ViewBag.SortByClickOnRole">
             <strong>Role</strong>
+            @if (ViewBag.CurrentSort == "role")
+            {
+                <span class="material-icons-outlined">arrow_drop_up</span>
+            }
+            @if (ViewBag.CurrentSort == "role_desc")
+            {
+                <span class="material-icons-outlined">arrow_drop_down</span>
+            }
         </a>
     </div>
     <div class="table-header">
         <a href="/User/UserTable?page=@Model.Page&sortOrder=@ViewBag.SortByClickOnDate">
             <strong>Registrated</strong>
-        </a>
+            @if (ViewBag.CurrentSort == "date")
+            {
+                <span class="material-icons-outlined">arrow_drop_up</span>
+            }
+            @if (ViewBag.CurrentSort == "date_desc")
+            {
+                <span class="material-icons-outlined">arrow_drop_down</span>
+            }
+                    </a>
     </div>
     <div class="table-header">
         <a>
