@@ -48,8 +48,14 @@ namespace ITechArt.Surveys.Foundation
         }
 
         public async Task<IReadOnlyCollection<User>> GetPaginatedUsersAsync(int fromPosition, int amount,
-            Expression<Func<User, object>> orderBy, bool descending = false)
+            Expression<Func<User, object>> orderBy = null, bool descending = false)
         {
+            if (orderBy == null)
+            {
+                orderBy = user => user.RegistrationDate;
+                descending = true;
+            }
+
             var users = await _userRepository.GetPaginatedWithRolesAsync(fromPosition, amount, orderBy, descending);
 
             return users;

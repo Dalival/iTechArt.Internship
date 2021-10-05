@@ -12,7 +12,7 @@ namespace ITechArt.Surveys.Foundation.Interfaces
         Task<OperationResult<RegistrationError>> CreateUserAsync(User user, string password);
 
         Task<IReadOnlyCollection<User>> GetPaginatedUsersAsync(int fromPosition, int amount,
-            Expression<Func<User, object>> orderBy, bool descending = false);
+            Expression<Func<User, object>> orderBy = null, bool descending = false);
 
         Task<int> CountUsersAsync();
 

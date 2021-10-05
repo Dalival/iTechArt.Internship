@@ -38,7 +38,7 @@ namespace ITechArt.Surveys.WebApp.Controllers
                 "role_desc" => await _userService.GetPaginatedUsersAsync(skippedUsers, UsersPerPage, u => u.UserRoles.Count, true),
                 "date" => await _userService.GetPaginatedUsersAsync(skippedUsers, UsersPerPage, u => u.RegistrationDate),
                 "date_desc" => await _userService.GetPaginatedUsersAsync(skippedUsers, UsersPerPage, u => u.RegistrationDate, true),
-                _ => await _userService.GetPaginatedUsersAsync(skippedUsers, UsersPerPage, u => u.RegistrationDate, true)
+                _ => await _userService.GetPaginatedUsersAsync(skippedUsers, UsersPerPage)
             };
 
             var usersForTable = users.Select(u => new UserDataForTableViewModel
