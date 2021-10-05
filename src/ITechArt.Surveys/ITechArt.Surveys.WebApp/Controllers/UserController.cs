@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using ITechArt.Surveys.Foundation.Interfaces;
 using ITechArt.Surveys.WebApp.Models;
@@ -12,6 +13,7 @@ namespace ITechArt.Surveys.WebApp.Controllers
     public class UserController : Controller
     {
         private const int UsersPerPage = 5;
+        private const string SortUsersCookieName = "usersSortOrder";
 
         private readonly IUserService _userService;
 
@@ -23,8 +25,25 @@ namespace ITechArt.Surveys.WebApp.Controllers
 
 
         [HttpGet]
-        public async Task<IActionResult> UserTable(int page = 1, UserSortOrder sortOrder = UserSortOrder.DateDescending)
+        public async Task<IActionResult> UserTable(int page = 1, UserSortOrder? sortOrder = null)
         {
+            if (sortOrder == null)
+            {
+                if (Request.Cookies.TryGetValue(SortUsersCookieName, out var sortOrderFromCookie))
+                {
+                    sortOrder = (UserSortOrder) Enum.Parse(typeof(UserSortOrder), sortOrderFromCookie);
+                }
+                else
+                {
+                    Response.Cookies.Append(SortUsersCookieName, UserSortOrder.DateDescending.ToString());
+                    sortOrder = UserSortOrder.DateDescending;
+                }
+            }
+            else
+            {
+                Response.Cookies.Append(SortUsersCookieName, sortOrder.ToString());
+            }
+
             ViewBag.CurrentSort = sortOrder;
             ViewBag.SortByClickOnName = sortOrder == UserSortOrder.Name
                 ? UserSortOrder.NameDescending
@@ -79,27 +98,27 @@ namespace ITechArt.Surveys.WebApp.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> DeleteUser(string userId, string sortOrder)
+        public async Task<IActionResult> DeleteUser(string userId)
         {
             await _userService.DeleteUserAsync(userId);
 
-            return RedirectToAction("UserTable", new { sortOrder });
+            return RedirectToAction("UserTable");
         }
 
         [HttpPost]
-        public async Task<IActionResult> GiveAdminRights(string userId, string sortOrder)
+        public async Task<IActionResult> GiveAdminRights(string userId)
         {
             await _userService.AddToRoleAsync(userId, "admin");
 
-            return RedirectToAction("UserTable", new { sortOrder });
+            return RedirectToAction("UserTable");
         }
 
         [HttpPost]
-        public async Task<IActionResult> RevokeAdminRights(string userId, string sortOrder)
+        public async Task<IActionResult> RevokeAdminRights(string userId)
         {
             await _userService.RemoveFromRoleAsync(userId, "admin");
 
-            return RedirectToAction("UserTable", new { sortOrder });
+            return RedirectToAction("UserTable");
         }
     }
 }
