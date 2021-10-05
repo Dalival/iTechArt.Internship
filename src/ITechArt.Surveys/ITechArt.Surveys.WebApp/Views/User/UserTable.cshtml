@@ -1,4 +1,5 @@
 ﻿@using Microsoft.AspNetCore.Http
+@using ITechArt.Surveys.WebApp.Models.Enum
 
 @inject IHttpContextAccessor _contextAccessor
 
@@ -16,11 +17,11 @@
     <div class="table-header align-left">
         <a href="/User/UserTable?page=@Model.Page&sortOrder=@ViewBag.SortByClickOnName">
             <strong>Name</strong>
-            @if (ViewBag.CurrentSort == "name")
+            @if (ViewBag.CurrentSort == UserSortOrder.Name)
             {
                 <span class="material-icons-outlined">arrow_drop_up</span>
             }
-            @if (ViewBag.CurrentSort == "name_desc")
+            @if (ViewBag.CurrentSort == UserSortOrder.NameDescending)
             {
                 <span class="material-icons-outlined">arrow_drop_down</span>
             }
@@ -29,11 +30,11 @@
     <div class="table-header">
         <a href="/User/UserTable?page=@Model.Page&sortOrder=@ViewBag.SortByClickOnRole">
             <strong>Role</strong>
-            @if (ViewBag.CurrentSort == "role")
+            @if (ViewBag.CurrentSort == UserSortOrder.Role)
             {
                 <span class="material-icons-outlined">arrow_drop_up</span>
             }
-            @if (ViewBag.CurrentSort == "role_desc")
+            @if (ViewBag.CurrentSort == UserSortOrder.RoleDescending)
             {
                 <span class="material-icons-outlined">arrow_drop_down</span>
             }
@@ -42,15 +43,15 @@
     <div class="table-header">
         <a href="/User/UserTable?page=@Model.Page&sortOrder=@ViewBag.SortByClickOnDate">
             <strong>Registrated</strong>
-            @if (ViewBag.CurrentSort == "date")
+            @if (ViewBag.CurrentSort == UserSortOrder.Date)
             {
                 <span class="material-icons-outlined">arrow_drop_up</span>
             }
-            @if (ViewBag.CurrentSort == "date_desc")
+            @if (ViewBag.CurrentSort == UserSortOrder.DateDescending)
             {
                 <span class="material-icons-outlined">arrow_drop_down</span>
             }
-                    </a>
+        </a>
     </div>
     <div class="table-header">
         <a>

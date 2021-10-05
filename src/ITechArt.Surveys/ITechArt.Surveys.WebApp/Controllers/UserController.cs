@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using ITechArt.Surveys.Foundation.Interfaces;
 using ITechArt.Surveys.WebApp.Models;
+using ITechArt.Surveys.WebApp.Models.Enum;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -22,22 +23,34 @@ namespace ITechArt.Surveys.WebApp.Controllers
 
 
         [HttpGet]
-        public async Task<IActionResult> UserTable(int page = 1, string sortOrder = "date_desc")
+        public async Task<IActionResult> UserTable(int page = 1, UserSortOrder sortOrder = UserSortOrder.DateDescending)
         {
             ViewBag.CurrentSort = sortOrder;
-            ViewBag.SortByClickOnName = sortOrder == "name" ? "name_desc" : "name";
-            ViewBag.SortByClickOnRole = sortOrder == "role_desc" ? "role" : "role_desc";
-            ViewBag.SortByClickOnDate = sortOrder == "date_desc" ? "date" : "date_desc";
+            ViewBag.SortByClickOnName = sortOrder == UserSortOrder.Name
+                ? UserSortOrder.NameDescending
+                : UserSortOrder.Name;
+            ViewBag.SortByClickOnRole = sortOrder == UserSortOrder.RoleDescending
+                ? UserSortOrder.Role
+                : UserSortOrder.RoleDescending;
+            ViewBag.SortByClickOnDate = sortOrder == UserSortOrder.DateDescending
+                ? UserSortOrder.Date
+                : UserSortOrder.DateDescending;
 
             var skippedUsers = (page - 1) * UsersPerPage;
             var users = sortOrder switch
             {
-                "name" => await _userService.GetPaginatedUsersAsync(skippedUsers, UsersPerPage, u => u.UserName),
-                "name_desc" => await _userService.GetPaginatedUsersAsync(skippedUsers, UsersPerPage, u => u.UserName, true),
-                "role" => await _userService.GetPaginatedUsersAsync(skippedUsers, UsersPerPage, u => u.UserRoles.Count),
-                "role_desc" => await _userService.GetPaginatedUsersAsync(skippedUsers, UsersPerPage, u => u.UserRoles.Count, true),
-                "date" => await _userService.GetPaginatedUsersAsync(skippedUsers, UsersPerPage, u => u.RegistrationDate),
-                "date_desc" => await _userService.GetPaginatedUsersAsync(skippedUsers, UsersPerPage, u => u.RegistrationDate, true),
+                UserSortOrder.Name => await _userService
+                    .GetPaginatedUsersAsync(skippedUsers, UsersPerPage, u => u.UserName),
+                UserSortOrder.NameDescending => await _userService
+                    .GetPaginatedUsersAsync(skippedUsers, UsersPerPage, u => u.UserName, true),
+                UserSortOrder.Role => await _userService
+                    .GetPaginatedUsersAsync(skippedUsers, UsersPerPage, u => u.UserRoles.Count),
+                UserSortOrder.RoleDescending => await _userService
+                    .GetPaginatedUsersAsync(skippedUsers, UsersPerPage, u => u.UserRoles.Count, true),
+                UserSortOrder.Date => await _userService
+                    .GetPaginatedUsersAsync(skippedUsers, UsersPerPage, u => u.RegistrationDate),
+                UserSortOrder.DateDescending => await _userService
+                    .GetPaginatedUsersAsync(skippedUsers, UsersPerPage, u => u.RegistrationDate, true),
                 _ => await _userService.GetPaginatedUsersAsync(skippedUsers, UsersPerPage)
             };
 
