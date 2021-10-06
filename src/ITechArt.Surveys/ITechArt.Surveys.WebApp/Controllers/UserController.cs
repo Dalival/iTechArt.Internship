@@ -31,7 +31,15 @@ namespace ITechArt.Surveys.WebApp.Controllers
             {
                 if (Request.Cookies.TryGetValue(SortUsersCookieName, out var sortOrderFromCookie))
                 {
-                    sortOrder = (UserSortOrder) Enum.Parse(typeof(UserSortOrder), sortOrderFromCookie);
+                    try
+                    {
+                        sortOrder = (UserSortOrder) Enum.Parse(typeof(UserSortOrder), sortOrderFromCookie);
+                    }
+                    catch
+                    {
+                        Response.Cookies.Append(SortUsersCookieName, UserSortOrder.DateDescending.ToString());
+                        sortOrder = UserSortOrder.DateDescending;
+                    }
                 }
                 else
                 {
