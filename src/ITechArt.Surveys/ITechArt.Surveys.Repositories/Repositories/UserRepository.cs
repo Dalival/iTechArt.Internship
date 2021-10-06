@@ -28,9 +28,10 @@ namespace ITechArt.Surveys.Repositories.Repositories
         public async Task<IReadOnlyCollection<User>> GetPaginatedWithRolesAsync(int fromPosition, int amount,
             Expression<Func<User, object>> orderBy, bool descending = false)
         {
-            var orderedUsers = descending
-                ? _dbSet.OrderByDescending(orderBy).ThenBy(u => u.RegistrationDate)
-                : _dbSet.OrderBy(orderBy).ThenBy(u => u.RegistrationDate);
+            var orderedUsers = (descending
+                    ? _dbSet.OrderByDescending(orderBy)
+                    : _dbSet.OrderBy(orderBy))
+                .ThenBy(u => u.RegistrationDate);
 
             var usersWithRoles = await orderedUsers
                 .Skip(fromPosition)
