@@ -1,6 +1,6 @@
 ﻿namespace ITechArt.Common.Result
 {
-    public enum AddingRoleErrors
+    public enum AddingRoleError
     {
         UnknownError,
         UserNotFound,

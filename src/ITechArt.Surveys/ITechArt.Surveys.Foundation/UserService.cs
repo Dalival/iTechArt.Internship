@@ -83,29 +83,29 @@ namespace ITechArt.Surveys.Foundation
             return result.Succeeded;
         }
 
-        public async Task<OperationResult<AddingRoleErrors>> AddToRoleAsync(string userId, string roleName)
+        public async Task<OperationResult<AddingRoleError>> AddToRoleAsync(string userId, string roleName)
         {
             var user = await _userRepository.GetByIdAsync(userId);
             if (user == null)
             {
-                return OperationResult<AddingRoleErrors>.Failed(AddingRoleErrors.UserNotFound);
+                return OperationResult<AddingRoleError>.Failed(AddingRoleError.UserNotFound);
             }
 
             var isRoleExist = await _roleRepository.AnyAsync(r => r.NormalizedName == roleName.Normalize());
             if (!isRoleExist)
             {
-                return OperationResult<AddingRoleErrors>.Failed(AddingRoleErrors.RoleNotFound);
+                return OperationResult<AddingRoleError>.Failed(AddingRoleError.RoleNotFound);
             }
 
             var identityResult = await _userManager.AddToRoleAsync(user, roleName);
             if (!identityResult.Succeeded)
             {
                 return identityResult.Errors.Any(e => e.Code is nameof(IdentityErrorDescriber.UserAlreadyInRole))
-                    ? OperationResult<AddingRoleErrors>.Failed(AddingRoleErrors.UserAlreadyInRole)
-                    : OperationResult<AddingRoleErrors>.Failed(AddingRoleErrors.UnknownError);
+                    ? OperationResult<AddingRoleError>.Failed(AddingRoleError.UserAlreadyInRole)
+                    : OperationResult<AddingRoleError>.Failed(AddingRoleError.UnknownError);
             }
 
-            return OperationResult<AddingRoleErrors>.Success;
+            return OperationResult<AddingRoleError>.Success;
         }
 
         public async Task<OperationResult<RemovingRoleError>> RemoveFromRoleAsync(string userId, string roleName)

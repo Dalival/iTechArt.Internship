@@ -14,6 +14,7 @@ namespace ITechArt.Surveys.WebApp.Controllers
     {
         private const int UsersPerPage = 5;
         private const string SortUsersCookieName = "usersSortOrder";
+        private const string AdminRoleName = "admin";
 
         private readonly IUserService _userService;
 
@@ -116,7 +117,7 @@ namespace ITechArt.Surveys.WebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> GiveAdminRights(string userId)
         {
-            await _userService.AddToRoleAsync(userId, "admin");
+            await _userService.AddToRoleAsync(userId, AdminRoleName);
 
             return RedirectToAction("UserTable");
         }
@@ -124,7 +125,7 @@ namespace ITechArt.Surveys.WebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> RevokeAdminRights(string userId)
         {
-            await _userService.RemoveFromRoleAsync(userId, "admin");
+            await _userService.RemoveFromRoleAsync(userId, AdminRoleName);
 
             return RedirectToAction("UserTable");
         }
