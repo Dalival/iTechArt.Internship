@@ -5,6 +5,19 @@ namespace ITechArt.Surveys.Repositories
 {
     public class SurveysDbContext : DbContext
     {
+        private const string AdminName = "EgorFedorenko";
+        private const string AdminEmail = "egorfedorenko.w@gmail.com";
+        private const string AdminId = "4beb0654-3b7a-4601-8b81-b284cc25a903";
+
+        private const string AdminRoleName = "Admin";
+        private const string AdminRoleId = "b03bd4cc-93a8-4623-ab9d-606823a1547e";
+
+        private const string UserRoleName = "User";
+        private const string UserRoleId = "76e401a9-1e91-4dff-adb7-c455cefe6fa9";
+
+        private const int MaxStringLength = 256;
+
+
         public SurveysDbContext(DbContextOptions options)
             : base(options) { }
 
@@ -21,19 +34,19 @@ namespace ITechArt.Surveys.Repositories
                 b.ToTable("Users");
                 b.Property(u => u.ConcurrencyStamp).IsConcurrencyToken();
 
-                b.Property(u => u.UserName).HasMaxLength(256);
-                b.Property(u => u.NormalizedUserName).HasMaxLength(256);
-                b.Property(u => u.Email).HasMaxLength(256);
-                b.Property(u => u.NormalizedEmail).HasMaxLength(256);
+                b.Property(u => u.UserName).HasMaxLength(MaxStringLength);
+                b.Property(u => u.NormalizedUserName).HasMaxLength(MaxStringLength);
+                b.Property(u => u.Email).HasMaxLength(MaxStringLength);
+                b.Property(u => u.NormalizedEmail).HasMaxLength(MaxStringLength);
 
                 b.HasMany(u => u.UserRoles).WithOne(ur => ur.User).HasForeignKey(ur => ur.UserId).IsRequired();
                 b.HasData(new User
                 {
-                    Id = "4beb0654-3b7a-4601-8b81-b284cc25a903",
-                    UserName = "EgorFedorenko",
-                    NormalizedUserName = "EGORFEDORENKO",
-                    Email = "egorfedorenko.w@gmail.com",
-                    NormalizedEmail = "EGORFEDORENKO.W@GMAIL.COM",
+                    Id = AdminId,
+                    UserName = AdminName,
+                    NormalizedUserName = AdminName.ToUpper(),
+                    Email = AdminEmail,
+                    NormalizedEmail = AdminEmail.ToUpper(),
                     EmailConfirmed = false,
                     PasswordHash = "AQAAAAEAACcQAAAAEDxts21ZFCTO9PJMekWmZIcRpZFtuqrjSI4xwd76L0h5zF3WoQlhE015Xr+kBSDqsw==",
                     SecurityStamp = "9dd2b025-477a-4ab2-af59-dfe6f16ea4e7",
@@ -55,23 +68,23 @@ namespace ITechArt.Surveys.Repositories
                 b.ToTable("Roles");
                 b.Property(r => r.ConcurrencyStamp).IsConcurrencyToken();
 
-                b.Property(r => r.Name).HasMaxLength(256);
-                b.Property(r => r.NormalizedName).HasMaxLength(256);
+                b.Property(r => r.Name).HasMaxLength(MaxStringLength);
+                b.Property(r => r.NormalizedName).HasMaxLength(MaxStringLength);
 
                 b.HasMany(r => r.UserRoles).WithOne(ur => ur.Role).HasForeignKey(ur => ur.RoleId).IsRequired();
                 b.HasData(
                     new Role
                     {
-                        Id = "76e401a9-1e91-4dff-adb7-c455cefe6fa9",
-                        Name = "User",
-                        NormalizedName = "USER",
+                        Id = UserRoleId,
+                        Name = UserRoleName,
+                        NormalizedName = UserRoleName.ToUpper(),
                         ConcurrencyStamp = "4179d8bd-907e-4293-bf2b-5a4598e34551"
                     },
                     new Role
                     {
-                        Id = "b03bd4cc-93a8-4623-ab9d-606823a1547e",
-                        Name = "Admin",
-                        NormalizedName = "ADMIN",
+                        Id = AdminRoleId,
+                        Name = AdminRoleName,
+                        NormalizedName = AdminRoleName.ToUpper(),
                         ConcurrencyStamp = "a00343f0-cc82-452e-b00b-663216eadce8"
                     });
             });
@@ -80,11 +93,17 @@ namespace ITechArt.Surveys.Repositories
             {
                 b.HasKey(r => new { r.UserId, r.RoleId });
                 b.ToTable("UserRoles");
-                b.HasData(new UserRole
-                {
-                    UserId = "4beb0654-3b7a-4601-8b81-b284cc25a903",
-                    RoleId = "b03bd4cc-93a8-4623-ab9d-606823a1547e",
-                });
+                b.HasData(
+                    new UserRole
+                    {
+                        UserId = AdminId,
+                        RoleId = AdminRoleId
+                    },
+                    new UserRole
+                    {
+                        UserId = AdminId,
+                        RoleId = UserRoleId
+                    });
             });
         }
     }

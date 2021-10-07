@@ -11,6 +11,7 @@ namespace ITechArt.Surveys.WebApp.Controllers
     public class UserController : Controller
     {
         private const int UsersPerPage = 5;
+        private const string AdminRoleName = "admin";
 
         private readonly IUserService _userService;
 
@@ -55,6 +56,22 @@ namespace ITechArt.Surveys.WebApp.Controllers
         public async Task<IActionResult> DeleteUser(string userId)
         {
             await _userService.DeleteUserAsync(userId);
+
+            return RedirectToAction("UserTable");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> GiveAdminRights(string userId)
+        {
+            await _userService.AddToRoleAsync(userId, AdminRoleName);
+
+            return RedirectToAction("UserTable");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RevokeAdminRights(string userId)
+        {
+            await _userService.RemoveFromRoleAsync(userId, AdminRoleName);
 
             return RedirectToAction("UserTable");
         }

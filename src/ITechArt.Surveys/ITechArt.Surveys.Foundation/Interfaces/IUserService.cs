@@ -9,12 +9,14 @@ namespace ITechArt.Surveys.Foundation.Interfaces
     {
         Task<OperationResult<RegistrationError>> CreateUserAsync(User user, string password);
 
-        Task<IReadOnlyCollection<User>> GetAllUsersAsync();
-
         Task<IReadOnlyCollection<User>> GetPaginatedUsersAsync(int fromPosition, int amount);
 
         Task<int> CountUsersAsync();
 
         Task<bool>  DeleteUserAsync(string id);
+
+        Task<OperationResult<AddingRoleError>> AddToRoleAsync(string userId, string roleName);
+
+        Task<OperationResult<RemovingRoleError>> RemoveFromRoleAsync(string userId, string roleName);
     }
 }

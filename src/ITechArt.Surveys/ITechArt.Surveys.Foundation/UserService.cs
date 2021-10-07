@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using ITechArt.Common.Logger;
 using ITechArt.Common.Result;
+using ITechArt.Repositories.Interfaces;
 using ITechArt.Surveys.DomainModel;
 using ITechArt.Surveys.Foundation.Interfaces;
 using ITechArt.Surveys.Repositories;
@@ -18,6 +19,7 @@ namespace ITechArt.Surveys.Foundation
         private readonly UserManager<User> _userManager;
 
         private readonly IUserRepository _userRepository;
+        private readonly IRepository<Role> _roleRepository;
 
 
         public UserService(ICustomLogger logger, UserManager<User> userManager, ISurveysUnitOfWork unitOfWork)
@@ -26,6 +28,7 @@ namespace ITechArt.Surveys.Foundation
             _userManager = userManager;
 
             _userRepository = unitOfWork.UserRepository;
+            _roleRepository = unitOfWork.GetRepository<Role>();
         }
 
 
@@ -33,7 +36,7 @@ namespace ITechArt.Surveys.Foundation
         {
             user.RegistrationDate = DateTime.Now;
             var identityResult = await _userManager.CreateAsync(user, password);
-            var operationResult = ConvertResult(identityResult);
+            var operationResult = ConvertRegistrationResult(identityResult);
 
             if (operationResult.Succeeded)
             {
@@ -41,13 +44,6 @@ namespace ITechArt.Surveys.Foundation
             }
 
             return operationResult;
-        }
-
-        public async Task<IReadOnlyCollection<User>> GetAllUsersAsync()
-        {
-            var users = await _userRepository.GetAllWithRolesAsync();
-
-            return users;
         }
 
         public async Task<IReadOnlyCollection<User>> GetPaginatedUsersAsync(int fromPosition, int amount)
@@ -79,8 +75,52 @@ namespace ITechArt.Surveys.Foundation
             return result.Succeeded;
         }
 
+        public async Task<OperationResult<AddingRoleError>> AddToRoleAsync(string userId, string roleName)
+        {
+            var user = await _userRepository.GetByIdAsync(userId);
+            if (user == null)
+            {
+                return OperationResult<AddingRoleError>.Failed(AddingRoleError.UserNotFound);
+            }
 
-        private OperationResult<RegistrationError> ConvertResult(IdentityResult identityResult)
+            var isRoleExist = await _roleRepository.AnyAsync(r => r.NormalizedName == roleName.Normalize());
+            if (!isRoleExist)
+            {
+                return OperationResult<AddingRoleError>.Failed(AddingRoleError.RoleNotFound);
+            }
+
+            var identityResult = await _userManager.AddToRoleAsync(user, roleName);
+            if (!identityResult.Succeeded)
+            {
+                return identityResult.Errors.Any(e => e.Code is nameof(IdentityErrorDescriber.UserAlreadyInRole))
+                    ? OperationResult<AddingRoleError>.Failed(AddingRoleError.UserAlreadyInRole)
+                    : OperationResult<AddingRoleError>.Failed(AddingRoleError.UnknownError);
+            }
+
+            return OperationResult<AddingRoleError>.Success;
+        }
+
+        public async Task<OperationResult<RemovingRoleError>> RemoveFromRoleAsync(string userId, string roleName)
+        {
+            var user = await _userRepository.GetByIdAsync(userId);
+            if (user == null)
+            {
+                return OperationResult<RemovingRoleError>.Failed(RemovingRoleError.UserNotFound);
+            }
+
+            var identityResult = await _userManager.RemoveFromRoleAsync(user, roleName);
+            if (!identityResult.Succeeded)
+            {
+                return identityResult.Errors.Any(e => e.Code is nameof(IdentityErrorDescriber.UserNotInRole))
+                    ? OperationResult<RemovingRoleError>.Failed(RemovingRoleError.UserNotInRole)
+                    : OperationResult<RemovingRoleError>.Failed(RemovingRoleError.UnknownError);
+            }
+
+            return OperationResult<RemovingRoleError>.Success;
+        }
+
+
+        private OperationResult<RegistrationError> ConvertRegistrationResult(IdentityResult identityResult)
         {
             if (identityResult.Succeeded)
             {
