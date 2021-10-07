@@ -14,6 +14,9 @@ namespace ITechArt.Surveys.Foundation.Interfaces
         Task<IReadOnlyCollection<User>> GetPaginatedUsersAsync(int fromPosition, int amount,
             Expression<Func<User, object>> orderBy = null, bool descending = false);
 
+        Task<IReadOnlyCollection<User>> SearchUsersAsync(string searchString,
+            Expression<Func<User, object>> orderBy = null, bool descending = false);
+
         Task<int> CountUsersAsync();
 
         Task<bool>  DeleteUserAsync(string id);

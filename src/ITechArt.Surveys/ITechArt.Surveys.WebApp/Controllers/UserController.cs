@@ -1,11 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Net.NetworkInformation;
 using System.Threading.Tasks;
+using ITechArt.Surveys.DomainModel;
 using ITechArt.Surveys.Foundation.Interfaces;
 using ITechArt.Surveys.WebApp.Models;
 using ITechArt.Surveys.WebApp.Models.Enum;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR.Protocol;
 
 namespace ITechArt.Surveys.WebApp.Controllers
 {
@@ -26,61 +30,15 @@ namespace ITechArt.Surveys.WebApp.Controllers
 
 
         [HttpGet]
-        public async Task<IActionResult> UserTable(int page = 1, UserSortOrder? sortOrder = null)
+        public async Task<IActionResult> UserTable(int page = 1, UserSortOrder? sortOrder = null, string searchString = null)
         {
-            if (sortOrder == null)
-            {
-                if (Request.Cookies.TryGetValue(SortUsersCookieName, out var sortOrderFromCookie))
-                {
-                    try
-                    {
-                        sortOrder = (UserSortOrder) Enum.Parse(typeof(UserSortOrder), sortOrderFromCookie);
-                    }
-                    catch
-                    {
-                        Response.Cookies.Append(SortUsersCookieName, UserSortOrder.DateDescending.ToString());
-                        sortOrder = UserSortOrder.DateDescending;
-                    }
-                }
-                else
-                {
-                    Response.Cookies.Append(SortUsersCookieName, UserSortOrder.DateDescending.ToString());
-                    sortOrder = UserSortOrder.DateDescending;
-                }
-            }
-            else
-            {
-                Response.Cookies.Append(SortUsersCookieName, sortOrder.ToString());
-            }
+            var newSortOrder = ManageSortOrder(sortOrder);
 
-            ViewBag.CurrentSort = sortOrder;
-            ViewBag.SortByClickOnName = sortOrder == UserSortOrder.Name
-                ? UserSortOrder.NameDescending
-                : UserSortOrder.Name;
-            ViewBag.SortByClickOnRole = sortOrder == UserSortOrder.RoleDescending
-                ? UserSortOrder.Role
-                : UserSortOrder.RoleDescending;
-            ViewBag.SortByClickOnDate = sortOrder == UserSortOrder.DateDescending
-                ? UserSortOrder.Date
-                : UserSortOrder.DateDescending;
+            var users = searchString == null
+                ? await GetUsersForPageAsync(page, newSortOrder)
+                : await SearchUsersAsync(searchString, newSortOrder);
 
-            var skippedUsers = (page - 1) * UsersPerPage;
-            var users = sortOrder switch
-            {
-                UserSortOrder.Name => await _userService
-                    .GetPaginatedUsersAsync(skippedUsers, UsersPerPage, u => u.UserName),
-                UserSortOrder.NameDescending => await _userService
-                    .GetPaginatedUsersAsync(skippedUsers, UsersPerPage, u => u.UserName, true),
-                UserSortOrder.Role => await _userService
-                    .GetPaginatedUsersAsync(skippedUsers, UsersPerPage, u => u.UserRoles.Count),
-                UserSortOrder.RoleDescending => await _userService
-                    .GetPaginatedUsersAsync(skippedUsers, UsersPerPage, u => u.UserRoles.Count, true),
-                UserSortOrder.Date => await _userService
-                    .GetPaginatedUsersAsync(skippedUsers, UsersPerPage, u => u.RegistrationDate),
-                UserSortOrder.DateDescending => await _userService
-                    .GetPaginatedUsersAsync(skippedUsers, UsersPerPage, u => u.RegistrationDate, true),
-                _ => await _userService.GetPaginatedUsersAsync(skippedUsers, UsersPerPage)
-            };
+
 
             var usersForTable = users.Select(u => new UserDataForTableViewModel
                 {
@@ -128,6 +86,76 @@ namespace ITechArt.Surveys.WebApp.Controllers
             await _userService.RemoveFromRoleAsync(userId, AdminRoleName);
 
             return RedirectToAction("UserTable");
+        }
+
+
+        private UserSortOrder ManageSortOrder(UserSortOrder? sortOrder)
+        {
+            if (sortOrder == null)
+            {
+                if (Request.Cookies.TryGetValue(SortUsersCookieName, out var sortOrderFromCookie))
+                {
+                    try
+                    {
+                        sortOrder = (UserSortOrder) Enum.Parse(typeof(UserSortOrder), sortOrderFromCookie);
+                    }
+                    catch
+                    {
+                        Response.Cookies.Append(SortUsersCookieName, UserSortOrder.DateDescending.ToString());
+                        sortOrder = UserSortOrder.DateDescending;
+                    }
+                }
+                else
+                {
+                    Response.Cookies.Append(SortUsersCookieName, UserSortOrder.DateDescending.ToString());
+                    sortOrder = UserSortOrder.DateDescending;
+                }
+            }
+            else
+            {
+                Response.Cookies.Append(SortUsersCookieName, sortOrder.ToString());
+            }
+
+            ViewBag.CurrentSort = sortOrder;
+            ViewBag.SortByClickOnName = sortOrder == UserSortOrder.Name
+                ? UserSortOrder.NameDescending
+                : UserSortOrder.Name;
+            ViewBag.SortByClickOnRole = sortOrder == UserSortOrder.RoleDescending
+                ? UserSortOrder.Role
+                : UserSortOrder.RoleDescending;
+            ViewBag.SortByClickOnDate = sortOrder == UserSortOrder.DateDescending
+                ? UserSortOrder.Date
+                : UserSortOrder.DateDescending;
+
+            return (UserSortOrder) sortOrder;
+        }
+
+        private async Task<IReadOnlyCollection<User>> GetUsersForPageAsync(int page, UserSortOrder sortOrder)
+        {
+            var skippedUsers = (page - 1) * UsersPerPage;
+            var users = sortOrder switch
+            {
+                UserSortOrder.Name => await _userService
+                    .GetPaginatedUsersAsync(skippedUsers, UsersPerPage, u => u.UserName),
+                UserSortOrder.NameDescending => await _userService
+                    .GetPaginatedUsersAsync(skippedUsers, UsersPerPage, u => u.UserName, true),
+                UserSortOrder.Role => await _userService
+                    .GetPaginatedUsersAsync(skippedUsers, UsersPerPage, u => u.UserRoles.Count),
+                UserSortOrder.RoleDescending => await _userService
+                    .GetPaginatedUsersAsync(skippedUsers, UsersPerPage, u => u.UserRoles.Count, true),
+                UserSortOrder.Date => await _userService
+                    .GetPaginatedUsersAsync(skippedUsers, UsersPerPage, u => u.RegistrationDate),
+                UserSortOrder.DateDescending => await _userService
+                    .GetPaginatedUsersAsync(skippedUsers, UsersPerPage, u => u.RegistrationDate, true),
+                _ => await _userService.GetPaginatedUsersAsync(skippedUsers, UsersPerPage)
+            };
+
+            return users;
+        }
+
+        private async Task<IReadOnlyCollection<User>> SearchUsersAsync(string searchString, UserSortOrder sortOrder)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -61,6 +61,12 @@ namespace ITechArt.Surveys.Foundation
             return users;
         }
 
+        public async Task<IReadOnlyCollection<User>> SearchUsersAsync(string searchString,
+            Expression<Func<User, object>> orderBy = null, bool descending = false)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<int> CountUsersAsync()
         {
             var amount = await _userRepository.CountAsync();
