@@ -34,6 +34,7 @@ namespace ITechArt.Surveys.WebApp.Controllers
         {
             var newSortOrder = ManageSortOrder(sortOrder);
 
+            ViewBag.SearchStringIsEmpty = searchString == null;
             var users = searchString == null
                 ? await GetUsersForPageAsync(page, newSortOrder)
                 : await SearchUsersAsync(searchString, newSortOrder);
@@ -51,12 +52,13 @@ namespace ITechArt.Surveys.WebApp.Controllers
                 })
                 .ToList();
 
-            var totalUsersAmount = await _userService.CountUsersAsync();
             var userTableViewModel = new UserTableViewModel
             {
                 Users = usersForTable,
                 Page = page,
-                TotalUsersAmount = totalUsersAmount
+                TotalUsersAmount = searchString == null
+                    ? await _userService.CountUsersAsync()
+                    : usersForTable.Count
             };
 
             return View(userTableViewModel);

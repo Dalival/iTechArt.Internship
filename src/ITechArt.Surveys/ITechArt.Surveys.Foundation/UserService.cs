@@ -71,11 +71,8 @@ namespace ITechArt.Surveys.Foundation
             }
 
             var normalizedSearchString = searchString.Trim().ToUpper();
-
-            var users = await _userRepository.GetWhereAsync(u =>
-                    u.NormalizedUserName.Contains(normalizedSearchString)
-                    || u.NormalizedEmail.Contains(normalizedSearchString),
-                orderBy, descending);
+            var users = await _userRepository.GetWhereAsync(
+                u => u.NormalizedUserName.Contains(normalizedSearchString), orderBy, descending);
 
             return users;
         }
