@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.NetworkInformation;
 using System.Threading.Tasks;
 using ITechArt.Surveys.DomainModel;
 using ITechArt.Surveys.Foundation.Interfaces;
@@ -9,7 +8,6 @@ using ITechArt.Surveys.WebApp.Models;
 using ITechArt.Surveys.WebApp.Models.Enum;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.SignalR.Protocol;
 
 namespace ITechArt.Surveys.WebApp.Controllers
 {
