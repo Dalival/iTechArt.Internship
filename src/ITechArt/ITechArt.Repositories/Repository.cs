@@ -135,10 +135,10 @@ namespace ITechArt.Repositories
 
         private IIncludableQueryable<T, object> GetQueryWithIncludes(params Expression<Func<T, object>>[] includes)
         {
-            var query = (IIncludableQueryable<T, object>) _dbSet;
+            var query = (IQueryable<T>) _dbSet;
             query = includes.Aggregate(query, (current, include) => current.Include(include));
 
-            return query;
+            return (IIncludableQueryable<T, object>) query;
         }
     }
 }
