@@ -11,6 +11,9 @@ namespace ITechArt.Surveys.Repositories.Repositories
     {
         Task<IReadOnlyCollection<User>> GetAllWithRolesAsync();
 
+        Task<IReadOnlyCollection<User>> GetWhereWithRolesAsync(Expression<Func<User, bool>> predicate,
+            Expression<Func<User, object>> orderBy, bool descending = false);
+
         Task<IReadOnlyCollection<User>> GetPaginatedWithRolesAsync(int fromPosition, int amount,
             Expression<Func<User, object>> orderBy, bool descending = false);
     }

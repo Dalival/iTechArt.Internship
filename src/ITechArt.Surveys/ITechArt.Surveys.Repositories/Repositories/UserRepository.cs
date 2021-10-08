@@ -25,6 +25,24 @@ namespace ITechArt.Surveys.Repositories.Repositories
             return usersWithRoles;
         }
 
+        public async Task<IReadOnlyCollection<User>> GetWhereWithRolesAsync(Expression<Func<User, bool>> predicate,
+            Expression<Func<User, object>> orderBy, bool descending = false)
+        {
+            var targetUsers = _dbSet.Where(predicate);
+
+            var orderedUsers = (descending
+                    ? targetUsers.OrderByDescending(orderBy)
+                    : targetUsers.OrderBy(orderBy))
+                .ThenBy(u => u.RegistrationDate);
+
+            var usersWithRoles = await orderedUsers
+                .Include(u => u.UserRoles)
+                .ThenInclude(ur => ur.Role)
+                .ToListAsync();
+
+            return usersWithRoles;
+        }
+
         public async Task<IReadOnlyCollection<User>> GetPaginatedWithRolesAsync(int fromPosition, int amount,
             Expression<Func<User, object>> orderBy, bool descending = false)
         {

@@ -64,7 +64,18 @@ namespace ITechArt.Surveys.Foundation
         public async Task<IReadOnlyCollection<User>> SearchUsersAsync(string searchString,
             Expression<Func<User, object>> orderBy = null, bool descending = false)
         {
-            throw new NotImplementedException();
+            if (orderBy == null)
+            {
+                orderBy = user => user.RegistrationDate;
+                descending = true;
+            }
+
+            var users = await _userRepository.GetWhereWithRolesAsync(
+                u => u.NormalizedUserName.Contains(searchString.ToUpper())
+                     || u.NormalizedEmail.Contains(searchString.ToUpper()),
+                orderBy, descending);
+
+            return users;
         }
 
         public async Task<int> CountUsersAsync()

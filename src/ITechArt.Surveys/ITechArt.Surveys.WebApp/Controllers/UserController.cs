@@ -38,8 +38,6 @@ namespace ITechArt.Surveys.WebApp.Controllers
                 ? await GetUsersForPageAsync(page, newSortOrder)
                 : await SearchUsersAsync(searchString, newSortOrder);
 
-
-
             var usersForTable = users.Select(u => new UserDataForTableViewModel
                 {
                     Id = u.Id,
@@ -155,7 +153,18 @@ namespace ITechArt.Surveys.WebApp.Controllers
 
         private async Task<IReadOnlyCollection<User>> SearchUsersAsync(string searchString, UserSortOrder sortOrder)
         {
-            throw new NotImplementedException();
+            var users = sortOrder switch
+            {
+                UserSortOrder.Name => await _userService.SearchUsersAsync(searchString, u => u.UserName),
+                UserSortOrder.NameDescending => await _userService.SearchUsersAsync(searchString, u => u.UserName, true),
+                UserSortOrder.Role => await _userService.SearchUsersAsync(searchString, u => u.UserRoles.Count),
+                UserSortOrder.RoleDescending => await _userService.SearchUsersAsync(searchString, u => u.UserRoles.Count, true),
+                UserSortOrder.Date => await _userService.SearchUsersAsync(searchString, u => u.RegistrationDate),
+                UserSortOrder.DateDescending => await _userService.SearchUsersAsync(searchString, u => u.RegistrationDate, true),
+                _ => await _userService.SearchUsersAsync(searchString)
+            };
+
+            return users;
         }
     }
 }
