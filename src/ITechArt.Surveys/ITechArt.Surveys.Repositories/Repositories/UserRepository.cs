@@ -15,7 +15,7 @@ namespace ITechArt.Surveys.Repositories.Repositories
             : base(dbContext) { }
 
 
-        public async Task<IReadOnlyCollection<User>> GetAllWithRolesAsync()
+        public async Task<IReadOnlyCollection<User>> GetAllAsync()
         {
             var usersWithRoles = await _dbSet
                 .Include(u => u.UserRoles)
@@ -25,7 +25,7 @@ namespace ITechArt.Surveys.Repositories.Repositories
             return usersWithRoles;
         }
 
-        public async Task<IReadOnlyCollection<User>> GetWhereWithRolesAsync(Expression<Func<User, bool>> predicate,
+        public async Task<IReadOnlyCollection<User>> GetWhereAsync(Expression<Func<User, bool>> predicate,
             Expression<Func<User, object>> orderBy, bool descending = false)
         {
             var targetUsers = _dbSet.Where(predicate);
@@ -43,7 +43,7 @@ namespace ITechArt.Surveys.Repositories.Repositories
             return usersWithRoles;
         }
 
-        public async Task<IReadOnlyCollection<User>> GetPaginatedWithRolesAsync(int fromPosition, int amount,
+        public async Task<IReadOnlyCollection<User>> GetPaginatedAsync(int fromPosition, int amount,
             Expression<Func<User, object>> orderBy, bool descending = false)
         {
             var orderedUsers = (descending

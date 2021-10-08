@@ -56,7 +56,7 @@ namespace ITechArt.Surveys.Foundation
                 descending = true;
             }
 
-            var users = await _userRepository.GetPaginatedWithRolesAsync(fromPosition, amount, orderBy, descending);
+            var users = await _userRepository.GetPaginatedAsync(fromPosition, amount, orderBy, descending);
 
             return users;
         }
@@ -72,7 +72,7 @@ namespace ITechArt.Surveys.Foundation
 
             var normalizedSearchString = searchString.Trim().ToUpper();
 
-            var users = await _userRepository.GetWhereWithRolesAsync(u =>
+            var users = await _userRepository.GetWhereAsync(u =>
                     u.NormalizedUserName.Contains(normalizedSearchString)
                     || u.NormalizedEmail.Contains(normalizedSearchString),
                 orderBy, descending);

@@ -9,12 +9,12 @@ namespace ITechArt.Surveys.Repositories.Repositories
 {
     public interface IUserRepository : IRepository<User>
     {
-        Task<IReadOnlyCollection<User>> GetAllWithRolesAsync();
+        Task<IReadOnlyCollection<User>> GetAllAsync();
 
-        Task<IReadOnlyCollection<User>> GetWhereWithRolesAsync(Expression<Func<User, bool>> predicate,
+        Task<IReadOnlyCollection<User>> GetWhereAsync(Expression<Func<User, bool>> predicate,
             Expression<Func<User, object>> orderBy, bool descending = false);
 
-        Task<IReadOnlyCollection<User>> GetPaginatedWithRolesAsync(int fromPosition, int amount,
+        Task<IReadOnlyCollection<User>> GetPaginatedAsync(int fromPosition, int amount,
             Expression<Func<User, object>> orderBy, bool descending = false);
     }
 }
