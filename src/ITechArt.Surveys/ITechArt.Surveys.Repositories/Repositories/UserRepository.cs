@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using ITechArt.Repositories;
 using ITechArt.Surveys.DomainModel;
@@ -23,13 +25,19 @@ namespace ITechArt.Surveys.Repositories.Repositories
             return usersWithRoles;
         }
 
-        public async Task<IReadOnlyCollection<User>> GetPaginatedWithRolesAsync(int fromPosition, int amount)
+        public async Task<IReadOnlyCollection<User>> GetPaginatedWithRolesAsync(int fromPosition, int amount,
+            Expression<Func<User, object>> orderBy, bool descending = false)
         {
-            var usersWithRoles = await _dbSet
-                .Include(u => u.UserRoles)
-                .ThenInclude(ur => ur.Role)
+            var orderedUsers = (descending
+                    ? _dbSet.OrderByDescending(orderBy)
+                    : _dbSet.OrderBy(orderBy))
+                .ThenBy(u => u.RegistrationDate);
+
+            var usersWithRoles = await orderedUsers
                 .Skip(fromPosition)
                 .Take(amount)
+                .Include(u => u.UserRoles)
+                .ThenInclude(ur => ur.Role)
                 .ToListAsync();
 
             return usersWithRoles;

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using ITechArt.Common.Logger;
 using ITechArt.Common.Result;
@@ -46,9 +47,16 @@ namespace ITechArt.Surveys.Foundation
             return operationResult;
         }
 
-        public async Task<IReadOnlyCollection<User>> GetPaginatedUsersAsync(int fromPosition, int amount)
+        public async Task<IReadOnlyCollection<User>> GetPaginatedUsersAsync(int fromPosition, int amount,
+            Expression<Func<User, object>> orderBy = null, bool descending = false)
         {
-            var users = await _userRepository.GetPaginatedWithRolesAsync(fromPosition, amount);
+            if (orderBy == null)
+            {
+                orderBy = user => user.RegistrationDate;
+                descending = true;
+            }
+
+            var users = await _userRepository.GetPaginatedWithRolesAsync(fromPosition, amount, orderBy, descending);
 
             return users;
         }

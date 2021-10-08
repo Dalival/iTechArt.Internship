@@ -96,13 +96,6 @@ namespace ITechArt.Repositories
             return target;
         }
 
-        public async Task<bool> AnyAsync(Expression<Func<T, bool>> predicate)
-        {
-            var target = await _dbSet.AnyAsync(predicate);
-
-            return target;
-        }
-
         public async Task<IReadOnlyCollection<T>> GetPaginatedAsync(int fromPosition, int amount,
             params Expression<Func<T, object>>[] includes)
         {
@@ -125,6 +118,13 @@ namespace ITechArt.Repositories
             return targetWithIncludes;
         }
 
+        public async Task<bool> AnyAsync(Expression<Func<T, bool>> predicate)
+        {
+            var target = await _dbSet.AnyAsync(predicate);
+
+            return target;
+        }
+
         public async Task<int> CountAsync()
         {
             var recordsAmount = await _dbSet.CountAsync();
@@ -135,12 +135,10 @@ namespace ITechArt.Repositories
 
         private IIncludableQueryable<T, object> GetQueryWithIncludes(params Expression<Func<T, object>>[] includes)
         {
-            var queryWithIncludes = includes
-                .Skip(1)
-                .Aggregate(_dbSet.Include(includes.First()),
-                    (current, include) => current.Include(include));
+            var query = (IIncludableQueryable<T, object>) _dbSet;
+            query = includes.Aggregate(query, (current, include) => current.Include(include));
 
-            return queryWithIncludes;
+            return query;
         }
     }
 }
