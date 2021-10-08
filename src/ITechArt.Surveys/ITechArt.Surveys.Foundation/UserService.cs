@@ -70,9 +70,11 @@ namespace ITechArt.Surveys.Foundation
                 descending = true;
             }
 
-            var users = await _userRepository.GetWhereWithRolesAsync(
-                u => u.NormalizedUserName.Contains(searchString.ToUpper())
-                     || u.NormalizedEmail.Contains(searchString.ToUpper()),
+            var normalizedSearchString = searchString.Trim().ToUpper();
+
+            var users = await _userRepository.GetWhereWithRolesAsync(u =>
+                    u.NormalizedUserName.Contains(normalizedSearchString)
+                    || u.NormalizedEmail.Contains(normalizedSearchString),
                 orderBy, descending);
 
             return users;
