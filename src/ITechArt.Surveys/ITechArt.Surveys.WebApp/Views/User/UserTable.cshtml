@@ -88,7 +88,7 @@
                         @using (Html.BeginForm("DeleteUser", "User", FormMethod.Post))
                         {
                             @Html.Hidden("userId", user.Id)
-                            @Html.Hidden("sortOrder", (object)ViewBag.CurrentSort)
+                            @Html.Hidden("sortOrder", (object) ViewBag.CurrentSort)
                             <label class="delete-button" title="Delete user">
                                 <input type="submit" class="hide"/>
                                 <span class="material-icons-outlined">delete</span>
@@ -101,7 +101,7 @@
                             @using (Html.BeginForm("RevokeAdminRights", "User", FormMethod.Post))
                             {
                                 @Html.Hidden("userId", user.Id)
-                                @Html.Hidden("sortOrder", (object)ViewBag.CurrentSort)
+                                @Html.Hidden("sortOrder", (object) ViewBag.CurrentSort)
                                 <label class="change-role-button" title="Revoke admin rights">
                                     <input type="submit" class="hide"/>
                                     <span class="material-icons-outlined">person_outline</span>
@@ -113,7 +113,7 @@
                             @using (Html.BeginForm("GiveAdminRights", "User", FormMethod.Post))
                             {
                                 @Html.Hidden("userId", user.Id)
-                                @Html.Hidden("sortOrder", (object)ViewBag.CurrentSort)
+                                @Html.Hidden("sortOrder", (object) ViewBag.CurrentSort)
                                 <label class="change-role-button" title="Give admin rights">
                                     <input type="submit" class="hide"/>
                                     <span class="material-icons-outlined">manage_accounts</span>
@@ -126,7 +126,7 @@
         }
     }
 </div>
-@if ((bool)ViewBag.SearchStringIsEmpty)
+@if ((bool) ViewBag.SearchStringIsEmpty)
 {
     <div class="navbar-for-table">
         <div class="users-counter">
