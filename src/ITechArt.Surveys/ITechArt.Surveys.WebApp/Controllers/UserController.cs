@@ -32,10 +32,8 @@ namespace ITechArt.Surveys.WebApp.Controllers
         {
             var newSortOrder = ManageSortOrder(sortOrder);
 
-            ViewBag.SearchStringIsEmpty = searchString == null;
-            var users = searchString == null
-                ? await GetUsersForPageAsync(page, newSortOrder)
-                : await SearchUsersAsync(searchString, newSortOrder);
+            ViewBag.SearchString = searchString;
+            var users = await GetUsersForPageAsync(page, newSortOrder, searchString);
 
             var usersForTable = users.Select(u => new UserDataForTableViewModel
                 {
@@ -54,9 +52,7 @@ namespace ITechArt.Surveys.WebApp.Controllers
             {
                 Users = usersForTable,
                 Page = page,
-                TotalUsersAmount = searchString == null
-                    ? await _userService.CountUsersAsync()
-                    : usersForTable.Count
+                TotalUsersAmount = await _userService.CountUsersAsync(searchString)
             };
 
             return View(userTableViewModel);
@@ -128,40 +124,24 @@ namespace ITechArt.Surveys.WebApp.Controllers
             return (UserSortOrder) sortOrder;
         }
 
-        private async Task<IReadOnlyCollection<User>> GetUsersForPageAsync(int page, UserSortOrder sortOrder)
+        private async Task<IReadOnlyCollection<User>> GetUsersForPageAsync(int page, UserSortOrder sortOrder, string searchString)
         {
             var skippedUsers = (page - 1) * UsersPerPage;
             var users = sortOrder switch
             {
                 UserSortOrder.Name => await _userService
-                    .GetPaginatedUsersAsync(skippedUsers, UsersPerPage, u => u.UserName),
+                    .GetPaginatedUsersAsync(skippedUsers, UsersPerPage, u => u.UserName, searchString: searchString),
                 UserSortOrder.NameDescending => await _userService
-                    .GetPaginatedUsersAsync(skippedUsers, UsersPerPage, u => u.UserName, true),
+                    .GetPaginatedUsersAsync(skippedUsers, UsersPerPage, u => u.UserName, true, searchString),
                 UserSortOrder.Role => await _userService
-                    .GetPaginatedUsersAsync(skippedUsers, UsersPerPage, u => u.UserRoles.Count),
+                    .GetPaginatedUsersAsync(skippedUsers, UsersPerPage, u => u.UserRoles.Count, searchString: searchString),
                 UserSortOrder.RoleDescending => await _userService
-                    .GetPaginatedUsersAsync(skippedUsers, UsersPerPage, u => u.UserRoles.Count, true),
+                    .GetPaginatedUsersAsync(skippedUsers, UsersPerPage, u => u.UserRoles.Count, true, searchString),
                 UserSortOrder.Date => await _userService
-                    .GetPaginatedUsersAsync(skippedUsers, UsersPerPage, u => u.RegistrationDate),
+                    .GetPaginatedUsersAsync(skippedUsers, UsersPerPage, u => u.RegistrationDate, searchString: searchString),
                 UserSortOrder.DateDescending => await _userService
-                    .GetPaginatedUsersAsync(skippedUsers, UsersPerPage, u => u.RegistrationDate, true),
-                _ => await _userService.GetPaginatedUsersAsync(skippedUsers, UsersPerPage)
-            };
-
-            return users;
-        }
-
-        private async Task<IReadOnlyCollection<User>> SearchUsersAsync(string searchString, UserSortOrder sortOrder)
-        {
-            var users = sortOrder switch
-            {
-                UserSortOrder.Name => await _userService.SearchUsersAsync(searchString, u => u.UserName),
-                UserSortOrder.NameDescending => await _userService.SearchUsersAsync(searchString, u => u.UserName, true),
-                UserSortOrder.Role => await _userService.SearchUsersAsync(searchString, u => u.UserRoles.Count),
-                UserSortOrder.RoleDescending => await _userService.SearchUsersAsync(searchString, u => u.UserRoles.Count, true),
-                UserSortOrder.Date => await _userService.SearchUsersAsync(searchString, u => u.RegistrationDate),
-                UserSortOrder.DateDescending => await _userService.SearchUsersAsync(searchString, u => u.RegistrationDate, true),
-                _ => await _userService.SearchUsersAsync(searchString)
+                    .GetPaginatedUsersAsync(skippedUsers, UsersPerPage, u => u.RegistrationDate, true, searchString),
+                _ => await _userService.GetPaginatedUsersAsync(skippedUsers, UsersPerPage, searchString: searchString)
             };
 
             return users;

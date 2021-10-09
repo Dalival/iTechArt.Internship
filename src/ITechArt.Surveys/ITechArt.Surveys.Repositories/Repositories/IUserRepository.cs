@@ -11,10 +11,13 @@ namespace ITechArt.Surveys.Repositories.Repositories
     {
         Task<IReadOnlyCollection<User>> GetAllAsync();
 
-        Task<IReadOnlyCollection<User>> GetWhereAsync(Expression<Func<User, bool>> predicate,
-            Expression<Func<User, object>> orderBy, bool descending = false);
+        Task<IReadOnlyCollection<User>> GetPaginatedAsync(
+            int fromPosition,
+            int amount,
+            Expression<Func<User, object>> orderBy,
+            bool descending,
+            string searchString);
 
-        Task<IReadOnlyCollection<User>> GetPaginatedAsync(int fromPosition, int amount,
-            Expression<Func<User, object>> orderBy, bool descending = false);
+        Task<int> CountAsync(Expression<Func<User, bool>> predicate = null);
     }
 }

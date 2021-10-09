@@ -25,30 +25,21 @@ namespace ITechArt.Surveys.Repositories.Repositories
             return usersWithRoles;
         }
 
-        public async Task<IReadOnlyCollection<User>> GetWhereAsync(Expression<Func<User, bool>> predicate,
-            Expression<Func<User, object>> orderBy, bool descending = false)
+        public async Task<IReadOnlyCollection<User>> GetPaginatedAsync(
+            int fromPosition,
+            int amount,
+            Expression<Func<User, object>> orderBy,
+            bool descending = false,
+            string searchString = null)
         {
-            var targetUsers = _dbSet.Where(predicate);
+            var normalizedSearchString = searchString?.ToUpper().Trim();
+            var targetUsers = normalizedSearchString == null
+                ? _dbSet
+                : _dbSet.Where(user => user.NormalizedUserName.Contains(normalizedSearchString));
 
             var orderedUsers = (descending
                     ? targetUsers.OrderByDescending(orderBy)
                     : targetUsers.OrderBy(orderBy))
-                .ThenBy(u => u.RegistrationDate);
-
-            var usersWithRoles = await orderedUsers
-                .Include(u => u.UserRoles)
-                .ThenInclude(ur => ur.Role)
-                .ToListAsync();
-
-            return usersWithRoles;
-        }
-
-        public async Task<IReadOnlyCollection<User>> GetPaginatedAsync(int fromPosition, int amount,
-            Expression<Func<User, object>> orderBy, bool descending = false)
-        {
-            var orderedUsers = (descending
-                    ? _dbSet.OrderByDescending(orderBy)
-                    : _dbSet.OrderBy(orderBy))
                 .ThenBy(u => u.RegistrationDate);
 
             var usersWithRoles = await orderedUsers
@@ -59,6 +50,16 @@ namespace ITechArt.Surveys.Repositories.Repositories
                 .ToListAsync();
 
             return usersWithRoles;
+        }
+
+        public async Task<int> CountAsync(Expression<Func<User, bool>> predicate = null)
+        {
+
+            var recordsAmount = predicate == null
+                ? await _dbSet.CountAsync()
+                : await _dbSet.CountAsync(predicate);
+
+            return recordsAmount;
         }
     }
 }

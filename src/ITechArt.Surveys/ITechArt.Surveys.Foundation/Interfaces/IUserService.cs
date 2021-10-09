@@ -11,13 +11,14 @@ namespace ITechArt.Surveys.Foundation.Interfaces
     {
         Task<OperationResult<RegistrationError>> CreateUserAsync(User user, string password);
 
-        Task<IReadOnlyCollection<User>> GetPaginatedUsersAsync(int fromPosition, int amount,
-            Expression<Func<User, object>> orderBy = null, bool descending = false);
+        Task<IReadOnlyCollection<User>> GetPaginatedUsersAsync(
+            int fromPosition,
+            int amount,
+            Expression<Func<User, object>> orderBy = null,
+            bool descending = false,
+            string searchString = null);
 
-        Task<IReadOnlyCollection<User>> SearchUsersAsync(string searchString,
-            Expression<Func<User, object>> orderBy = null, bool descending = false);
-
-        Task<int> CountUsersAsync();
+        Task<int> CountUsersAsync(string searchString = null);
 
         Task<bool>  DeleteUserAsync(string id);
 

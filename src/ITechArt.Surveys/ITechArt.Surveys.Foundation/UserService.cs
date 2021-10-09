@@ -47,8 +47,12 @@ namespace ITechArt.Surveys.Foundation
             return operationResult;
         }
 
-        public async Task<IReadOnlyCollection<User>> GetPaginatedUsersAsync(int fromPosition, int amount,
-            Expression<Func<User, object>> orderBy = null, bool descending = false)
+        public async Task<IReadOnlyCollection<User>> GetPaginatedUsersAsync(
+            int fromPosition,
+            int amount,
+            Expression<Func<User, object>> orderBy = null,
+            bool descending = false,
+            string searchString = null)
         {
             if (orderBy == null)
             {
@@ -56,30 +60,17 @@ namespace ITechArt.Surveys.Foundation
                 descending = true;
             }
 
-            var users = await _userRepository.GetPaginatedAsync(fromPosition, amount, orderBy, descending);
+            var users = await _userRepository.GetPaginatedAsync(fromPosition, amount, orderBy, descending, searchString);
 
             return users;
         }
 
-        public async Task<IReadOnlyCollection<User>> SearchUsersAsync(string searchString,
-            Expression<Func<User, object>> orderBy = null, bool descending = false)
+        public async Task<int> CountUsersAsync(string searchString = null)
         {
-            if (orderBy == null)
-            {
-                orderBy = user => user.RegistrationDate;
-                descending = true;
-            }
-
-            var normalizedSearchString = searchString.Trim().ToUpper();
-            var users = await _userRepository.GetWhereAsync(
-                u => u.NormalizedUserName.Contains(normalizedSearchString), orderBy, descending);
-
-            return users;
-        }
-
-        public async Task<int> CountUsersAsync()
-        {
-            var amount = await _userRepository.CountAsync();
+            var normalizedSearchString = searchString?.ToUpper().Trim();
+            var amount = normalizedSearchString == null
+                ? await _userRepository.CountAsync()
+                : await _userRepository.CountAsync(user => user.NormalizedUserName.Contains(normalizedSearchString));
 
             return amount;
         }
