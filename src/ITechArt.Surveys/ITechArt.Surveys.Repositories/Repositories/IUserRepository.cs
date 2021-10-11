@@ -9,8 +9,6 @@ namespace ITechArt.Surveys.Repositories.Repositories
 {
     public interface IUserRepository : IRepository<User>
     {
-        Task<IReadOnlyCollection<User>> GetAllAsync();
-
         Task<IReadOnlyCollection<User>> GetPaginatedAsync(
             int fromPosition,
             int amount,

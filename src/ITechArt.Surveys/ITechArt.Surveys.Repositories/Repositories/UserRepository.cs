@@ -15,16 +15,6 @@ namespace ITechArt.Surveys.Repositories.Repositories
             : base(dbContext) { }
 
 
-        public async Task<IReadOnlyCollection<User>> GetAllAsync()
-        {
-            var usersWithRoles = await _dbSet
-                .Include(u => u.UserRoles)
-                .ThenInclude(ur => ur.Role)
-                .ToListAsync();
-
-            return usersWithRoles;
-        }
-
         public async Task<IReadOnlyCollection<User>> GetPaginatedAsync(
             int fromPosition,
             int amount,
