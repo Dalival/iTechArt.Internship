@@ -52,12 +52,12 @@ namespace ITechArt.Surveys.Repositories.Repositories
             return usersWithRoles;
         }
 
-        public async Task<int> CountAsync(Expression<Func<User, bool>> predicate = null)
+        public async Task<int> CountAsync(string searchString = null)
         {
 
-            var recordsAmount = predicate == null
+            var recordsAmount = searchString == null
                 ? await _dbSet.CountAsync()
-                : await _dbSet.CountAsync(predicate);
+                : await _dbSet.CountAsync(u => u.UserName == searchString);
 
             return recordsAmount;
         }

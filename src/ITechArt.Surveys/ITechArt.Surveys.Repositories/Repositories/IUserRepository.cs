@@ -18,6 +18,6 @@ namespace ITechArt.Surveys.Repositories.Repositories
             bool descending,
             string searchString);
 
-        Task<int> CountAsync(Expression<Func<User, bool>> predicate = null);
+        Task<int> CountAsync(string searchString = null);
     }
 }
