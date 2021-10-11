@@ -32,14 +32,13 @@ namespace ITechArt.Surveys.Repositories.Repositories
             bool descending = false,
             string searchString = null)
         {
-            var normalizedSearchString = searchString?.ToUpper().Trim();
-            var targetUsers = normalizedSearchString == null
+            var filteredUsers = searchString == null
                 ? _dbSet
-                : _dbSet.Where(user => user.NormalizedUserName.Contains(normalizedSearchString));
+                : _dbSet.Where(user => user.NormalizedUserName.Contains(searchString.Trim()));
 
             var orderedUsers = (descending
-                    ? targetUsers.OrderByDescending(orderBy)
-                    : targetUsers.OrderBy(orderBy))
+                    ? filteredUsers.OrderByDescending(orderBy)
+                    : filteredUsers.OrderBy(orderBy))
                 .ThenBy(u => u.RegistrationDate);
 
             var usersWithRoles = await orderedUsers
