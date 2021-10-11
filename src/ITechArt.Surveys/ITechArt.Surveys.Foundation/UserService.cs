@@ -60,7 +60,7 @@ namespace ITechArt.Surveys.Foundation
                 descending = true;
             }
 
-            var users = await _userRepository.GetPaginatedAsync(fromPosition, amount, orderBy, descending, searchString);
+            var users = await _userRepository.GetSelectionAsync(fromPosition, amount, orderBy, descending, searchString);
 
             return users;
         }

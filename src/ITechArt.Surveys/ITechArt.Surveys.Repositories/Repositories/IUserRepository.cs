@@ -9,7 +9,7 @@ namespace ITechArt.Surveys.Repositories.Repositories
 {
     public interface IUserRepository : IRepository<User>
     {
-        Task<IReadOnlyCollection<User>> GetPaginatedAsync(
+        Task<IReadOnlyCollection<User>> GetSelectionAsync(
             int fromPosition,
             int amount,
             Expression<Func<User, object>> orderBy,

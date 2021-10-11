@@ -15,7 +15,7 @@ namespace ITechArt.Surveys.Repositories.Repositories
             : base(dbContext) { }
 
 
-        public async Task<IReadOnlyCollection<User>> GetPaginatedAsync(
+        public async Task<IReadOnlyCollection<User>> GetSelectionAsync(
             int fromPosition,
             int amount,
             Expression<Func<User, object>> orderBy,
