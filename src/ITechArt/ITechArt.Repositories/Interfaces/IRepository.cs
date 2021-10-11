@@ -31,7 +31,5 @@ namespace ITechArt.Repositories.Interfaces
         Task<IReadOnlyCollection<T>> GetPaginatedAsync(int fromPosition, int amount, params Expression<Func<T, object>>[] includes);
 
         Task<bool> AnyAsync(Expression<Func<T, bool>> predicate);
-
-        Task<int> CountAsync();
     }
 }
