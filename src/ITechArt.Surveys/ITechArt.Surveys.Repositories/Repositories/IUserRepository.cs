@@ -13,8 +13,8 @@ namespace ITechArt.Surveys.Repositories.Repositories
             int fromPosition,
             int amount,
             Expression<Func<User, object>> orderBy,
-            bool descending,
-            string searchString);
+            bool descending = false,
+            string searchString = null);
 
         Task<int> CountAsync(string searchString = null);
     }
