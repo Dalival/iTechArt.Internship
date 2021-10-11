@@ -34,7 +34,7 @@ namespace ITechArt.Surveys.Repositories.Repositories
         {
             var filteredUsers = searchString == null
                 ? _dbSet
-                : _dbSet.Where(user => user.UserName.Contains(searchString.Trim()));
+                : _dbSet.Where(u => u.UserName.Contains(searchString.Trim()));
 
             var orderedUsers = (descending
                     ? filteredUsers.OrderByDescending(orderBy)
@@ -56,7 +56,7 @@ namespace ITechArt.Surveys.Repositories.Repositories
 
             var recordsAmount = searchString == null
                 ? await _dbSet.CountAsync()
-                : await _dbSet.CountAsync(u => u.UserName == searchString);
+                : await _dbSet.CountAsync(u => u.UserName.Contains(searchString.Trim()));
 
             return recordsAmount;
         }
