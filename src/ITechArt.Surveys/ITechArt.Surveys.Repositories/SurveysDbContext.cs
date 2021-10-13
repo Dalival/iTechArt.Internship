@@ -105,6 +105,25 @@ namespace ITechArt.Surveys.Repositories
                         RoleId = UserRoleId
                     });
             });
+
+            modelBuilder.Entity<Survey>(b =>
+            {
+                b.HasKey(s => s.Id);
+                b.ToTable("Surveys");
+
+                b.Property(s => s.Name).HasMaxLength(MaxStringLength);
+
+                b.HasMany(s => s.Questions).WithOne(q => q.Survey);
+                b.HasOne(s => s.Owner).WithMany(user => user.Surveys);
+            });
+
+            modelBuilder.Entity<Question>(b =>
+            {
+                b.HasKey(q => q.Id);
+                b.ToTable("Questions");
+
+                b.Property(q => q.Title).HasMaxLength(MaxStringLength);
+            });
         }
     }
 }
