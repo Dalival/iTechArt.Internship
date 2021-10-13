@@ -67,8 +67,7 @@ namespace ITechArt.Surveys.Foundation
 
         public async Task<int> CountUsersAsync(string searchString = null)
         {
-            var normalizedSearchString = searchString?.ToUpper().Trim();
-            var amount = normalizedSearchString == null
+            var amount = searchString == null
                 ? await _userRepository.CountAsync()
                 : await _userRepository.CountUsersWithUsernameAsync(searchString);
 

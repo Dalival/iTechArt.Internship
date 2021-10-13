@@ -52,7 +52,7 @@ namespace ITechArt.Surveys.WebApp.Controllers
             {
                 Users = usersForTable,
                 Page = page,
-                TotalUsersAmount = await _userService.CountUsersAsync(searchString)
+                TotalUsersAmount = await _userService.CountUsersAsync(searchString?.Trim())
             };
 
             return View(userTableViewModel);
