@@ -47,7 +47,7 @@ namespace ITechArt.Surveys.Foundation
             return operationResult;
         }
 
-        public async Task<IReadOnlyCollection<User>> GetPaginatedUsersAsync(
+        public async Task<IReadOnlyCollection<User>> GetUsersPageAsync(
             int fromPosition,
             int amount,
             Expression<Func<User, object>> orderBy = null,
@@ -60,7 +60,7 @@ namespace ITechArt.Surveys.Foundation
                 descending = true;
             }
 
-            var users = await _userRepository.GetSelectionAsync(fromPosition, amount, orderBy, descending, searchString);
+            var users = await _userRepository.GetUsersPageAsync(fromPosition, amount, orderBy, descending, searchString);
 
             return users;
         }

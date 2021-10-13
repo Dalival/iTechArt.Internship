@@ -11,7 +11,7 @@ namespace ITechArt.Surveys.Foundation.Interfaces
     {
         Task<OperationResult<RegistrationError>> CreateUserAsync(User user, string password);
 
-        Task<IReadOnlyCollection<User>> GetPaginatedUsersAsync(
+        Task<IReadOnlyCollection<User>> GetUsersPageAsync(
             int fromPosition,
             int amount,
             Expression<Func<User, object>> orderBy = null,

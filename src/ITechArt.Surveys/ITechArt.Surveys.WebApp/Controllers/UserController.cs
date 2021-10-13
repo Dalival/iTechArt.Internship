@@ -130,18 +130,18 @@ namespace ITechArt.Surveys.WebApp.Controllers
             var users = sortOrder switch
             {
                 UserSortOrder.Name => await _userService
-                    .GetPaginatedUsersAsync(skippedUsers, UsersPerPage, u => u.UserName, searchString: searchString),
+                    .GetUsersPageAsync(skippedUsers, UsersPerPage, u => u.UserName, searchString: searchString),
                 UserSortOrder.NameDescending => await _userService
-                    .GetPaginatedUsersAsync(skippedUsers, UsersPerPage, u => u.UserName, true, searchString),
+                    .GetUsersPageAsync(skippedUsers, UsersPerPage, u => u.UserName, true, searchString),
                 UserSortOrder.Role => await _userService
-                    .GetPaginatedUsersAsync(skippedUsers, UsersPerPage, u => u.UserRoles.Count, searchString: searchString),
+                    .GetUsersPageAsync(skippedUsers, UsersPerPage, u => u.UserRoles.Count, searchString: searchString),
                 UserSortOrder.RoleDescending => await _userService
-                    .GetPaginatedUsersAsync(skippedUsers, UsersPerPage, u => u.UserRoles.Count, true, searchString),
+                    .GetUsersPageAsync(skippedUsers, UsersPerPage, u => u.UserRoles.Count, true, searchString),
                 UserSortOrder.Date => await _userService
-                    .GetPaginatedUsersAsync(skippedUsers, UsersPerPage, u => u.RegistrationDate, searchString: searchString),
+                    .GetUsersPageAsync(skippedUsers, UsersPerPage, u => u.RegistrationDate, searchString: searchString),
                 UserSortOrder.DateDescending => await _userService
-                    .GetPaginatedUsersAsync(skippedUsers, UsersPerPage, u => u.RegistrationDate, true, searchString),
-                _ => await _userService.GetPaginatedUsersAsync(skippedUsers, UsersPerPage, searchString: searchString)
+                    .GetUsersPageAsync(skippedUsers, UsersPerPage, u => u.RegistrationDate, true, searchString),
+                _ => await _userService.GetUsersPageAsync(skippedUsers, UsersPerPage, searchString: searchString)
             };
 
             return users;
