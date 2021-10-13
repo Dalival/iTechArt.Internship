@@ -125,6 +125,15 @@ namespace ITechArt.Repositories
             return target;
         }
 
+        public async Task<int> CountAsync(Expression<Func<T, bool>> predicate = null)
+        {
+            var recordsAmount = predicate == null
+                ? await _dbSet.CountAsync()
+                : await _dbSet.CountAsync(predicate);
+
+            return recordsAmount;
+        }
+
 
         private IIncludableQueryable<T, object> GetQueryWithIncludes(params Expression<Func<T, object>>[] includes)
         {
