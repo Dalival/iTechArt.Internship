@@ -41,7 +41,7 @@ namespace ITechArt.Surveys.Repositories.Repositories
             return usersWithRoles;
         }
 
-        public async Task<int> CountAsync(string searchString)
+        public async Task<int> CountUsersWithUsernameAsync(string searchString)
         {
             var recordsAmount = await CountAsync(u => u.UserName == searchString);
 

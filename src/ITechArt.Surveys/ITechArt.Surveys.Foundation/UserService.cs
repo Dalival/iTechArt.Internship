@@ -70,7 +70,7 @@ namespace ITechArt.Surveys.Foundation
             var normalizedSearchString = searchString?.ToUpper().Trim();
             var amount = normalizedSearchString == null
                 ? await _userRepository.CountAsync()
-                : await _userRepository.CountAsync(searchString);
+                : await _userRepository.CountUsersWithUsernameAsync(searchString);
 
             return amount;
         }

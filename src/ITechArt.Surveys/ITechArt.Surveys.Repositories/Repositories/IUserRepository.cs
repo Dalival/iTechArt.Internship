@@ -16,6 +16,6 @@ namespace ITechArt.Surveys.Repositories.Repositories
             bool descending = false,
             string searchString = null);
 
-        Task<int> CountAsync(string searchString);
+        Task<int> CountUsersWithUsernameAsync(string searchString);
     }
 }
