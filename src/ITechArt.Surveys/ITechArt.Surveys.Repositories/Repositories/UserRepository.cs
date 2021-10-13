@@ -43,7 +43,6 @@ namespace ITechArt.Surveys.Repositories.Repositories
 
         public async Task<int> CountAsync(string searchString = null)
         {
-
             var recordsAmount = searchString == null
                 ? await _dbSet.CountAsync()
                 : await _dbSet.CountAsync(u => u.UserName.Contains(searchString.Trim()));
