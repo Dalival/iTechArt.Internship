@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using ITechArt.Common;
 using ITechArt.Common.Logger;
 using ITechArt.Common.Result;
 using ITechArt.Repositories.Interfaces;
 using ITechArt.Surveys.DomainModel;
+using ITechArt.Surveys.Foundation.Enum;
 using ITechArt.Surveys.Foundation.Interfaces;
 using ITechArt.Surveys.Repositories;
 using ITechArt.Surveys.Repositories.Repositories;
@@ -50,17 +52,19 @@ namespace ITechArt.Surveys.Foundation
         public async Task<IReadOnlyCollection<User>> GetUsersPageAsync(
             int fromPosition,
             int amount,
-            Expression<Func<User, object>> orderBy = null,
-            bool descending = false,
+            UserSortOrder? sortOrder,
             string searchString = null)
         {
-            if (orderBy == null)
+            var orderStrategies = new[]
             {
-                orderBy = user => user.RegistrationDate;
-                descending = true;
-            }
+                CreateOrderStrategy(sortOrder),
+                EntityOrderStrategy<User>.CreateAscending(u => u.RegistrationDate)
+            };
 
-            var users = await _userRepository.GetUsersPageAsync(fromPosition, amount, orderBy, descending, searchString);
+            var users = searchString == null
+                ? await _userRepository.GetPaginatedAsync(fromPosition, amount, orderStrategies)
+                : await _userRepository.GetWherePaginatedAsync(fromPosition, amount,
+                    user => user.UserName.Contains(searchString), orderStrategies);
 
             return users;
         }
@@ -160,6 +164,22 @@ namespace ITechArt.Surveys.Foundation
             var operationResult = OperationResult<RegistrationError>.Failed(registrationErrors);
 
             return operationResult;
+        }
+
+        private EntityOrderStrategy<User> CreateOrderStrategy(UserSortOrder? sortOrder)
+        {
+            var strategy = sortOrder switch
+            {
+                UserSortOrder.Name => EntityOrderStrategy<User>.CreateAscending(user => user.UserName),
+                UserSortOrder.NameDescending => EntityOrderStrategy<User>.CreateDescending(user => user.UserName),
+                UserSortOrder.Role => EntityOrderStrategy<User>.CreateAscending(user => user.UserRoles.Count),
+                UserSortOrder.RoleDescending => EntityOrderStrategy<User>.CreateDescending(user => user.UserRoles.Count),
+                UserSortOrder.Date => EntityOrderStrategy<User>.CreateAscending(user => user.RegistrationDate),
+                UserSortOrder.DateDescending => EntityOrderStrategy<User>.CreateDescending(user => user.RegistrationDate),
+                _ => EntityOrderStrategy<User>.CreateDescending(user => user.RegistrationDate)
+            };
+
+            return strategy;
         }
     }
 }

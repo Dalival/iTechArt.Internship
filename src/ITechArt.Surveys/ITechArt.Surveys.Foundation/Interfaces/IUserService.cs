@@ -4,6 +4,7 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using ITechArt.Common.Result;
 using ITechArt.Surveys.DomainModel;
+using ITechArt.Surveys.Foundation.Enum;
 
 namespace ITechArt.Surveys.Foundation.Interfaces
 {
@@ -14,8 +15,7 @@ namespace ITechArt.Surveys.Foundation.Interfaces
         Task<IReadOnlyCollection<User>> GetUsersPageAsync(
             int fromPosition,
             int amount,
-            Expression<Func<User, object>> orderBy = null,
-            bool descending = false,
+            UserSortOrder? sortOrder,
             string searchString = null);
 
         Task<int> CountUsersAsync(string searchString = null);
