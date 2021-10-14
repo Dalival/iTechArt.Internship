@@ -101,7 +101,7 @@ namespace ITechArt.Repositories
             int take,
             params EntityOrderStrategy<T>[] orderStrategies)
         {
-            var targetEntities = await GetPaginatedCore(skip, take, orderStrategies).ToListAsync();
+            var targetEntities = await GetPaginatedCore(_dbSet, skip, take, orderStrategies).ToListAsync();
 
             return targetEntities;
         }
@@ -112,10 +112,11 @@ namespace ITechArt.Repositories
             Expression<Func<T, bool>> predicate,
             params EntityOrderStrategy<T>[] orderStrategies)
         {
-            var query = GetPaginatedCore(skip, take, orderStrategies);
-            var filteredEntities = await query.Where(predicate).ToListAsync();
+            var filteredQuery = _dbSet.Where(predicate);
+            var targetQuery = GetPaginatedCore(filteredQuery, skip, take, orderStrategies);
+            var targetEntities = await targetQuery.ToListAsync();
 
-            return filteredEntities;
+            return targetEntities;
         }
 
         public async Task<bool> AnyAsync(Expression<Func<T, bool>> predicate)
@@ -136,6 +137,7 @@ namespace ITechArt.Repositories
 
 
         protected IQueryable<T> GetPaginatedCore(
+            IQueryable<T> query,
             int skip,
             int take,
             params EntityOrderStrategy<T>[] orderStrategies)
@@ -146,8 +148,8 @@ namespace ITechArt.Repositories
             {
                 var firstStrategy = orderStrategies[0];
                 orderedQuery = firstStrategy.Ascending
-                    ? _dbSet.OrderBy(firstStrategy.OrderBy)
-                    : _dbSet.OrderByDescending(firstStrategy.OrderBy);
+                    ? query.OrderBy(firstStrategy.OrderBy)
+                    : query.OrderByDescending(firstStrategy.OrderBy);
                 for (var i = 1; i < orderStrategies.Length; i++)
                 {
                     var strategy = orderStrategies[i];
@@ -158,7 +160,7 @@ namespace ITechArt.Repositories
             }
 
             var filteredQuery = orderedQuery == null
-                ? _dbSet.Skip(skip).Take(take)
+                ? query.Skip(skip).Take(take)
                 : orderedQuery.Skip(skip).Take(take);
 
             return filteredQuery;
