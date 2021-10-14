@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using ITechArt.Common;
 
 namespace ITechArt.Repositories.Interfaces
 {
@@ -28,7 +29,10 @@ namespace ITechArt.Repositories.Interfaces
 
         Task<T> GetSingleOrDefaultAsync(Expression<Func<T, bool>> predicate);
 
-        Task<IReadOnlyCollection<T>> GetPaginatedAsync(int fromPosition, int amount, params Expression<Func<T, object>>[] includes);
+        Task<IReadOnlyCollection<T>> GetPaginatedAsync(int skipCount, int takeCount, params EntityOrderStrategy<T>[] orderStrategies);
+
+        Task<IReadOnlyCollection<T>> GetWherePaginatedAsync(int skipCount, int takeCount,
+            Expression<Func<T, bool>> predicate, params EntityOrderStrategy<T>[] orderStrategies);
 
         Task<bool> AnyAsync(Expression<Func<T, bool>> predicate);
 

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using ITechArt.Common;
 using ITechArt.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Query;
 
 namespace ITechArt.Repositories
 {
@@ -96,26 +96,48 @@ namespace ITechArt.Repositories
             return target;
         }
 
-        public async Task<IReadOnlyCollection<T>> GetPaginatedAsync(int fromPosition, int amount,
-            params Expression<Func<T, object>>[] includes)
+        // public async Task<IReadOnlyCollection<T>> GetPaginatedAsync(int fromPosition, int amount,
+        //     params Expression<Func<T, object>>[] includes)
+        // {
+        //     if (includes == null || includes.Length == 0)
+        //     {
+        //         var target = await _dbSet
+        //             .Skip(fromPosition)
+        //             .Take(amount)
+        //             .ToListAsync();
+        //
+        //         return target;
+        //     }
+        //
+        //     var queryWithIncludes = GetQueryWithIncludes(includes);
+        //     var targetWithIncludes = await queryWithIncludes
+        //         .Skip(fromPosition)
+        //         .Take(amount)
+        //         .ToListAsync();
+        //
+        //     return targetWithIncludes;
+        // }
+
+        public virtual async Task<IReadOnlyCollection<T>> GetPaginatedAsync(
+            int skipCount,
+            int takeCount,
+            params EntityOrderStrategy<T>[] orderStrategies)
         {
-            if (includes == null || includes.Length == 0)
-            {
-                var target = await _dbSet
-                    .Skip(fromPosition)
-                    .Take(amount)
-                    .ToListAsync();
+            var targetEntities = await GetPaginatedCore(skipCount, takeCount, orderStrategies).ToListAsync();
 
-                return target;
-            }
+            return targetEntities;
+        }
 
-            var queryWithIncludes = GetQueryWithIncludes(includes);
-            var targetWithIncludes = await queryWithIncludes
-                .Skip(fromPosition)
-                .Take(amount)
-                .ToListAsync();
+        public virtual async Task<IReadOnlyCollection<T>> GetWherePaginatedAsync(
+            int skipCount,
+            int takeCount,
+            Expression<Func<T, bool>> predicate,
+            params EntityOrderStrategy<T>[] orderStrategies)
+        {
+            var query = GetPaginatedCore(skipCount, takeCount, orderStrategies);
+            var filteredEntities = await query.Where(predicate).ToListAsync();
 
-            return targetWithIncludes;
+            return filteredEntities;
         }
 
         public async Task<bool> AnyAsync(Expression<Func<T, bool>> predicate)
@@ -132,6 +154,36 @@ namespace ITechArt.Repositories
                 : await _dbSet.CountAsync(predicate);
 
             return recordsAmount;
+        }
+
+
+        protected IQueryable<T> GetPaginatedCore(
+            int skipCount,
+            int takeCount,
+            params EntityOrderStrategy<T>[] orderStrategies)
+        {
+            IOrderedQueryable<T> orderedQuery = null;
+
+            if (orderStrategies != null && orderStrategies.Length != 0)
+            {
+                var firstStrategy = orderStrategies[0];
+                orderedQuery = firstStrategy.Ascending
+                    ? _dbSet.OrderBy(firstStrategy.OrderBy)
+                    : _dbSet.OrderByDescending(firstStrategy.OrderBy);
+                for (var i = 1; i < orderStrategies.Length; i++)
+                {
+                    var strategy = orderStrategies[i];
+                    orderedQuery = strategy.Ascending
+                        ? orderedQuery.ThenBy(strategy.OrderBy)
+                        : orderedQuery.ThenByDescending(strategy.OrderBy);
+                }
+            }
+
+            var filteredQuery = orderedQuery == null
+                ? _dbSet.Skip(skipCount).Take(takeCount)
+                : orderedQuery.Skip(skipCount).Take(takeCount);
+
+            return filteredQuery;
         }
 
 
