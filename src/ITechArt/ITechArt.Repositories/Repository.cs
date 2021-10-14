@@ -96,45 +96,23 @@ namespace ITechArt.Repositories
             return target;
         }
 
-        // public async Task<IReadOnlyCollection<T>> GetPaginatedAsync(int fromPosition, int amount,
-        //     params Expression<Func<T, object>>[] includes)
-        // {
-        //     if (includes == null || includes.Length == 0)
-        //     {
-        //         var target = await _dbSet
-        //             .Skip(fromPosition)
-        //             .Take(amount)
-        //             .ToListAsync();
-        //
-        //         return target;
-        //     }
-        //
-        //     var queryWithIncludes = GetQueryWithIncludes(includes);
-        //     var targetWithIncludes = await queryWithIncludes
-        //         .Skip(fromPosition)
-        //         .Take(amount)
-        //         .ToListAsync();
-        //
-        //     return targetWithIncludes;
-        // }
-
         public virtual async Task<IReadOnlyCollection<T>> GetPaginatedAsync(
-            int skipCount,
-            int takeCount,
+            int skip,
+            int take,
             params EntityOrderStrategy<T>[] orderStrategies)
         {
-            var targetEntities = await GetPaginatedCore(skipCount, takeCount, orderStrategies).ToListAsync();
+            var targetEntities = await GetPaginatedCore(skip, take, orderStrategies).ToListAsync();
 
             return targetEntities;
         }
 
         public virtual async Task<IReadOnlyCollection<T>> GetWherePaginatedAsync(
-            int skipCount,
-            int takeCount,
+            int skip,
+            int take,
             Expression<Func<T, bool>> predicate,
             params EntityOrderStrategy<T>[] orderStrategies)
         {
-            var query = GetPaginatedCore(skipCount, takeCount, orderStrategies);
+            var query = GetPaginatedCore(skip, take, orderStrategies);
             var filteredEntities = await query.Where(predicate).ToListAsync();
 
             return filteredEntities;
@@ -158,8 +136,8 @@ namespace ITechArt.Repositories
 
 
         protected IQueryable<T> GetPaginatedCore(
-            int skipCount,
-            int takeCount,
+            int skip,
+            int take,
             params EntityOrderStrategy<T>[] orderStrategies)
         {
             IOrderedQueryable<T> orderedQuery = null;
@@ -180,8 +158,8 @@ namespace ITechArt.Repositories
             }
 
             var filteredQuery = orderedQuery == null
-                ? _dbSet.Skip(skipCount).Take(takeCount)
-                : orderedQuery.Skip(skipCount).Take(takeCount);
+                ? _dbSet.Skip(skip).Take(take)
+                : orderedQuery.Skip(skip).Take(take);
 
             return filteredQuery;
         }

@@ -50,8 +50,8 @@ namespace ITechArt.Surveys.Foundation
         }
 
         public async Task<IReadOnlyCollection<User>> GetUsersPageAsync(
-            int fromPosition,
-            int amount,
+            int skip,
+            int take,
             UserSortOrder? sortOrder,
             string searchString = null)
         {
@@ -62,8 +62,8 @@ namespace ITechArt.Surveys.Foundation
             };
 
             var users = searchString == null
-                ? await _userRepository.GetPaginatedAsync(fromPosition, amount, orderStrategies)
-                : await _userRepository.GetWherePaginatedAsync(fromPosition, amount,
+                ? await _userRepository.GetPaginatedAsync(skip, take, orderStrategies)
+                : await _userRepository.GetWherePaginatedAsync(skip, take,
                     user => user.UserName.Contains(searchString), orderStrategies);
 
             return users;

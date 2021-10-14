@@ -29,9 +29,9 @@ namespace ITechArt.Repositories.Interfaces
 
         Task<T> GetSingleOrDefaultAsync(Expression<Func<T, bool>> predicate);
 
-        Task<IReadOnlyCollection<T>> GetPaginatedAsync(int skipCount, int takeCount, params EntityOrderStrategy<T>[] orderStrategies);
+        Task<IReadOnlyCollection<T>> GetPaginatedAsync(int skip, int take, params EntityOrderStrategy<T>[] orderStrategies);
 
-        Task<IReadOnlyCollection<T>> GetWherePaginatedAsync(int skipCount, int takeCount,
+        Task<IReadOnlyCollection<T>> GetWherePaginatedAsync(int skip, int take,
             Expression<Func<T, bool>> predicate, params EntityOrderStrategy<T>[] orderStrategies);
 
         Task<bool> AnyAsync(Expression<Func<T, bool>> predicate);
