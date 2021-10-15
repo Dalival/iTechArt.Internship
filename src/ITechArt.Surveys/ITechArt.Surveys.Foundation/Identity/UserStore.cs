@@ -178,9 +178,9 @@ namespace ITechArt.Surveys.Foundation.Identity
                 throw new ArgumentNullException(nameof(userId));
             }
 
-            var targetUser = await _userRepository.GetByIdAsync(userId);
+            var user = await _userRepository.GetByIdAsync(userId);
 
-            return targetUser;
+            return user;
         }
 
         public async Task<User> FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken = default)
@@ -191,9 +191,9 @@ namespace ITechArt.Surveys.Foundation.Identity
                 throw new ArgumentNullException(nameof(normalizedUserName));
             }
 
-            var targetUser = await _userRepository.GetSingleOrDefaultAsync(u => u.NormalizedUserName == normalizedUserName);
+            var user = await _userRepository.GetSingleOrDefaultAsync(u => u.NormalizedUserName == normalizedUserName);
 
-            return targetUser;
+            return user;
         }
 
         public Task SetPasswordHashAsync(User user, string passwordHash, CancellationToken cancellationToken = default)
@@ -297,9 +297,9 @@ namespace ITechArt.Surveys.Foundation.Identity
                 throw new ArgumentNullException(nameof(normalizedEmail));
             }
 
-            var targetUser = await _userRepository.GetSingleOrDefaultAsync(u => u.NormalizedEmail == normalizedEmail);
+            var user = await _userRepository.GetSingleOrDefaultAsync(u => u.NormalizedEmail == normalizedEmail);
 
-            return targetUser;
+            return user;
         }
 
         public Task<string> GetNormalizedEmailAsync(User user, CancellationToken cancellationToken = default)
@@ -344,13 +344,13 @@ namespace ITechArt.Surveys.Foundation.Identity
                 throw new ArgumentNullException(nameof(normalizedRoleName));
             }
 
-            var targetRole = await _roleRepository.GetSingleOrDefaultAsync(r => r.NormalizedName == normalizedRoleName);
+            var role = await _roleRepository.GetSingleOrDefaultAsync(r => r.NormalizedName == normalizedRoleName);
 
-            if (targetRole != null)
+            if (role != null)
             {
                 _userRoleRepository.Add(new UserRole
                 {
-                    RoleId = targetRole.Id,
+                    RoleId = role.Id,
                     UserId = user.Id
                 });
                 await _unitOfWork.SaveAsync();
@@ -370,12 +370,12 @@ namespace ITechArt.Surveys.Foundation.Identity
                 throw new ArgumentNullException(nameof(normalizedRoleName));
             }
 
-            var targetUserRole = await _userRoleRepository
+            var userRole = await _userRoleRepository
                 .GetSingleOrDefaultAsync(ur => ur.User == user && ur.Role.NormalizedName == normalizedRoleName);
 
-            if (targetUserRole != null)
+            if (userRole != null)
             {
-                _userRoleRepository.Delete(targetUserRole);
+                _userRoleRepository.Delete(userRole);
                 await _unitOfWork.SaveAsync();
             }
         }
@@ -425,11 +425,11 @@ namespace ITechArt.Surveys.Foundation.Identity
                 throw new ArgumentNullException(nameof(normalizedRoleName));
             }
 
-            var targetUserRoles = await _userRoleRepository
+            var userRoles = await _userRoleRepository
                 .GetWhereAsync(ur => ur.Role.NormalizedName == normalizedRoleName,
                     ur => ur.Role, ur => ur.User);
 
-            var userInRole = targetUserRoles.Select(ur => ur.User).ToList();
+            var userInRole = userRoles.Select(ur => ur.User).ToList();
 
             return userInRole;
         }

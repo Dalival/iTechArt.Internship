@@ -32,8 +32,8 @@ namespace ITechArt.Surveys.Repositories.Repositories
             Expression<Func<User, bool>> predicate,
             params EntityOrderStrategy<User>[] orderStrategies)
         {
-            var filteredQuery = _dbSet.Where(predicate);
-            var targetQuery = GetPaginatedCore(filteredQuery, skip, take, orderStrategies);
+            var filterQuery = _dbSet.Where(predicate);
+            var targetQuery = GetPaginatedCore(filterQuery, skip, take, orderStrategies);
             var usersWithRoles = await GetWithRoleIncludes(targetQuery).ToListAsync();
 
             return usersWithRoles;

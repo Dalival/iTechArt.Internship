@@ -97,11 +97,11 @@ namespace ITechArt.Repositories
             Expression<Func<T, bool>> predicate,
             params EntityOrderStrategy<T>[] orderStrategies)
         {
-            var filteredQuery = _dbSet.Where(predicate);
-            var targetQuery = GetPaginatedCore(filteredQuery, skip, take, orderStrategies);
-            var targetEntities = await targetQuery.ToListAsync();
+            var filterQuery = _dbSet.Where(predicate);
+            var targetQuery = GetPaginatedCore(filterQuery, skip, take, orderStrategies);
+            var entities = await targetQuery.ToListAsync();
 
-            return targetEntities;
+            return entities;
         }
 
         public async Task<bool> AnyAsync(Expression<Func<T, bool>> predicate)
@@ -144,9 +144,9 @@ namespace ITechArt.Repositories
                 }
             }
 
-            var filteredQuery = orderedQuery.Skip(skip).Take(take);
+            var filterQuery = orderedQuery.Skip(skip).Take(take);
 
-            return filteredQuery;
+            return filterQuery;
         }
 
 
