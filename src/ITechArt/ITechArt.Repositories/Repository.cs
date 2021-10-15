@@ -127,24 +127,22 @@ namespace ITechArt.Repositories
             int take,
             params EntityOrderStrategy<T>[] orderStrategies)
         {
-            var orderedQuery = (IOrderedQueryable<T>) query;
-
             if (orderStrategies != null && orderStrategies.Length != 0)
             {
                 var firstStrategy = orderStrategies[0];
-                orderedQuery = firstStrategy.Ascending
+                var orderedQuery = firstStrategy.Ascending
                     ? query.OrderBy(firstStrategy.OrderBy)
                     : query.OrderByDescending(firstStrategy.OrderBy);
-                for (var i = 1; i < orderStrategies.Length; i++)
-                {
-                    var strategy = orderStrategies[i];
-                    orderedQuery = strategy.Ascending
-                        ? orderedQuery.ThenBy(strategy.OrderBy)
-                        : orderedQuery.ThenByDescending(strategy.OrderBy);
-                }
+
+                orderedQuery = orderStrategies.Skip(1)
+                    .Aggregate(orderedQuery, (current, strategy) => strategy.Ascending
+                        ? current.ThenBy(strategy.OrderBy)
+                        : current.ThenByDescending(strategy.OrderBy));
+
+                query = orderedQuery;
             }
 
-            var filterQuery = orderedQuery.Skip(skip).Take(take);
+            var filterQuery = query.Skip(skip).Take(take);
 
             return filterQuery;
         }
