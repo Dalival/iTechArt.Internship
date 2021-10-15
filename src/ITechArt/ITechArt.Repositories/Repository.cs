@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using ITechArt.Common;
 using ITechArt.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 

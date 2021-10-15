@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using ITechArt.Surveys.DomainModel;
 using ITechArt.Surveys.Foundation.Enum;
 using ITechArt.Surveys.Foundation.Interfaces;
 using ITechArt.Surveys.WebApp.Models;
