@@ -9,6 +9,6 @@ namespace ITechArt.Surveys.Repositories.Repositories
 {
     public interface IUserRepository : IRepository<User>
     {
-        Task<int> CountUsersWithUsernameAsync(string searchString);
+        Task<int> CountUsersWithUsernameAsync(string userNameSearchString);
     }
 }

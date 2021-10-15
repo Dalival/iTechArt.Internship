@@ -53,9 +53,9 @@ namespace ITechArt.Repositories
 
         public async Task<T> GetByIdAsync(params object[] id)
         {
-            var target = await _dbSet.FindAsync(id);
+            var entity = await _dbSet.FindAsync(id);
 
-            return target;
+            return entity;
         }
 
         public async Task<IReadOnlyCollection<T>> GetAllAsync(params Expression<Func<T, object>>[] includes)
@@ -91,9 +91,9 @@ namespace ITechArt.Repositories
 
         public async Task<T> GetSingleOrDefaultAsync(Expression<Func<T, bool>> predicate)
         {
-            var target = await _dbSet.SingleOrDefaultAsync(predicate);
+            var entity = await _dbSet.SingleOrDefaultAsync(predicate);
 
-            return target;
+            return entity;
         }
 
         public virtual async Task<IReadOnlyCollection<T>> GetPaginatedAsync(
@@ -101,9 +101,9 @@ namespace ITechArt.Repositories
             int take,
             params EntityOrderStrategy<T>[] orderStrategies)
         {
-            var targetEntities = await GetPaginatedCore(_dbSet, skip, take, orderStrategies).ToListAsync();
+            var entities = await GetPaginatedCore(_dbSet, skip, take, orderStrategies).ToListAsync();
 
-            return targetEntities;
+            return entities;
         }
 
         public virtual async Task<IReadOnlyCollection<T>> GetWherePaginatedAsync(
@@ -121,9 +121,9 @@ namespace ITechArt.Repositories
 
         public async Task<bool> AnyAsync(Expression<Func<T, bool>> predicate)
         {
-            var target = await _dbSet.AnyAsync(predicate);
+            var isEntityExist = await _dbSet.AnyAsync(predicate);
 
-            return target;
+            return isEntityExist;
         }
 
         public async Task<int> CountAsync(Expression<Func<T, bool>> predicate = null)
