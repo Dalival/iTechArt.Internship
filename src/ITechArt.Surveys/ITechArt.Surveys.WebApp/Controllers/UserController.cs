@@ -28,7 +28,7 @@ namespace ITechArt.Surveys.WebApp.Controllers
         [HttpGet]
         public async Task<IActionResult> UserTable(int page = 1, UserSortOrder? sortOrder = null, string searchString = null)
         {
-            var newSortOrder = ManageSortOrder(sortOrder);
+            ManageSortOrder(sortOrder);
 
             ViewBag.SearchString = searchString;
 
@@ -84,7 +84,7 @@ namespace ITechArt.Surveys.WebApp.Controllers
         }
 
 
-        private UserSortOrder ManageSortOrder(UserSortOrder? sortOrder)
+        private void ManageSortOrder(UserSortOrder? sortOrder)
         {
             if (sortOrder == null)
             {
@@ -121,8 +121,6 @@ namespace ITechArt.Surveys.WebApp.Controllers
             ViewBag.SortByClickOnDate = sortOrder == UserSortOrder.DateDescending
                 ? UserSortOrder.Date
                 : UserSortOrder.DateDescending;
-
-            return (UserSortOrder) sortOrder;
         }
     }
 }
