@@ -113,11 +113,11 @@ namespace ITechArt.Repositories
 
         public async Task<int> CountAsync(Expression<Func<T, bool>> predicate = null)
         {
-            var recordsAmount = predicate == null
+            var count = predicate == null
                 ? await _dbSet.CountAsync()
                 : await _dbSet.CountAsync(predicate);
 
-            return recordsAmount;
+            return count;
         }
 
 

@@ -131,11 +131,11 @@
 <div class="navbar-for-table">
     @if (string.IsNullOrWhiteSpace(ViewBag.SearchString))
     {
-        <div class="users-counter">Total users: @Model.UsersAmount</div>
+        <div class="users-counter">Total users: @Model.UsersCount</div>
     }
     else
     {
-        <div class="users-counter">Users found: @Model.UsersAmount</div>
+        <div class="users-counter">Users found: @Model.UsersCount</div>
     }
     <div class="flip-pages-arrows">
         @{
@@ -151,13 +151,13 @@
                 </a>
             }
 
-            if (Model.UsersAmount > usersPerPage)
+            if (Model.UsersCount > usersPerPage)
             {
                 <span class="users-counter">@Model.Page</span>
             }
 
-            var fullPagesNumber = Model.UsersAmount / usersPerPage;
-            var isExtraPageNeeded = Model.UsersAmount > fullPagesNumber * usersPerPage;
+            var fullPagesNumber = Model.UsersCount / usersPerPage;
+            var isExtraPageNeeded = Model.UsersCount > fullPagesNumber * usersPerPage;
             var lastPageIndex = isExtraPageNeeded
                 ? fullPagesNumber + 1
                 : fullPagesNumber;
@@ -166,7 +166,7 @@
                 <a href="/User/UserTable?page=@(Model.Page + 1)&sortOrder=@ViewBag.CurrentSort&searchString=@ViewBag.SearchString">
                     <span class="material-icons-outlined">keyboard_arrow_right</span>
                 </a>
-                <a href="/User/UserTable?page=@(Model.UsersAmount / usersPerPage + 1)&sortOrder=@ViewBag.CurrentSort&searchString=@ViewBag.SearchString">
+                <a href="/User/UserTable?page=@(Model.UsersCount / usersPerPage + 1)&sortOrder=@ViewBag.CurrentSort&searchString=@ViewBag.SearchString">
                     <span class="material-icons-outlined">keyboard_double_arrow_right</span>
                 </a>
             }

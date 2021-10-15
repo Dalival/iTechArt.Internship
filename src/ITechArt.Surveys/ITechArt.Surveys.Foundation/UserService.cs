@@ -70,11 +70,11 @@ namespace ITechArt.Surveys.Foundation
 
         public async Task<int> CountUsersAsync(string userNameSearchString = null)
         {
-            var amount = userNameSearchString == null
+            var count = userNameSearchString == null
                 ? await _userRepository.CountAsync()
                 : await _userRepository.CountUsersWithUsernameAsync(userNameSearchString);
 
-            return amount;
+            return count;
         }
 
         public async Task<bool> DeleteUserAsync(string id)
