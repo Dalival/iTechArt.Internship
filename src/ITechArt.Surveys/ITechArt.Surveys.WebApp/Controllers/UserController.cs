@@ -88,13 +88,13 @@ namespace ITechArt.Surveys.WebApp.Controllers
         {
             if (sortOrder == null)
             {
-                if (Request.Cookies.TryGetValue(SortUsersCookieName, out var sortOrderFromCookie))
+                if (Request.Cookies.TryGetValue(SortUsersCookieName, out var sortUsersCookieValue))
                 {
-                    try
+                    if (Enum.TryParse<UserSortOrder>(sortUsersCookieValue, true, out var sortOrderFromCookie))
                     {
-                        sortOrder = (UserSortOrder) Enum.Parse(typeof(UserSortOrder), sortOrderFromCookie);
+                        sortOrder = sortOrderFromCookie;
                     }
-                    catch
+                    else
                     {
                         Response.Cookies.Append(SortUsersCookieName, UserSortOrder.DateDescending.ToString());
                         sortOrder = UserSortOrder.DateDescending;
