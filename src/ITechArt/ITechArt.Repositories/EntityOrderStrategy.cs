@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq.Expressions;
 
-namespace ITechArt.Common
+namespace ITechArt.Repositories
 {
     public class EntityOrderStrategy<TEntity>
     {

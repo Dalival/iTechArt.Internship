@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using ITechArt.Common;
 using ITechArt.Common.Logger;
 using ITechArt.Common.Result;
+using ITechArt.Repositories;
 using ITechArt.Repositories.Interfaces;
 using ITechArt.Surveys.DomainModel;
 using ITechArt.Surveys.Foundation.Enum;
