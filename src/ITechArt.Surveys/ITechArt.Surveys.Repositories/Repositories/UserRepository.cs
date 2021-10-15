@@ -20,8 +20,8 @@ namespace ITechArt.Surveys.Repositories.Repositories
             int take,
             params EntityOrderStrategy<User>[] orderStrategies)
         {
-            var query = GetPaginatedCore(_dbSet, skip, take, orderStrategies);
-            var usersWithRoles = await GetWithRoleIncludes(query).ToListAsync();
+            var usersQuery = GetPaginatedCore(_dbSet, skip, take, orderStrategies);
+            var usersWithRoles = await GetUsersQueryWithRoles(usersQuery).ToListAsync();
 
             return usersWithRoles;
         }
@@ -33,20 +33,20 @@ namespace ITechArt.Surveys.Repositories.Repositories
             params EntityOrderStrategy<User>[] orderStrategies)
         {
             var filterQuery = _dbSet.Where(predicate);
-            var targetQuery = GetPaginatedCore(filterQuery, skip, take, orderStrategies);
-            var usersWithRoles = await GetWithRoleIncludes(targetQuery).ToListAsync();
+            var usersQuery = GetPaginatedCore(filterQuery, skip, take, orderStrategies);
+            var usersWithRoles = await GetUsersQueryWithRoles(usersQuery).ToListAsync();
 
             return usersWithRoles;
         }
 
 
-        private IQueryable<User> GetWithRoleIncludes(IQueryable<User> query)
+        private IQueryable<User> GetUsersQueryWithRoles(IQueryable<User> usersQuery)
         {
-            var queryWithRoles = query
+            var usersQueryWithRoles = usersQuery
                 .Include(user => user.UserRoles)
                 .ThenInclude(userRole => userRole.Role);
 
-            return queryWithRoles;
+            return usersQueryWithRoles;
         }
     }
 }
