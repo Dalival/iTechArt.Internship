@@ -142,7 +142,7 @@ namespace ITechArt.Repositories
             int take,
             params EntityOrderStrategy<T>[] orderStrategies)
         {
-            IOrderedQueryable<T> orderedQuery = null;
+            var orderedQuery = (IOrderedQueryable<T>) query;
 
             if (orderStrategies != null && orderStrategies.Length != 0)
             {
@@ -159,9 +159,7 @@ namespace ITechArt.Repositories
                 }
             }
 
-            var filteredQuery = orderedQuery == null
-                ? query.Skip(skip).Take(take)
-                : orderedQuery.Skip(skip).Take(take);
+            var filteredQuery = orderedQuery.Skip(skip).Take(take);
 
             return filteredQuery;
         }
