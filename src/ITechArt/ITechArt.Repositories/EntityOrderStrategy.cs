@@ -5,9 +5,9 @@ namespace ITechArt.Repositories
 {
     public class EntityOrderStrategy<TEntity>
     {
-        public Expression<Func<TEntity, object>> OrderBy { get; set; }
+        public Expression<Func<TEntity, object>> OrderBy { get; private set; }
 
-        public bool Ascending { get; set; }
+        public bool Ascending { get; private set; }
 
 
         public static EntityOrderStrategy<TEntity> CreateAscending(Expression<Func<TEntity, object>> orderBy)
