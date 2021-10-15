@@ -167,8 +167,8 @@ namespace ITechArt.Repositories
 
         private IQueryable<T> GetQueryWithIncludes(params Expression<Func<T, object>>[] includes)
         {
-            var query = includes.Aggregate<Expression<Func<T, object>>, IQueryable<T>>
-                (_dbSet, (current, expression) => current.Include(expression));
+            var query = includes.Aggregate<Expression<Func<T, object>>, IQueryable<T>>(_dbSet,
+                (current, include) => current.Include(include));
 
             return query;
         }
