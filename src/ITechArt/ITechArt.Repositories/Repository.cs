@@ -60,14 +60,7 @@ namespace ITechArt.Repositories
 
         public async Task<IReadOnlyCollection<T>> GetAllAsync(params Expression<Func<T, object>>[] includes)
         {
-            if (includes == null || includes.Length == 0)
-            {
-                var entities = await _dbSet.ToListAsync();
-
-                return entities;
-            }
-
-            var queryWithIncludes = GetQueryWithIncludes(includes);
+            var queryWithIncludes = GetQueryWithIncludes(_dbSet, includes);
             var entitiesWithIncludes = await queryWithIncludes.ToListAsync();
 
             return entitiesWithIncludes;
@@ -76,14 +69,7 @@ namespace ITechArt.Repositories
         public async Task<IReadOnlyCollection<T>> GetWhereAsync(Expression<Func<T, bool>> predicate,
             params Expression<Func<T, object>>[] includes)
         {
-            if (includes == null || includes.Length == 0)
-            {
-                var target = await _dbSet.Where(predicate).ToListAsync();
-
-                return target;
-            }
-
-            var queryWithIncludes = GetQueryWithIncludes(includes);
+            var queryWithIncludes = GetQueryWithIncludes(_dbSet, includes);
             var entitiesWithIncludes = await queryWithIncludes.Where(predicate).ToListAsync();
 
             return entitiesWithIncludes;
@@ -165,12 +151,16 @@ namespace ITechArt.Repositories
         }
 
 
-        private IQueryable<T> GetQueryWithIncludes(params Expression<Func<T, object>>[] includes)
+        private IQueryable<T> GetQueryWithIncludes(IQueryable<T> query, params Expression<Func<T, object>>[] includes)
         {
-            var query = includes.Aggregate<Expression<Func<T, object>>, IQueryable<T>>(_dbSet,
-                (current, include) => current.Include(include));
+            if (includes == null || includes.Length == 0)
+            {
+                return query;
+            }
 
-            return query;
+            var queryWithIncludes = includes.Aggregate(query, (current, include) => current.Include(include));
+
+            return queryWithIncludes;
         }
     }
 }
