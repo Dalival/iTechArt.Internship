@@ -54,7 +54,7 @@ namespace ITechArt.Surveys.Foundation
             int skip,
             int take,
             UserSortOrder? sortOrder,
-            string searchString = null)
+            string userNameSearchString = null)
         {
             var orderStrategies = new[]
             {
@@ -62,19 +62,19 @@ namespace ITechArt.Surveys.Foundation
                 EntityOrderStrategy<User>.CreateAscending(u => u.RegistrationDate)
             };
 
-            var users = searchString == null
+            var users = userNameSearchString == null
                 ? await _userRepository.GetPaginatedAsync(skip, take, orderStrategies)
                 : await _userRepository.GetWherePaginatedAsync(skip, take,
-                    user => user.UserName.Contains(searchString), orderStrategies);
+                    user => user.UserName.Contains(userNameSearchString), orderStrategies);
 
             return users;
         }
 
-        public async Task<int> CountUsersAsync(string searchString = null)
+        public async Task<int> CountUsersAsync(string uerNameSearchString = null)
         {
-            var amount = searchString == null
+            var amount = uerNameSearchString == null
                 ? await _userRepository.CountAsync()
-                : await _userRepository.CountUsersWithUsernameAsync(searchString);
+                : await _userRepository.CountUsersWithUsernameAsync(uerNameSearchString);
 
             return amount;
         }

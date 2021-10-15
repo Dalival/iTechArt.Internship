@@ -16,9 +16,9 @@ namespace ITechArt.Surveys.Foundation.Interfaces
             int skip,
             int take,
             UserSortOrder? sortOrder,
-            string searchString = null);
+            string userNameSearchString = null);
 
-        Task<int> CountUsersAsync(string searchString = null);
+        Task<int> CountUsersAsync(string uerNameSearchString = null);
 
         Task<bool>  DeleteUserAsync(string id);
 
