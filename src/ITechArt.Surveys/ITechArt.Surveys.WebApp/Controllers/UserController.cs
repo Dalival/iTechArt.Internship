@@ -32,8 +32,8 @@ namespace ITechArt.Surveys.WebApp.Controllers
 
             ViewBag.SearchString = searchString;
 
-            var skippedUsers = (page - 1) * UsersPerPage;
-            var users = await _userService.GetUsersPageAsync(skippedUsers, UsersPerPage, sortOrder, searchString);
+            var countUsersToSkip = (page - 1) * UsersPerPage;
+            var users = await _userService.GetUsersPageAsync(countUsersToSkip, UsersPerPage, sortOrder, searchString);
 
             var usersForTable = users.Select(u => new UserDataForTableViewModel
                 {
