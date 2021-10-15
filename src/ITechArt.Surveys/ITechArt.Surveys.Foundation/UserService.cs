@@ -9,8 +9,6 @@ using ITechArt.Repositories.Interfaces;
 using ITechArt.Surveys.DomainModel;
 using ITechArt.Surveys.Foundation.Enum;
 using ITechArt.Surveys.Foundation.Interfaces;
-using ITechArt.Surveys.Repositories;
-using ITechArt.Surveys.Repositories.Repositories;
 using Microsoft.AspNetCore.Identity;
 
 namespace ITechArt.Surveys.Foundation
@@ -20,16 +18,16 @@ namespace ITechArt.Surveys.Foundation
         private readonly ICustomLogger _logger;
         private readonly UserManager<User> _userManager;
 
-        private readonly IUserRepository _userRepository;
+        private readonly IRepository<User> _userRepository;
         private readonly IRepository<Role> _roleRepository;
 
 
-        public UserService(ICustomLogger logger, UserManager<User> userManager, ISurveysUnitOfWork unitOfWork)
+        public UserService(ICustomLogger logger, UserManager<User> userManager, IUnitOfWork unitOfWork)
         {
             _logger = logger;
             _userManager = userManager;
 
-            _userRepository = unitOfWork.UserRepository;
+            _userRepository = unitOfWork.GetRepository<User>();
             _roleRepository = unitOfWork.GetRepository<Role>();
         }
 
@@ -72,7 +70,7 @@ namespace ITechArt.Surveys.Foundation
         {
             var count = userNameSearchString == null
                 ? await _userRepository.CountAsync()
-                : await _userRepository.CountUsersWithUsernameAsync(userNameSearchString);
+                : await _userRepository.CountAsync(user => user.UserName == userNameSearchString);
 
             return count;
         }

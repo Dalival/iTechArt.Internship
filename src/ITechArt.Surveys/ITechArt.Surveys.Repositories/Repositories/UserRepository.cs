@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ITechArt.Surveys.Repositories.Repositories
 {
-    public class UserRepository : Repository<User>, IUserRepository
+    public class UserRepository : Repository<User>
     {
         public UserRepository(DbContext dbContext)
             : base(dbContext) { }
@@ -37,13 +37,6 @@ namespace ITechArt.Surveys.Repositories.Repositories
             var usersWithRoles = await GetWithRoleIncludes(targetQuery).ToListAsync();
 
             return usersWithRoles;
-        }
-
-        public async Task<int> CountUsersWithUsernameAsync(string userNameSearchString)
-        {
-            var count = await CountAsync(u => u.UserName == userNameSearchString);
-
-            return count;
         }
 
 
