@@ -154,7 +154,7 @@ namespace ITechArt.Repositories
 
         private IQueryable<T> GetQueryWithIncludes(params Expression<Func<T, object>>[] includes)
         {
-            if (includes == null || includes.Length == 0)
+            if (includes.Length == 0)
             {
                 return _dbSet;
             }
