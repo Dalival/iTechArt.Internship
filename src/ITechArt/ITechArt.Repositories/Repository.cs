@@ -127,6 +127,7 @@ namespace ITechArt.Repositories
             int take,
             params EntityOrderStrategy<T>[] orderStrategies)
         {
+            var queryToPaginate = query;
             if (orderStrategies != null && orderStrategies.Length != 0)
             {
                 var firstStrategy = orderStrategies[0];
@@ -139,12 +140,12 @@ namespace ITechArt.Repositories
                         ? current.ThenBy(strategy.OrderBy)
                         : current.ThenByDescending(strategy.OrderBy));
 
-                query = orderedQuery;
+                queryToPaginate = orderedQuery;
             }
 
-            var filterQuery = query.Skip(skip).Take(take);
+            var paginatedQuery = queryToPaginate.Skip(skip).Take(take);
 
-            return filterQuery;
+            return paginatedQuery;
         }
 
 
