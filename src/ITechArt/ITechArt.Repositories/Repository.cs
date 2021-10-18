@@ -130,12 +130,13 @@ namespace ITechArt.Repositories
             var queryToPaginate = query;
             if (orderStrategies.Length != 0)
             {
-                var firstStrategy = orderStrategies[0];
+                var firstStrategy = orderStrategies.First();
                 var orderedQuery = firstStrategy.Ascending
                     ? query.OrderBy(firstStrategy.OrderBy)
                     : query.OrderByDescending(firstStrategy.OrderBy);
 
-                orderedQuery = orderStrategies.Skip(1)
+                orderedQuery = orderStrategies
+                    .Skip(1)
                     .Aggregate(orderedQuery, (current, strategy) => strategy.Ascending
                         ? current.ThenBy(strategy.OrderBy)
                         : current.ThenByDescending(strategy.OrderBy));
