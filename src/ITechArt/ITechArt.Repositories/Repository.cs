@@ -5,6 +5,7 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using ITechArt.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 
 namespace ITechArt.Repositories
 {
@@ -59,7 +60,7 @@ namespace ITechArt.Repositories
 
         public async Task<IReadOnlyCollection<T>> GetAllAsync(params Expression<Func<T, object>>[] includes)
         {
-            var queryWithIncludes = GetQueryWithIncludes(_dbSet, includes);
+            var queryWithIncludes = GetQueryWithIncludes(includes);
             var entitiesWithIncludes = await queryWithIncludes.ToListAsync();
 
             return entitiesWithIncludes;
@@ -68,7 +69,7 @@ namespace ITechArt.Repositories
         public async Task<IReadOnlyCollection<T>> GetWhereAsync(Expression<Func<T, bool>> predicate,
             params Expression<Func<T, object>>[] includes)
         {
-            var queryWithIncludes = GetQueryWithIncludes(_dbSet, includes);
+            var queryWithIncludes = GetQueryWithIncludes(includes);
             var entitiesWithIncludes = await queryWithIncludes.Where(predicate).ToListAsync();
 
             return entitiesWithIncludes;
@@ -150,14 +151,16 @@ namespace ITechArt.Repositories
         }
 
 
-        private IQueryable<T> GetQueryWithIncludes(IQueryable<T> query, params Expression<Func<T, object>>[] includes)
+        private IQueryable<T> GetQueryWithIncludes(params Expression<Func<T, object>>[] includes)
         {
             if (includes == null || includes.Length == 0)
             {
-                return query;
+                return _dbSet;
             }
 
-            var queryWithIncludes = includes.Aggregate(query, (current, include) => current.Include(include));
+            var queryWithIncludes = includes.Aggregate<Expression<Func<T, object>>, IQueryable<T>>(
+                _dbSet,
+                (current, include) => current.Include(include));
 
             return queryWithIncludes;
         }
