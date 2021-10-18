@@ -128,7 +128,7 @@ namespace ITechArt.Repositories
             params EntityOrderStrategy<T>[] orderStrategies)
         {
             var queryToPaginate = query;
-            if (orderStrategies != null && orderStrategies.Length != 0)
+            if (orderStrategies.Length != 0)
             {
                 var firstStrategy = orderStrategies[0];
                 var orderedQuery = firstStrategy.Ascending
