@@ -8,6 +8,6 @@ namespace ITechArt.Surveys.WebApp.Models
 
         public int Page { get; set; }
 
-        public int TotalUsersAmount { get; set; }
+        public int UsersCount { get; set; }
     }
 }

@@ -3,19 +3,18 @@ using System.Threading;
 using System.Threading.Tasks;
 using ITechArt.Repositories.Interfaces;
 using ITechArt.Surveys.DomainModel;
-using ITechArt.Surveys.Repositories;
 using Microsoft.AspNetCore.Identity;
 
 namespace ITechArt.Surveys.Foundation.Identity
 {
     public class RoleStore : IRoleStore<Role>
     {
-        private readonly ISurveysUnitOfWork _unitOfWork;
+        private readonly IUnitOfWork _unitOfWork;
 
         private readonly IRepository<Role> _roleRepository;
 
 
-        public RoleStore(ISurveysUnitOfWork unitOfWork)
+        public RoleStore(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
 
@@ -177,9 +176,9 @@ namespace ITechArt.Surveys.Foundation.Identity
                 throw new ArgumentException("Not a valid Guid id", nameof(roleId));
             }
 
-            var targetRole =  await _roleRepository.GetByIdAsync(idGuid);
+            var role =  await _roleRepository.GetByIdAsync(idGuid);
 
-            return targetRole;
+            return role;
         }
 
         public async Task<Role> FindByNameAsync(string normalizedRoleName, CancellationToken cancellationToken = default)
@@ -190,9 +189,9 @@ namespace ITechArt.Surveys.Foundation.Identity
                 throw new ArgumentNullException(nameof(normalizedRoleName));
             }
 
-            var targetRole = await _roleRepository.GetSingleOrDefaultAsync(r => r.NormalizedName == normalizedRoleName);
+            var role = await _roleRepository.GetSingleOrDefaultAsync(r => r.NormalizedName == normalizedRoleName);
 
-            return targetRole;
+            return role;
         }
 
         public void Dispose()

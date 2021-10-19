@@ -4,11 +4,8 @@ using ITechArt.Surveys.Repositories.Repositories;
 
 namespace ITechArt.Surveys.Repositories
 {
-    public class SurveysUnitOfWork : UnitOfWork<SurveysDbContext>, ISurveysUnitOfWork
+    public class SurveysUnitOfWork : UnitOfWork<SurveysDbContext>
     {
-        public IUserRepository UserRepository => (IUserRepository) GetRepository<User>();
-
-
         public SurveysUnitOfWork(SurveysDbContext context)
             : base(context)
         {

@@ -9,38 +9,43 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ITechArt.Surveys.Repositories.Repositories
 {
-    public class UserRepository : Repository<User>, IUserRepository
+    public class UserRepository : Repository<User>
     {
         public UserRepository(DbContext dbContext)
             : base(dbContext) { }
 
 
-        public async Task<IReadOnlyCollection<User>> GetAllWithRolesAsync()
+        public override async Task<IReadOnlyCollection<User>> GetPaginatedAsync(
+            int skip,
+            int take,
+            params EntityOrderStrategy<User>[] orderStrategies)
         {
-            var usersWithRoles = await _dbSet
-                .Include(u => u.UserRoles)
-                .ThenInclude(ur => ur.Role)
-                .ToListAsync();
+            var usersQuery = GetPaginatedQuery(_dbSet, skip, take, orderStrategies);
+            var usersWithRoles = await GetUsersQueryWithRoles(usersQuery).ToListAsync();
 
             return usersWithRoles;
         }
 
-        public async Task<IReadOnlyCollection<User>> GetPaginatedWithRolesAsync(int fromPosition, int amount,
-            Expression<Func<User, object>> orderBy, bool descending = false)
+        public override async Task<IReadOnlyCollection<User>> GetWherePaginatedAsync(
+            int skip,
+            int take,
+            Expression<Func<User, bool>> predicate,
+            params EntityOrderStrategy<User>[] orderStrategies)
         {
-            var orderedUsers = (descending
-                    ? _dbSet.OrderByDescending(orderBy)
-                    : _dbSet.OrderBy(orderBy))
-                .ThenBy(u => u.RegistrationDate);
-
-            var usersWithRoles = await orderedUsers
-                .Skip(fromPosition)
-                .Take(amount)
-                .Include(u => u.UserRoles)
-                .ThenInclude(ur => ur.Role)
-                .ToListAsync();
+            var usersQuery = GetWherePaginatedQuery(_dbSet, skip, take, predicate, orderStrategies);
+            var usersWithRoles = await GetUsersQueryWithRoles(usersQuery).ToListAsync();
 
             return usersWithRoles;
+        }
+
+
+        private IQueryable<User> GetUsersQueryWithRoles(IQueryable<User> usersQuery)
+        {
+            var usersQueryWithRoles = usersQuery
+                .Include(user => user.UserRoles)
+                .ThenInclude(userRole => userRole.Role);
+
+            return usersQueryWithRoles;
         }
     }
 }

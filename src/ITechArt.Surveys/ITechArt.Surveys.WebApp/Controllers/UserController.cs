@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using ITechArt.Surveys.Foundation.Enum;
 using ITechArt.Surveys.Foundation.Interfaces;
 using ITechArt.Surveys.WebApp.Models;
-using ITechArt.Surveys.WebApp.Models.Enum;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -26,61 +26,14 @@ namespace ITechArt.Surveys.WebApp.Controllers
 
 
         [HttpGet]
-        public async Task<IActionResult> UserTable(int page = 1, UserSortOrder? sortOrder = null)
+        public async Task<IActionResult> UserTable(int page = 1, UserSortOrder? sortOrder = null, string searchString = null)
         {
-            if (sortOrder == null)
-            {
-                if (Request.Cookies.TryGetValue(SortUsersCookieName, out var sortOrderFromCookie))
-                {
-                    try
-                    {
-                        sortOrder = (UserSortOrder) Enum.Parse(typeof(UserSortOrder), sortOrderFromCookie);
-                    }
-                    catch
-                    {
-                        Response.Cookies.Append(SortUsersCookieName, UserSortOrder.DateDescending.ToString());
-                        sortOrder = UserSortOrder.DateDescending;
-                    }
-                }
-                else
-                {
-                    Response.Cookies.Append(SortUsersCookieName, UserSortOrder.DateDescending.ToString());
-                    sortOrder = UserSortOrder.DateDescending;
-                }
-            }
-            else
-            {
-                Response.Cookies.Append(SortUsersCookieName, sortOrder.ToString());
-            }
+            ManageSortOrder(sortOrder);
 
-            ViewBag.CurrentSort = sortOrder;
-            ViewBag.SortByClickOnName = sortOrder == UserSortOrder.Name
-                ? UserSortOrder.NameDescending
-                : UserSortOrder.Name;
-            ViewBag.SortByClickOnRole = sortOrder == UserSortOrder.RoleDescending
-                ? UserSortOrder.Role
-                : UserSortOrder.RoleDescending;
-            ViewBag.SortByClickOnDate = sortOrder == UserSortOrder.DateDescending
-                ? UserSortOrder.Date
-                : UserSortOrder.DateDescending;
+            ViewBag.SearchString = searchString;
 
-            var skippedUsers = (page - 1) * UsersPerPage;
-            var users = sortOrder switch
-            {
-                UserSortOrder.Name => await _userService
-                    .GetPaginatedUsersAsync(skippedUsers, UsersPerPage, u => u.UserName),
-                UserSortOrder.NameDescending => await _userService
-                    .GetPaginatedUsersAsync(skippedUsers, UsersPerPage, u => u.UserName, true),
-                UserSortOrder.Role => await _userService
-                    .GetPaginatedUsersAsync(skippedUsers, UsersPerPage, u => u.UserRoles.Count),
-                UserSortOrder.RoleDescending => await _userService
-                    .GetPaginatedUsersAsync(skippedUsers, UsersPerPage, u => u.UserRoles.Count, true),
-                UserSortOrder.Date => await _userService
-                    .GetPaginatedUsersAsync(skippedUsers, UsersPerPage, u => u.RegistrationDate),
-                UserSortOrder.DateDescending => await _userService
-                    .GetPaginatedUsersAsync(skippedUsers, UsersPerPage, u => u.RegistrationDate, true),
-                _ => await _userService.GetPaginatedUsersAsync(skippedUsers, UsersPerPage)
-            };
+            var countUsersToSkip = (page - 1) * UsersPerPage;
+            var users = await _userService.GetUsersPageAsync(countUsersToSkip, UsersPerPage, sortOrder, searchString);
 
             var usersForTable = users.Select(u => new UserDataForTableViewModel
                 {
@@ -95,12 +48,12 @@ namespace ITechArt.Surveys.WebApp.Controllers
                 })
                 .ToList();
 
-            var totalUsersAmount = await _userService.CountUsersAsync();
+            var usersInTableCount = await _userService.CountUsersAsync(searchString?.Trim());
             var userTableViewModel = new UserTableViewModel
             {
                 Users = usersForTable,
                 Page = page,
-                TotalUsersAmount = totalUsersAmount
+                UsersCount = usersInTableCount
             };
 
             return View(userTableViewModel);
@@ -128,6 +81,46 @@ namespace ITechArt.Surveys.WebApp.Controllers
             await _userService.RemoveFromRoleAsync(userId, AdminRoleName);
 
             return RedirectToAction("UserTable");
+        }
+
+
+        private void ManageSortOrder(UserSortOrder? sortOrder)
+        {
+            if (sortOrder == null)
+            {
+                if (Request.Cookies.TryGetValue(SortUsersCookieName, out var sortUsersCookieValue))
+                {
+                    if (Enum.TryParse<UserSortOrder>(sortUsersCookieValue, true, out var sortOrderFromCookie))
+                    {
+                        sortOrder = sortOrderFromCookie;
+                    }
+                    else
+                    {
+                        Response.Cookies.Append(SortUsersCookieName, UserSortOrder.DateDescending.ToString());
+                        sortOrder = UserSortOrder.DateDescending;
+                    }
+                }
+                else
+                {
+                    Response.Cookies.Append(SortUsersCookieName, UserSortOrder.DateDescending.ToString());
+                    sortOrder = UserSortOrder.DateDescending;
+                }
+            }
+            else
+            {
+                Response.Cookies.Append(SortUsersCookieName, sortOrder.ToString());
+            }
+
+            ViewBag.CurrentSort = sortOrder;
+            ViewBag.SortByClickOnName = sortOrder == UserSortOrder.Name
+                ? UserSortOrder.NameDescending
+                : UserSortOrder.Name;
+            ViewBag.SortByClickOnRole = sortOrder == UserSortOrder.RoleDescending
+                ? UserSortOrder.Role
+                : UserSortOrder.RoleDescending;
+            ViewBag.SortByClickOnDate = sortOrder == UserSortOrder.DateDescending
+                ? UserSortOrder.Date
+                : UserSortOrder.DateDescending;
         }
     }
 }

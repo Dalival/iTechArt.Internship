@@ -53,20 +53,13 @@ namespace ITechArt.Repositories
 
         public async Task<T> GetByIdAsync(params object[] id)
         {
-            var target = await _dbSet.FindAsync(id);
+            var entity = await _dbSet.FindAsync(id);
 
-            return target;
+            return entity;
         }
 
         public async Task<IReadOnlyCollection<T>> GetAllAsync(params Expression<Func<T, object>>[] includes)
         {
-            if (includes == null || includes.Length == 0)
-            {
-                var entities = await _dbSet.ToListAsync();
-
-                return entities;
-            }
-
             var queryWithIncludes = GetQueryWithIncludes(includes);
             var entitiesWithIncludes = await queryWithIncludes.ToListAsync();
 
@@ -76,13 +69,6 @@ namespace ITechArt.Repositories
         public async Task<IReadOnlyCollection<T>> GetWhereAsync(Expression<Func<T, bool>> predicate,
             params Expression<Func<T, object>>[] includes)
         {
-            if (includes == null || includes.Length == 0)
-            {
-                var target = await _dbSet.Where(predicate).ToListAsync();
-
-                return target;
-            }
-
             var queryWithIncludes = GetQueryWithIncludes(includes);
             var entitiesWithIncludes = await queryWithIncludes.Where(predicate).ToListAsync();
 
@@ -91,54 +77,105 @@ namespace ITechArt.Repositories
 
         public async Task<T> GetSingleOrDefaultAsync(Expression<Func<T, bool>> predicate)
         {
-            var target = await _dbSet.SingleOrDefaultAsync(predicate);
+            var entity = await _dbSet.SingleOrDefaultAsync(predicate);
 
-            return target;
+            return entity;
         }
 
-        public async Task<IReadOnlyCollection<T>> GetPaginatedAsync(int fromPosition, int amount,
-            params Expression<Func<T, object>>[] includes)
+        public virtual async Task<IReadOnlyCollection<T>> GetPaginatedAsync(
+            int skip,
+            int take,
+            params EntityOrderStrategy<T>[] orderStrategies)
         {
-            if (includes == null || includes.Length == 0)
-            {
-                var target = await _dbSet
-                    .Skip(fromPosition)
-                    .Take(amount)
-                    .ToListAsync();
+            var entities = await GetPaginatedQuery(_dbSet, skip, take, orderStrategies).ToListAsync();
 
-                return target;
-            }
+            return entities;
+        }
 
-            var queryWithIncludes = GetQueryWithIncludes(includes);
-            var targetWithIncludes = await queryWithIncludes
-                .Skip(fromPosition)
-                .Take(amount)
-                .ToListAsync();
+        public virtual async Task<IReadOnlyCollection<T>> GetWherePaginatedAsync(
+            int skip,
+            int take,
+            Expression<Func<T, bool>> predicate,
+            params EntityOrderStrategy<T>[] orderStrategies)
+        {
+            var targetQuery = GetWherePaginatedQuery(_dbSet, skip, take, predicate, orderStrategies);
+            var entities = await targetQuery.ToListAsync();
 
-            return targetWithIncludes;
+            return entities;
         }
 
         public async Task<bool> AnyAsync(Expression<Func<T, bool>> predicate)
         {
-            var target = await _dbSet.AnyAsync(predicate);
+            var isEntityExist = await _dbSet.AnyAsync(predicate);
 
-            return target;
+            return isEntityExist;
         }
 
-        public async Task<int> CountAsync()
+        public async Task<int> CountAsync(Expression<Func<T, bool>> predicate = null)
         {
-            var recordsAmount = await _dbSet.CountAsync();
+            var count = predicate == null
+                ? await _dbSet.CountAsync()
+                : await _dbSet.CountAsync(predicate);
 
-            return recordsAmount;
+            return count;
         }
 
 
-        private IIncludableQueryable<T, object> GetQueryWithIncludes(params Expression<Func<T, object>>[] includes)
+        protected IQueryable<T> GetPaginatedQuery(
+            IQueryable<T> query,
+            int skip,
+            int take,
+            params EntityOrderStrategy<T>[] orderStrategies)
         {
-            var query = (IIncludableQueryable<T, object>) _dbSet;
-            query = includes.Aggregate(query, (current, include) => current.Include(include));
+            var queryToPaginate = query;
 
-            return query;
+            if (orderStrategies.Length != 0)
+            {
+                var firstStrategy = orderStrategies.First();
+                var orderedQuery = firstStrategy.Ascending
+                    ? query.OrderBy(firstStrategy.OrderBy)
+                    : query.OrderByDescending(firstStrategy.OrderBy);
+
+                orderedQuery = orderStrategies
+                    .Skip(1)
+                    .Aggregate(orderedQuery, (current, strategy) => strategy.Ascending
+                        ? current.ThenBy(strategy.OrderBy)
+                        : current.ThenByDescending(strategy.OrderBy));
+
+                queryToPaginate = orderedQuery;
+            }
+
+            var paginatedQuery = queryToPaginate.Skip(skip).Take(take);
+
+            return paginatedQuery;
+        }
+
+        protected IQueryable<T> GetWherePaginatedQuery(
+            IQueryable<T> query,
+            int skip,
+            int take,
+            Expression<Func<T, bool>> predicate,
+            params EntityOrderStrategy<T>[] orderStrategies)
+        {
+            var filterQuery = query.Where(predicate);
+            var paginatedQuery = GetPaginatedQuery(filterQuery, skip, take, orderStrategies);
+
+            return paginatedQuery;
+        }
+
+
+        private IQueryable<T> GetQueryWithIncludes(params Expression<Func<T, object>>[] includes)
+        {
+            if (includes.Length == 0)
+            {
+                return _dbSet;
+            }
+
+            var queryWithIncludes = includes.Aggregate<Expression<Func<T, object>>, IQueryable<T>>(
+                _dbSet,
+                (current, include) => current.Include(include));
+
+            return queryWithIncludes;
         }
     }
 }
