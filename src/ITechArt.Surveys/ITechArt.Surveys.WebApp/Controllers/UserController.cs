@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using ITechArt.Surveys.DomainModel;
+using ITechArt.Surveys.Foundation.Enum;
 using ITechArt.Surveys.Foundation.Interfaces;
 using ITechArt.Surveys.WebApp.Models;
-using ITechArt.Surveys.WebApp.Models.Enum;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -30,10 +28,12 @@ namespace ITechArt.Surveys.WebApp.Controllers
         [HttpGet]
         public async Task<IActionResult> UserTable(int page = 1, UserSortOrder? sortOrder = null, string searchString = null)
         {
-            var newSortOrder = ManageSortOrder(sortOrder);
+            ManageSortOrder(sortOrder);
 
             ViewBag.SearchString = searchString;
-            var users = await GetUsersForPageAsync(page, newSortOrder, searchString);
+
+            var countUsersToSkip = (page - 1) * UsersPerPage;
+            var users = await _userService.GetUsersPageAsync(countUsersToSkip, UsersPerPage, sortOrder, searchString);
 
             var usersForTable = users.Select(u => new UserDataForTableViewModel
                 {
@@ -48,11 +48,12 @@ namespace ITechArt.Surveys.WebApp.Controllers
                 })
                 .ToList();
 
+            var usersInTableCount = await _userService.CountUsersAsync(searchString?.Trim());
             var userTableViewModel = new UserTableViewModel
             {
                 Users = usersForTable,
                 Page = page,
-                TotalUsersAmount = await _userService.CountUsersAsync(searchString)
+                UsersCount = usersInTableCount
             };
 
             return View(userTableViewModel);
@@ -83,17 +84,17 @@ namespace ITechArt.Surveys.WebApp.Controllers
         }
 
 
-        private UserSortOrder ManageSortOrder(UserSortOrder? sortOrder)
+        private void ManageSortOrder(UserSortOrder? sortOrder)
         {
             if (sortOrder == null)
             {
-                if (Request.Cookies.TryGetValue(SortUsersCookieName, out var sortOrderFromCookie))
+                if (Request.Cookies.TryGetValue(SortUsersCookieName, out var sortUsersCookieValue))
                 {
-                    try
+                    if (Enum.TryParse<UserSortOrder>(sortUsersCookieValue, true, out var sortOrderFromCookie))
                     {
-                        sortOrder = (UserSortOrder) Enum.Parse(typeof(UserSortOrder), sortOrderFromCookie);
+                        sortOrder = sortOrderFromCookie;
                     }
-                    catch
+                    else
                     {
                         Response.Cookies.Append(SortUsersCookieName, UserSortOrder.DateDescending.ToString());
                         sortOrder = UserSortOrder.DateDescending;
@@ -120,31 +121,6 @@ namespace ITechArt.Surveys.WebApp.Controllers
             ViewBag.SortByClickOnDate = sortOrder == UserSortOrder.DateDescending
                 ? UserSortOrder.Date
                 : UserSortOrder.DateDescending;
-
-            return (UserSortOrder) sortOrder;
-        }
-
-        private async Task<IReadOnlyCollection<User>> GetUsersForPageAsync(int page, UserSortOrder sortOrder, string searchString)
-        {
-            var skippedUsers = (page - 1) * UsersPerPage;
-            var users = sortOrder switch
-            {
-                UserSortOrder.Name => await _userService
-                    .GetPaginatedUsersAsync(skippedUsers, UsersPerPage, u => u.UserName, searchString: searchString),
-                UserSortOrder.NameDescending => await _userService
-                    .GetPaginatedUsersAsync(skippedUsers, UsersPerPage, u => u.UserName, true, searchString),
-                UserSortOrder.Role => await _userService
-                    .GetPaginatedUsersAsync(skippedUsers, UsersPerPage, u => u.UserRoles.Count, searchString: searchString),
-                UserSortOrder.RoleDescending => await _userService
-                    .GetPaginatedUsersAsync(skippedUsers, UsersPerPage, u => u.UserRoles.Count, true, searchString),
-                UserSortOrder.Date => await _userService
-                    .GetPaginatedUsersAsync(skippedUsers, UsersPerPage, u => u.RegistrationDate, searchString: searchString),
-                UserSortOrder.DateDescending => await _userService
-                    .GetPaginatedUsersAsync(skippedUsers, UsersPerPage, u => u.RegistrationDate, true, searchString),
-                _ => await _userService.GetPaginatedUsersAsync(skippedUsers, UsersPerPage, searchString: searchString)
-            };
-
-            return users;
         }
     }
 }

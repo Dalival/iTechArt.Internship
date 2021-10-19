@@ -28,8 +28,13 @@ namespace ITechArt.Repositories.Interfaces
 
         Task<T> GetSingleOrDefaultAsync(Expression<Func<T, bool>> predicate);
 
-        Task<IReadOnlyCollection<T>> GetPaginatedAsync(int fromPosition, int amount, params Expression<Func<T, object>>[] includes);
+        Task<IReadOnlyCollection<T>> GetPaginatedAsync(int skip, int take, params EntityOrderStrategy<T>[] orderStrategies);
+
+        Task<IReadOnlyCollection<T>> GetWherePaginatedAsync(int skip, int take,
+            Expression<Func<T, bool>> predicate, params EntityOrderStrategy<T>[] orderStrategies);
 
         Task<bool> AnyAsync(Expression<Func<T, bool>> predicate);
+
+        Task<int> CountAsync(Expression<Func<T, bool>> predicate = null);
     }
 }

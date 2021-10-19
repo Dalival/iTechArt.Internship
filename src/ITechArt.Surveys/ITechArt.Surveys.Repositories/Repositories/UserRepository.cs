@@ -9,46 +9,43 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ITechArt.Surveys.Repositories.Repositories
 {
-    public class UserRepository : Repository<User>, IUserRepository
+    public class UserRepository : Repository<User>
     {
         public UserRepository(DbContext dbContext)
             : base(dbContext) { }
 
 
-        public async Task<IReadOnlyCollection<User>> GetSelectionAsync(
-            int fromPosition,
-            int amount,
-            Expression<Func<User, object>> orderBy,
-            bool descending = false,
-            string searchString = null)
+        public override async Task<IReadOnlyCollection<User>> GetPaginatedAsync(
+            int skip,
+            int take,
+            params EntityOrderStrategy<User>[] orderStrategies)
         {
-            var filteredUsers = searchString == null
-                ? _dbSet
-                : _dbSet.Where(u => u.UserName.Contains(searchString.Trim()));
-
-            var orderedUsers = (descending
-                    ? filteredUsers.OrderByDescending(orderBy)
-                    : filteredUsers.OrderBy(orderBy))
-                .ThenBy(u => u.RegistrationDate);
-
-            var usersWithRoles = await orderedUsers
-                .Skip(fromPosition)
-                .Take(amount)
-                .Include(u => u.UserRoles)
-                .ThenInclude(ur => ur.Role)
-                .ToListAsync();
+            var usersQuery = GetPaginatedQuery(_dbSet, skip, take, orderStrategies);
+            var usersWithRoles = await GetUsersQueryWithRoles(usersQuery).ToListAsync();
 
             return usersWithRoles;
         }
 
-        public async Task<int> CountAsync(string searchString = null)
+        public override async Task<IReadOnlyCollection<User>> GetWherePaginatedAsync(
+            int skip,
+            int take,
+            Expression<Func<User, bool>> predicate,
+            params EntityOrderStrategy<User>[] orderStrategies)
         {
+            var usersQuery = GetWherePaginatedQuery(_dbSet, skip, take, predicate, orderStrategies);
+            var usersWithRoles = await GetUsersQueryWithRoles(usersQuery).ToListAsync();
 
-            var recordsAmount = searchString == null
-                ? await _dbSet.CountAsync()
-                : await _dbSet.CountAsync(u => u.UserName.Contains(searchString.Trim()));
+            return usersWithRoles;
+        }
 
-            return recordsAmount;
+
+        private IQueryable<User> GetUsersQueryWithRoles(IQueryable<User> usersQuery)
+        {
+            var usersQueryWithRoles = usersQuery
+                .Include(user => user.UserRoles)
+                .ThenInclude(userRole => userRole.Role);
+
+            return usersQueryWithRoles;
         }
     }
 }

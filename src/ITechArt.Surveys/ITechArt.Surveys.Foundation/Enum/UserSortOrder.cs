@@ -1,4 +1,4 @@
-﻿namespace ITechArt.Surveys.WebApp.Models.Enum
+﻿namespace ITechArt.Surveys.Foundation.Enum
 {
     public enum UserSortOrder
     {

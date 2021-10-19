@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq.Expressions;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using ITechArt.Common.Result;
 using ITechArt.Surveys.DomainModel;
+using ITechArt.Surveys.Foundation.Enum;
 
 namespace ITechArt.Surveys.Foundation.Interfaces
 {
@@ -11,14 +10,13 @@ namespace ITechArt.Surveys.Foundation.Interfaces
     {
         Task<OperationResult<RegistrationError>> CreateUserAsync(User user, string password);
 
-        Task<IReadOnlyCollection<User>> GetPaginatedUsersAsync(
-            int fromPosition,
-            int amount,
-            Expression<Func<User, object>> orderBy = null,
-            bool descending = false,
-            string searchString = null);
+        Task<IReadOnlyCollection<User>> GetUsersPageAsync(
+            int skip,
+            int take,
+            UserSortOrder? sortOrder,
+            string userNameSearchString = null);
 
-        Task<int> CountUsersAsync(string searchString = null);
+        Task<int> CountUsersAsync(string userNameSearchString = null);
 
         Task<bool>  DeleteUserAsync(string id);
 
