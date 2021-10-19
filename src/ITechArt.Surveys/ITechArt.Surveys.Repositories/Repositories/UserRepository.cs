@@ -20,7 +20,7 @@ namespace ITechArt.Surveys.Repositories.Repositories
             int take,
             params EntityOrderStrategy<User>[] orderStrategies)
         {
-            var usersQuery = GetPaginatedCore(_dbSet, skip, take, orderStrategies);
+            var usersQuery = GetPaginatedQuery(_dbSet, skip, take, orderStrategies);
             var usersWithRoles = await GetUsersQueryWithRoles(usersQuery).ToListAsync();
 
             return usersWithRoles;
@@ -32,8 +32,7 @@ namespace ITechArt.Surveys.Repositories.Repositories
             Expression<Func<User, bool>> predicate,
             params EntityOrderStrategy<User>[] orderStrategies)
         {
-            var filterQuery = _dbSet.Where(predicate);
-            var usersQuery = GetPaginatedCore(filterQuery, skip, take, orderStrategies);
+            var usersQuery = GetWherePaginatedQuery(_dbSet, skip, take, predicate, orderStrategies);
             var usersWithRoles = await GetUsersQueryWithRoles(usersQuery).ToListAsync();
 
             return usersWithRoles;

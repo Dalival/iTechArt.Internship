@@ -87,7 +87,7 @@ namespace ITechArt.Repositories
             int take,
             params EntityOrderStrategy<T>[] orderStrategies)
         {
-            var entities = await GetPaginatedCore(_dbSet, skip, take, orderStrategies).ToListAsync();
+            var entities = await GetPaginatedQuery(_dbSet, skip, take, orderStrategies).ToListAsync();
 
             return entities;
         }
@@ -98,8 +98,7 @@ namespace ITechArt.Repositories
             Expression<Func<T, bool>> predicate,
             params EntityOrderStrategy<T>[] orderStrategies)
         {
-            var filterQuery = _dbSet.Where(predicate);
-            var targetQuery = GetPaginatedCore(filterQuery, skip, take, orderStrategies);
+            var targetQuery = GetWherePaginatedQuery(_dbSet, skip, take, predicate, orderStrategies);
             var entities = await targetQuery.ToListAsync();
 
             return entities;
@@ -122,7 +121,7 @@ namespace ITechArt.Repositories
         }
 
 
-        protected IQueryable<T> GetPaginatedCore(
+        protected IQueryable<T> GetPaginatedQuery(
             IQueryable<T> query,
             int skip,
             int take,
@@ -147,6 +146,19 @@ namespace ITechArt.Repositories
             }
 
             var paginatedQuery = queryToPaginate.Skip(skip).Take(take);
+
+            return paginatedQuery;
+        }
+
+        protected IQueryable<T> GetWherePaginatedQuery(
+            IQueryable<T> query,
+            int skip,
+            int take,
+            Expression<Func<T, bool>> predicate,
+            params EntityOrderStrategy<T>[] orderStrategies)
+        {
+            var filterQuery = query.Where(predicate);
+            var paginatedQuery = GetPaginatedQuery(filterQuery, skip, take, orderStrategies);
 
             return paginatedQuery;
         }
