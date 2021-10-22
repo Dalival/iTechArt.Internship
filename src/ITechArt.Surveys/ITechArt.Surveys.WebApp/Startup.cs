@@ -42,6 +42,8 @@ namespace ITechArt.Surveys.WebApp
             services.AddScoped<ICustomLogger, CustomLogger>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IAccountService, AccountService>();
+            services.AddScoped<ISurveyService, SurveyService>();
+            services.AddScoped<IQuestionService, QuestionService>();
 
             services.AddControllersWithViews();
 
