@@ -1,4 +1,5 @@
 ﻿using ITechArt.Surveys.DomainModel;
+using ITechArt.Surveys.DomainModel.Responses;
 using Microsoft.EntityFrameworkCore;
 
 namespace ITechArt.Surveys.Repositories
@@ -16,6 +17,7 @@ namespace ITechArt.Surveys.Repositories
         private const string UserRoleId = "76e401a9-1e91-4dff-adb7-c455cefe6fa9";
 
         private const int MaxStringLength = 256;
+        private const int MaxTextLength = 5000;
 
 
         public SurveysDbContext(DbContextOptions options)
@@ -40,6 +42,9 @@ namespace ITechArt.Surveys.Repositories
                 b.Property(u => u.NormalizedEmail).HasMaxLength(MaxStringLength);
 
                 b.HasMany(u => u.UserRoles).WithOne(ur => ur.User).HasForeignKey(ur => ur.UserId).IsRequired();
+                b.HasMany(u => u.Surveys).WithOne(s => s.Owner);
+                b.HasMany(u => u.Responses).WithOne(r => r.Respondent);
+
                 b.HasData(new User
                 {
                     Id = AdminId,
@@ -111,10 +116,23 @@ namespace ITechArt.Surveys.Repositories
                 b.HasKey(s => s.Id);
                 b.ToTable("Surveys");
 
-                b.Property(s => s.Name).HasMaxLength(MaxStringLength);
+                b.Property(s => s.Name).HasMaxLength(MaxStringLength).IsRequired();
 
-                b.HasMany(s => s.Sections).WithOne(q => q.Survey);
-                b.HasOne(s => s.Owner).WithMany(user => user.Surveys);
+                b.HasOne(s => s.Owner).WithMany(u => u.Surveys);
+                b.HasMany(s => s.Sections).WithOne(s => s.Survey);
+                b.HasMany(s => s.Responses).WithOne(r => r.Survey);
+            });
+
+            modelBuilder.Entity<Section>(b =>
+            {
+                b.HasKey(s => s.Id);
+                b.ToTable("Sections");
+
+                b.Property(s => s.Name).HasMaxLength(MaxStringLength);
+                b.Property(s => s.Description).HasMaxLength(MaxTextLength);
+
+                b.HasOne(s => s.Survey).WithMany(s => s.Sections);
+                b.HasMany(s => s.Questions).WithOne(q => q.Section);
             });
 
             modelBuilder.Entity<Question>(b =>
@@ -122,7 +140,78 @@ namespace ITechArt.Surveys.Repositories
                 b.HasKey(q => q.Id);
                 b.ToTable("Questions");
 
-                b.Property(q => q.Title).HasMaxLength(MaxStringLength);
+                b.Property(q => q.Title).HasMaxLength(MaxStringLength).IsRequired();
+                b.Property(q => q.Description).HasMaxLength(MaxTextLength);
+
+                b.HasOne(q => q.Section).WithMany(s => s.Questions);
+            });
+
+            modelBuilder.Entity<Choice>(b =>
+            {
+                b.HasKey(q => q.Id);
+                b.ToTable("Choices");
+
+                b.Property(c => c.Value).HasMaxLength(MaxTextLength);
+
+                b.HasOne(c => c.Question);
+            });
+
+            modelBuilder.Entity<Response>(b =>
+            {
+                b.HasKey(r => r.Id);
+                b.ToTable("Responses");
+
+                b.HasOne(r => r.Respondent).WithMany(u => u.Responses);
+                b.HasOne(r => r.Survey).WithMany(s => s.Responses);
+            });
+
+            modelBuilder.Entity<SingleChoiceResponse>(b =>
+            {
+                b.HasKey(r => r.Id);
+                b.ToTable("SingleChoiceResponses");
+
+                b.HasOne(scr => scr.Choice);
+                b.HasOne(scr => scr.Question);
+                b.HasOne(scr => scr.Response);
+            });
+
+            modelBuilder.Entity<MultipleChoiceResponse>(b =>
+            {
+                b.HasKey(r => r.Id);
+                b.ToTable("MultipleChoiceResponses");
+
+                b.HasMany(scr => scr.Choices);
+                b.HasOne(scr => scr.Question);
+                b.HasOne(scr => scr.Response);
+            });
+
+            modelBuilder.Entity<TextResponse>(b =>
+            {
+                b.HasKey(r => r.Id);
+                b.ToTable("TextResponses");
+
+                b.Property(tr => tr.Value).HasMaxLength(MaxTextLength);
+
+                b.HasOne(scr => scr.Question);
+                b.HasOne(scr => scr.Response);
+            });
+
+            modelBuilder.Entity<FileResponse>(b =>
+            {
+                b.HasKey(r => r.Id);
+                b.ToTable("FileResponses");
+
+                b.HasOne(scr => scr.Question);
+                b.HasOne(scr => scr.Response);
+            });
+
+            modelBuilder.Entity<NumericResponse>(b =>
+            {
+                b.HasKey(r => r.Id);
+                b.ToTable("NumericResponses");
+
+                b.HasOne(scr => scr.Question);
+                b.HasOne(scr => scr.Response);
             });
         }
     }
