@@ -6,6 +6,15 @@
 
         public string Title { get; set; }
 
-        public Survey Survey { get; set; }
+        public string Description { get; set; }
+
+        // for question with numeric response only
+        public int MaxValue { get; set; }
+
+        public bool Required { get; set; }
+
+        public QuestionType Type { get; set; }
+
+        public Section Section { get; set; }
     }
 }

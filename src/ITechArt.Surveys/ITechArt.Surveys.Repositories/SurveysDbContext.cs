@@ -113,7 +113,7 @@ namespace ITechArt.Surveys.Repositories
 
                 b.Property(s => s.Name).HasMaxLength(MaxStringLength);
 
-                b.HasMany(s => s.Questions).WithOne(q => q.Survey);
+                b.HasMany(s => s.Sections).WithOne(q => q.Survey);
                 b.HasOne(s => s.Owner).WithMany(user => user.Surveys);
             });
 
