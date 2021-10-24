@@ -36,6 +36,9 @@
     </nav>
 </header>
 <div class="container">
+    <div class="sidenav">
+        <a href="/Survey/CreateSurvey">New survey</a>
+    </div>
     @if (_contextAccessor.HttpContext != null && _contextAccessor.HttpContext.User.IsInRole("Admin"))
     {
         <div class="sidenav">

@@ -1,4 +1,5 @@
 ﻿using ITechArt.Surveys.Foundation.Interfaces;
+using ITechArt.Surveys.WebApp.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ITechArt.Surveys.WebApp.Controllers
@@ -18,6 +19,8 @@ namespace ITechArt.Surveys.WebApp.Controllers
         public IActionResult CreateSurvey()
         {
             var model = new SurveyViewModel();
+
+            return View(model);
         }
     }
 }
