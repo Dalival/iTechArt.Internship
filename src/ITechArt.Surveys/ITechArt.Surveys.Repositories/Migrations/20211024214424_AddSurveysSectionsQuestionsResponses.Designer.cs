@@ -104,7 +104,7 @@ namespace ITechArt.Surveys.Repositories.Migrations
                     b.ToTable("FileResponses");
                 });
 
-            modelBuilder.Entity("ITechArt.Surveys.DomainModel.Responses.MultipleChoiceResponse", b =>
+            modelBuilder.Entity("ITechArt.Surveys.DomainModel.Responses.MultipleOptionsResponse", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -170,7 +170,7 @@ namespace ITechArt.Surveys.Repositories.Migrations
                     b.ToTable("Responses");
                 });
 
-            modelBuilder.Entity("ITechArt.Surveys.DomainModel.Responses.SingleChoiceResponse", b =>
+            modelBuilder.Entity("ITechArt.Surveys.DomainModel.Responses.SingleOptionResponse", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -426,7 +426,7 @@ namespace ITechArt.Surveys.Repositories.Migrations
 
             modelBuilder.Entity("ITechArt.Surveys.DomainModel.Option", b =>
                 {
-                    b.HasOne("ITechArt.Surveys.DomainModel.Responses.MultipleChoiceResponse", null)
+                    b.HasOne("ITechArt.Surveys.DomainModel.Responses.MultipleOptionsResponse", null)
                         .WithMany("Options")
                         .HasForeignKey("MultipleChoiceResponseId");
 
@@ -461,7 +461,7 @@ namespace ITechArt.Surveys.Repositories.Migrations
                     b.Navigation("Response");
                 });
 
-            modelBuilder.Entity("ITechArt.Surveys.DomainModel.Responses.MultipleChoiceResponse", b =>
+            modelBuilder.Entity("ITechArt.Surveys.DomainModel.Responses.MultipleOptionsResponse", b =>
                 {
                     b.HasOne("ITechArt.Surveys.DomainModel.Question", "Question")
                         .WithMany()
@@ -506,7 +506,7 @@ namespace ITechArt.Surveys.Repositories.Migrations
                     b.Navigation("Survey");
                 });
 
-            modelBuilder.Entity("ITechArt.Surveys.DomainModel.Responses.SingleChoiceResponse", b =>
+            modelBuilder.Entity("ITechArt.Surveys.DomainModel.Responses.SingleOptionResponse", b =>
                 {
                     b.HasOne("ITechArt.Surveys.DomainModel.Option", "Option")
                         .WithMany()
@@ -579,7 +579,7 @@ namespace ITechArt.Surveys.Repositories.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("ITechArt.Surveys.DomainModel.Responses.MultipleChoiceResponse", b =>
+            modelBuilder.Entity("ITechArt.Surveys.DomainModel.Responses.MultipleOptionsResponse", b =>
                 {
                     b.Navigation("Options");
                 });

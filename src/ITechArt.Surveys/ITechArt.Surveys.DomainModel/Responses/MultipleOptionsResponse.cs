@@ -2,7 +2,7 @@
 
 namespace ITechArt.Surveys.DomainModel.Responses
 {
-    public class MultipleChoiceResponse
+    public class MultipleOptionsResponse
     {
         public string Id { get; set; }
 

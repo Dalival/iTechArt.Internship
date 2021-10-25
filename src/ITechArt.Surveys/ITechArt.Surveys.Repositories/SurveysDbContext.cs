@@ -144,6 +144,7 @@ namespace ITechArt.Surveys.Repositories
                 b.Property(q => q.Description).HasMaxLength(MaxTextLength);
 
                 b.HasOne(q => q.Section).WithMany(s => s.Questions);
+                b.HasMany(q => q.Options).WithOne(o => o.Question);
             });
 
             modelBuilder.Entity<Option>(b =>
@@ -153,7 +154,7 @@ namespace ITechArt.Surveys.Repositories
 
                 b.Property(c => c.Value).HasMaxLength(MaxTextLength);
 
-                b.HasOne(c => c.Question);
+                b.HasOne(c => c.Question).WithMany(q => q.Options);
             });
 
             modelBuilder.Entity<Response>(b =>
@@ -165,20 +166,20 @@ namespace ITechArt.Surveys.Repositories
                 b.HasOne(r => r.Survey).WithMany(s => s.Responses);
             });
 
-            modelBuilder.Entity<SingleChoiceResponse>(b =>
+            modelBuilder.Entity<SingleOptionResponse>(b =>
             {
                 b.HasKey(r => r.Id);
-                b.ToTable("SingleChoiceResponses");
+                b.ToTable("SingleOptionResponses");
 
                 b.HasOne(scr => scr.Option);
                 b.HasOne(scr => scr.Question);
                 b.HasOne(scr => scr.Response);
             });
 
-            modelBuilder.Entity<MultipleChoiceResponse>(b =>
+            modelBuilder.Entity<MultipleOptionsResponse>(b =>
             {
                 b.HasKey(r => r.Id);
-                b.ToTable("MultipleChoiceResponses");
+                b.ToTable("MultipleOptionsResponses");
 
                 b.HasMany(scr => scr.Options);
                 b.HasOne(scr => scr.Question);

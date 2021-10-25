@@ -1,6 +1,6 @@
 ﻿namespace ITechArt.Surveys.DomainModel.Responses
 {
-    public class SingleChoiceResponse
+    public class SingleOptionResponse
     {
         public string Id { get; set; }
 
