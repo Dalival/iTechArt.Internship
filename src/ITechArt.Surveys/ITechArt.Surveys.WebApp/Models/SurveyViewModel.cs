@@ -6,8 +6,6 @@ namespace ITechArt.Surveys.WebApp.Models
     {
         public string Name { get; set; }
 
-        public int QuestionsCount { get; set; }
-
         public IEnumerable<QuestionViewModel> Questions { get; set; }
     }
 }

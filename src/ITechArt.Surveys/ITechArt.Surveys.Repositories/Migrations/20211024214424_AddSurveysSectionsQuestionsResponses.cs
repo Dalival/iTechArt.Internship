@@ -231,7 +231,7 @@ namespace ITechArt.Surveys.Repositories.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Choices",
+                name: "Options",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
@@ -271,7 +271,7 @@ namespace ITechArt.Surveys.Repositories.Migrations
                     table.ForeignKey(
                         name: "FK_SingleChoiceResponses_Choices_ChoiceId",
                         column: x => x.ChoiceId,
-                        principalTable: "Choices",
+                        principalTable: "Options",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
@@ -290,12 +290,12 @@ namespace ITechArt.Surveys.Repositories.Migrations
 
             migrationBuilder.CreateIndex(
                 name: "IX_Choices_MultipleChoiceResponseId",
-                table: "Choices",
+                table: "Options",
                 column: "MultipleChoiceResponseId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Choices_QuestionId",
-                table: "Choices",
+                table: "Options",
                 column: "QuestionId");
 
             migrationBuilder.CreateIndex(
@@ -399,7 +399,7 @@ namespace ITechArt.Surveys.Repositories.Migrations
                 name: "TextResponses");
 
             migrationBuilder.DropTable(
-                name: "Choices");
+                name: "Options");
 
             migrationBuilder.DropTable(
                 name: "MultipleChoiceResponses");

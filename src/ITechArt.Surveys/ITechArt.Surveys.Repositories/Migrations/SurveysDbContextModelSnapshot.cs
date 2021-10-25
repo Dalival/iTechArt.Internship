@@ -19,7 +19,7 @@ namespace ITechArt.Surveys.Repositories.Migrations
                 .HasAnnotation("ProductVersion", "5.0.9")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("ITechArt.Surveys.DomainModel.Choice", b =>
+            modelBuilder.Entity("ITechArt.Surveys.DomainModel.Option", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -40,7 +40,7 @@ namespace ITechArt.Surveys.Repositories.Migrations
 
                     b.HasIndex("QuestionId");
 
-                    b.ToTable("Choices");
+                    b.ToTable("Options");
                 });
 
             modelBuilder.Entity("ITechArt.Surveys.DomainModel.Question", b =>
@@ -422,10 +422,10 @@ namespace ITechArt.Surveys.Repositories.Migrations
                         });
                 });
 
-            modelBuilder.Entity("ITechArt.Surveys.DomainModel.Choice", b =>
+            modelBuilder.Entity("ITechArt.Surveys.DomainModel.Option", b =>
                 {
                     b.HasOne("ITechArt.Surveys.DomainModel.Responses.MultipleChoiceResponse", null)
-                        .WithMany("Choices")
+                        .WithMany("Options")
                         .HasForeignKey("MultipleChoiceResponseId");
 
                     b.HasOne("ITechArt.Surveys.DomainModel.Question", "Question")
@@ -506,7 +506,7 @@ namespace ITechArt.Surveys.Repositories.Migrations
 
             modelBuilder.Entity("ITechArt.Surveys.DomainModel.Responses.SingleChoiceResponse", b =>
                 {
-                    b.HasOne("ITechArt.Surveys.DomainModel.Choice", "Choice")
+                    b.HasOne("ITechArt.Surveys.DomainModel.Option", "Option")
                         .WithMany()
                         .HasForeignKey("ChoiceId");
 
@@ -518,7 +518,7 @@ namespace ITechArt.Surveys.Repositories.Migrations
                         .WithMany()
                         .HasForeignKey("ResponseId");
 
-                    b.Navigation("Choice");
+                    b.Navigation("Option");
 
                     b.Navigation("Question");
 
@@ -579,7 +579,7 @@ namespace ITechArt.Surveys.Repositories.Migrations
 
             modelBuilder.Entity("ITechArt.Surveys.DomainModel.Responses.MultipleChoiceResponse", b =>
                 {
-                    b.Navigation("Choices");
+                    b.Navigation("Options");
                 });
 
             modelBuilder.Entity("ITechArt.Surveys.DomainModel.Role", b =>

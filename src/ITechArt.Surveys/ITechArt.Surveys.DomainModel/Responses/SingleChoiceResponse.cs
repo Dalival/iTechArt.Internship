@@ -4,7 +4,7 @@
     {
         public string Id { get; set; }
 
-        public Choice Choice { get; set; }
+        public Option Option { get; set; }
 
         public Response Response { get; set; }
 

@@ -6,7 +6,7 @@ namespace ITechArt.Surveys.DomainModel.Responses
     {
         public string Id { get; set; }
 
-        public List<Choice> Choices { get; set; }
+        public List<Option> Options { get; set; }
 
         public Response Response { get; set; }
 
