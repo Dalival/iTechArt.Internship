@@ -1,5 +1,4 @@
 ﻿using ITechArt.Surveys.DomainModel;
-using ITechArt.Surveys.DomainModel.Responses;
 using Microsoft.EntityFrameworkCore;
 
 namespace ITechArt.Surveys.Repositories
@@ -43,7 +42,6 @@ namespace ITechArt.Surveys.Repositories
 
                 b.HasMany(u => u.UserRoles).WithOne(ur => ur.User).HasForeignKey(ur => ur.UserId).IsRequired();
                 b.HasMany(u => u.Surveys).WithOne(s => s.Owner);
-                b.HasMany(u => u.Responses).WithOne(r => r.Respondent);
 
                 b.HasData(new User
                 {
@@ -119,20 +117,7 @@ namespace ITechArt.Surveys.Repositories
                 b.Property(s => s.Name).HasMaxLength(MaxStringLength).IsRequired();
 
                 b.HasOne(s => s.Owner).WithMany(u => u.Surveys);
-                b.HasMany(s => s.Sections).WithOne(s => s.Survey);
-                b.HasMany(s => s.Responses).WithOne(r => r.Survey);
-            });
-
-            modelBuilder.Entity<Section>(b =>
-            {
-                b.HasKey(s => s.Id);
-                b.ToTable("Sections");
-
-                b.Property(s => s.Name).HasMaxLength(MaxStringLength);
-                b.Property(s => s.Description).HasMaxLength(MaxTextLength);
-
-                b.HasOne(s => s.Survey).WithMany(s => s.Sections);
-                b.HasMany(s => s.Questions).WithOne(q => q.Section);
+                b.HasMany(s => s.Questions).WithOne(q => q.Survey);
             });
 
             modelBuilder.Entity<Question>(b =>
@@ -143,76 +128,7 @@ namespace ITechArt.Surveys.Repositories
                 b.Property(q => q.Title).HasMaxLength(MaxStringLength).IsRequired();
                 b.Property(q => q.Description).HasMaxLength(MaxTextLength);
 
-                b.HasOne(q => q.Section).WithMany(s => s.Questions);
-                b.HasMany(q => q.Options).WithOne(o => o.Question);
-            });
-
-            modelBuilder.Entity<Option>(b =>
-            {
-                b.HasKey(q => q.Id);
-                b.ToTable("Options");
-
-                b.Property(c => c.Value).HasMaxLength(MaxTextLength);
-
-                b.HasOne(c => c.Question).WithMany(q => q.Options);
-            });
-
-            modelBuilder.Entity<Response>(b =>
-            {
-                b.HasKey(r => r.Id);
-                b.ToTable("Responses");
-
-                b.HasOne(r => r.Respondent).WithMany(u => u.Responses);
-                b.HasOne(r => r.Survey).WithMany(s => s.Responses);
-            });
-
-            modelBuilder.Entity<SingleOptionResponse>(b =>
-            {
-                b.HasKey(r => r.Id);
-                b.ToTable("SingleOptionResponses");
-
-                b.HasOne(scr => scr.Option);
-                b.HasOne(scr => scr.Question);
-                b.HasOne(scr => scr.Response);
-            });
-
-            modelBuilder.Entity<MultipleOptionsResponse>(b =>
-            {
-                b.HasKey(r => r.Id);
-                b.ToTable("MultipleOptionsResponses");
-
-                b.HasMany(scr => scr.Options);
-                b.HasOne(scr => scr.Question);
-                b.HasOne(scr => scr.Response);
-            });
-
-            modelBuilder.Entity<TextResponse>(b =>
-            {
-                b.HasKey(r => r.Id);
-                b.ToTable("TextResponses");
-
-                b.Property(tr => tr.Value).HasMaxLength(MaxTextLength);
-
-                b.HasOne(scr => scr.Question);
-                b.HasOne(scr => scr.Response);
-            });
-
-            modelBuilder.Entity<FileResponse>(b =>
-            {
-                b.HasKey(r => r.Id);
-                b.ToTable("FileResponses");
-
-                b.HasOne(scr => scr.Question);
-                b.HasOne(scr => scr.Response);
-            });
-
-            modelBuilder.Entity<NumericResponse>(b =>
-            {
-                b.HasKey(r => r.Id);
-                b.ToTable("NumericResponses");
-
-                b.HasOne(scr => scr.Question);
-                b.HasOne(scr => scr.Response);
+                b.HasOne(q => q.Survey).WithMany(s => s.Questions);
             });
         }
     }

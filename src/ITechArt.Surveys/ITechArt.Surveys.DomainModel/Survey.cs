@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using ITechArt.Surveys.DomainModel.Responses;
 
 namespace ITechArt.Surveys.DomainModel
 {
@@ -11,8 +10,6 @@ namespace ITechArt.Surveys.DomainModel
 
         public User Owner { get; set; }
 
-        public List<Section> Sections { get; set; }
-
-        public List<Response> Responses { get; set; }
+        public List<Question> Questions { get; set; }
     }
 }

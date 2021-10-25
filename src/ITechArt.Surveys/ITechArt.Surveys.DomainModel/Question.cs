@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace ITechArt.Surveys.DomainModel
+﻿namespace ITechArt.Surveys.DomainModel
 {
     public class Question
     {
@@ -10,17 +8,10 @@ namespace ITechArt.Surveys.DomainModel
 
         public string Description { get; set; }
 
-        // for question with numeric response only (e.g. rating, scale)
-        public int MaxValue { get; set; }
-
-        public List<Option> Options { get; set; }
-
-        public bool Required { get; set; }
+        public int Order { get; set; }
 
         public QuestionType Type { get; set; }
 
-        public int Order { get; set; }
-
-        public Section Section { get; set; }
+        public Survey Survey { get; set; }
     }
 }

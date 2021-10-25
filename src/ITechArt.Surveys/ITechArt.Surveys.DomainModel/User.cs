@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using ITechArt.Surveys.DomainModel.Responses;
 using Microsoft.AspNetCore.Identity;
 
 namespace ITechArt.Surveys.DomainModel
@@ -12,7 +11,5 @@ namespace ITechArt.Surveys.DomainModel
         public DateTime RegistrationDate { get; set; }
 
         public List<Survey> Surveys { get; set; }
-
-        public List<Response> Responses { get; set; }
     }
 }
