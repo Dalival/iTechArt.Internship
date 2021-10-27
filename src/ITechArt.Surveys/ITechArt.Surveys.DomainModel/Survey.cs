@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace ITechArt.Surveys.DomainModel
 {
@@ -7,6 +8,8 @@ namespace ITechArt.Surveys.DomainModel
         public string Id { get; set; }
 
         public string Name { get; set; }
+
+        public DateTime CreationDate { get; set; }
 
         public User Owner { get; set; }
 
