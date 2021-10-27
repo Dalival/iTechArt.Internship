@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using ITechArt.Surveys.DomainModel;
 using ITechArt.Surveys.Foundation.Interfaces;
@@ -12,13 +13,11 @@ namespace ITechArt.Surveys.WebApp.Controllers
     public class SurveyController : Controller
     {
         private readonly ISurveyService _surveyService;
-        private readonly UserManager<User> _userManager;
 
 
-        public SurveyController(ISurveyService surveyService, UserManager<User> userManager)
+        public SurveyController(ISurveyService surveyService)
         {
             _surveyService = surveyService;
-            _userManager = userManager;
         }
 
 
@@ -47,11 +46,11 @@ namespace ITechArt.Surveys.WebApp.Controllers
                 })
                 .ToList();
 
-            var currentUser = await _userManager.GetUserAsync(this.User);
+            var currentUserId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             var survey = new Survey
             {
                 Name = model.Name,
-                Owner = currentUser,
+                OwnerId = currentUserId,
                 CreationDate = DateTime.Now,
                 Questions = questions
             };
