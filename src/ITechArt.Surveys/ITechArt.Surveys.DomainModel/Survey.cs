@@ -11,6 +11,8 @@ namespace ITechArt.Surveys.DomainModel
 
         public DateTime CreationDate { get; set; }
 
+        public string OwnerId { get; set; }
+
         public User Owner { get; set; }
 
         public List<Question> Questions { get; set; }

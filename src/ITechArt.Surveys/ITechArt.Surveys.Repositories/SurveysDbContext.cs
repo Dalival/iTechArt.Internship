@@ -41,7 +41,7 @@ namespace ITechArt.Surveys.Repositories
                 b.Property(u => u.NormalizedEmail).HasMaxLength(MaxStringLength);
 
                 b.HasMany(u => u.UserRoles).WithOne(ur => ur.User).HasForeignKey(ur => ur.UserId).IsRequired();
-                b.HasMany(u => u.Surveys).WithOne(s => s.Owner);
+                b.HasMany(u => u.Surveys).WithOne(s => s.Owner).HasForeignKey(x => x.OwnerId);
 
                 b.HasData(new User
                 {
@@ -116,7 +116,7 @@ namespace ITechArt.Surveys.Repositories
 
                 b.Property(s => s.Name).HasMaxLength(MaxStringLength).IsRequired();
 
-                b.HasOne(s => s.Owner).WithMany(u => u.Surveys);
+                b.HasOne(s => s.Owner).WithMany(u => u.Surveys).HasForeignKey(x => x.OwnerId);
                 b.HasMany(s => s.Questions).WithOne(q => q.Survey);
             });
 
