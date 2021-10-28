@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using ITechArt.Surveys.DomainModel;
 using ITechArt.Surveys.Foundation.Interfaces;
 using ITechArt.Surveys.WebApp.Models;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ITechArt.Surveys.WebApp.Controllers
@@ -42,7 +41,7 @@ namespace ITechArt.Surveys.WebApp.Controllers
                     Title = q.Title,
                     Description = q.Description,
                     Order = q.Order,
-                    Type = QuestionType.Text
+                    Type = q.Type
                 })
                 .ToList();
 

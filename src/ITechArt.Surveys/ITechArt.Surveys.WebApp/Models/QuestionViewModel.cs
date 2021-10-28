@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using ITechArt.Surveys.DomainModel;
 
 namespace ITechArt.Surveys.WebApp.Models
 {
@@ -16,5 +17,7 @@ namespace ITechArt.Surveys.WebApp.Models
         public string Description { get; set; }
 
         public int Order { get; set; }
+
+        public QuestionType Type { get; set; }
     }
 }
