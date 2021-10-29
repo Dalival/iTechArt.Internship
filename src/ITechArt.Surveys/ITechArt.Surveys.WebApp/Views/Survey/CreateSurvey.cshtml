@@ -1,10 +1,35 @@
 ﻿@model SurveyViewModel
 
 @{
-    ViewData["Title"] = "Create Survey";
+    ViewData["Title"] = "Create survey";
+}
+
+@section Scripts
+{
+    <script src="~/js/createSurvey.js" asp-append-version="true"></script>
 }
 
 <link rel="stylesheet" href="~/css/createSurvey.css"/>
 
-<h1>@ViewData["Title"]</h1>
-
+<form asp-controller="Survey" asp-action="CreateSurvey" method="post">
+    <div class="survey-info">
+        <div class="name">
+            New survey: @Html.TextBoxFor(m => m.Name)
+        </div>
+        <div>
+            Questions: <span id="questions-counter">0</span>
+        </div>
+        <div class="save-discard-buttons">
+            <button type="submit" class="btn btn-outline-primary">Save</button>
+            <a asp-controller="Home" asp-action="Index" class="btn btn-outline-danger">Discard</a>
+        </div>
+    </div>
+    <div class="content">
+        <div class="survey-content">
+            There will be a content
+        </div>
+        <div class="questions-menu" id="questions-menu">
+            <div class="btn btn-outline-secondary">Text</div>
+        </div>
+    </div>
+</form>
