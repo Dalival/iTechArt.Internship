@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -7,7 +6,6 @@ using ITechArt.Surveys.DomainModel;
 using ITechArt.Surveys.Foundation.Interfaces;
 using ITechArt.Surveys.WebApp.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace ITechArt.Surveys.WebApp.Controllers
 {
@@ -51,8 +49,7 @@ namespace ITechArt.Surveys.WebApp.Controllers
                 {
                     Title = q.Title,
                     Description = q.Description,
-                    Index = q.Index,
-                    Type = q.Type
+                    Index = q.Index
                 })
                 .ToList();
 

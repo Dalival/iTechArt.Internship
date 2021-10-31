@@ -10,8 +10,6 @@
 
         public int Index { get; set; }
 
-        public QuestionType Type { get; set; }
-
         public Survey Survey { get; set; }
     }
 }
