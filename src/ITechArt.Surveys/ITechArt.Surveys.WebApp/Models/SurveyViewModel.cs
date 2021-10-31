@@ -12,6 +12,6 @@ namespace ITechArt.Surveys.WebApp.Models
         [DisplayName("Name")]
         public string Name { get; set; }
 
-        public IEnumerable<QuestionViewModel> Questions { get; set; }
+        public List<QuestionViewModel> Questions { get; set; }
     }
 }

@@ -1,5 +1,4 @@
-﻿@using ITechArt.Surveys.DomainModel
-@model SurveyViewModel
+﻿@model SurveyViewModel
 
 @{
     ViewData["Title"] = "Create survey";
@@ -31,16 +30,7 @@
 
 
                 <div class="question text-question">
-                    <div class="question-title">
-                        1. @Html.TextBoxFor(x => @Model.Questions.ElementAt(0).Title)
-                    </div>
-                    <div class="question-description">
-                        @Html.TextBoxFor(x => @Model.Questions.ElementAt(0).Description)
-                    </div>
-                    @{
-                        Model.Questions.ElementAt(0).Order = 1;
-                        Model.Questions.ElementAt(0).Type = QuestionType.Text;
-                    }
+                    @Html.EditorFor(x => @Model.Questions)
                 </div>
 
 

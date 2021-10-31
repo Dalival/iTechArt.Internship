@@ -6,7 +6,21 @@
     })
 })
 
+// $('#create-text-question').click(function () {
+//     const textQuestionHTMLCode = "<div>THIS IS A TEXT QUESTION</div>";
+//     $('#survey-content').append(textQuestionHTMLCode);
+// })
+
 $('#create-text-question').click(function () {
-    const textQuestionHTMLCode = "<div>THIS IS A TEXT QUESTION</div>";
-    $('#survey-content').append(textQuestionHTMLCode);
+    var i = $('.thingRow').length;
+    $.ajax({
+        url: 'AddQuestion?index=' + i,
+        cache: false,
+        success: function (data) {
+            $('#survey-content').append(data);
+        },
+        error: function (a, b, c) {
+            alert(a + " " + b + " " + c);
+        }
+    })
 })

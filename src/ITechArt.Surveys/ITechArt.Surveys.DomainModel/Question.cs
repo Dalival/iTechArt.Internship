@@ -8,7 +8,7 @@
 
         public string Description { get; set; }
 
-        public int Order { get; set; }
+        public int Index { get; set; }
 
         public QuestionType Type { get; set; }
 

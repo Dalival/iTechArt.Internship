@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -6,6 +7,7 @@ using ITechArt.Surveys.DomainModel;
 using ITechArt.Surveys.Foundation.Interfaces;
 using ITechArt.Surveys.WebApp.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace ITechArt.Surveys.WebApp.Controllers
 {
@@ -24,6 +26,15 @@ namespace ITechArt.Surveys.WebApp.Controllers
         public IActionResult CreateSurvey()
         {
             var model = new SurveyViewModel();
+            // {
+            //     Questions = new List<QuestionViewModel> {new QuestionViewModel
+            //     {
+            //         Title = "gggg",
+            //         Description = "descr",
+            //         Index= 0,
+            //         Type = QuestionType.Text
+            //     }}
+            // };
 
             return View(model);
         }
@@ -40,7 +51,7 @@ namespace ITechArt.Surveys.WebApp.Controllers
                 {
                     Title = q.Title,
                     Description = q.Description,
-                    Order = q.Order,
+                    Index = q.Index,
                     Type = q.Type
                 })
                 .ToList();
@@ -57,6 +68,16 @@ namespace ITechArt.Surveys.WebApp.Controllers
             await _surveyService.CreateAsync(survey);
 
             return RedirectToAction("Index", "Home");
+        }
+
+        public IActionResult AddQuestion(int index)
+        {
+            var model = new QuestionViewModel
+            {
+                Index = index
+            };
+
+            return PartialView("_TextQuestion", model);
         }
     }
 }
