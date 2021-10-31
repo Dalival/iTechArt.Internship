@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using ITechArt.Common.Logger;
+using ITechArt.Common.Result;
 using ITechArt.Repositories.Interfaces;
 using ITechArt.Surveys.DomainModel;
 using ITechArt.Surveys.Foundation.Interfaces;
@@ -30,6 +31,12 @@ namespace ITechArt.Surveys.Foundation
             await _unitOfWork.SaveAsync();
 
             return true;
+        }
+
+
+        private OperationResult<SurveyCreationError> ValidateSurvey(Survey survey)
+        {
+            throw new NotImplementedException();
         }
     }
 }
