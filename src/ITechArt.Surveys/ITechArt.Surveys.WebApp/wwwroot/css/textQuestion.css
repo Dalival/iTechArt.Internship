@@ -1,0 +1,31 @@
+﻿.question {
+    margin: 20px;
+    padding: 20px;
+    background-color: #b1dfbb;
+    border: 1px solid red;
+}
+
+.question-edit-mode,
+.question-view-mode {
+    display: flex;
+    flex-direction: column;
+}
+
+.question-edit-mode > .question-title {
+    outline: none;
+    border: none;
+    font-size: 24px;
+    border-bottom: 1px solid rgb(196, 196, 196);
+    margin-bottom: 10px;
+}
+
+.question-edit-mode > .question-description {
+    outline: none;
+    border: none;
+    border-bottom: 1px solid rgb(196, 196, 196);
+}
+
+.question-title::placeholder,
+.question-description::placeholder {
+    color: rgb(196, 196, 196);
+}

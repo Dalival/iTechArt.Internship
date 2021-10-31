@@ -12,7 +12,7 @@
     border: none;
     font-size: 38px;
     font-weight: bolder;
-    border-bottom: 1px solid;
+    border-bottom: 1px solid rgb(196, 196, 196);
 }
 
 .survey-info > .name > input::placeholder {

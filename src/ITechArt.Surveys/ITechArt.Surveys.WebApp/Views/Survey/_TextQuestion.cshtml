@@ -1,6 +1,23 @@
 ﻿@model QuestionViewModel
 
-<div>
-    <input id="Questions_@(Model.Index)__Title" class="thingRow"
-           name="Questions[@(Model.Index)].Title" type="text" value=""/>
+<link rel="stylesheet" href="~/css/textQuestion.css"/>
+
+<div class="question">
+    <div class="question-edit-mode">
+        <input class="question-title"
+               id="Questions_@(Model.Index)__Title"
+               name="Questions[@(Model.Index)].Title"
+               type="text"
+               placeholder="Title"/>
+        <textarea class="question-description"
+               id="Questions_@(Model.Index)__Description"
+               name="Questions[@(Model.Index)].Description"
+               placeholder="Enter the description if needed..."></textarea>
+    </div>
+
+    <div class="question-view-mode">
+        <div class="question-title">
+
+        </div>
+    </div>
 </div>
