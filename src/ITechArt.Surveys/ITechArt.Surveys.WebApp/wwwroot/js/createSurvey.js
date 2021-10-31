@@ -5,3 +5,8 @@
         });
     })
 })
+
+$('#create-text-question').click(function () {
+    const textQuestionHTMLCode = "<div>THIS IS A TEXT QUESTION</div>";
+    $('#survey-content').append(textQuestionHTMLCode);
+})
