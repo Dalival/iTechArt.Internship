@@ -15,6 +15,7 @@ namespace ITechArt.Surveys.WebApp.Models
         [DisplayName("Description")]
         public string Description { get; set; }
 
+        [Range(0, 500)]
         public int Index { get; set; }
     }
 }

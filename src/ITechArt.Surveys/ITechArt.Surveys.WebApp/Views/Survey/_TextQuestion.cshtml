@@ -3,6 +3,10 @@
 <link rel="stylesheet" href="~/css/textQuestion.css"/>
 
 <div class="question">
+    <input type="hidden"
+           id="Questions_@(Model.Index)__Index"
+           name="Questions[@(Model.Index)].Index"
+           value="@Model.Index"/>
     <div class="question-edit-mode">
         <input class="question-title"
                id="Questions_@(Model.Index)__Title"

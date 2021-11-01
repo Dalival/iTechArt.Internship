@@ -24,15 +24,6 @@ namespace ITechArt.Surveys.WebApp.Controllers
         public IActionResult CreateSurvey()
         {
             var model = new SurveyViewModel();
-            // {
-            //     Questions = new List<QuestionViewModel> {new QuestionViewModel
-            //     {
-            //         Title = "gggg",
-            //         Description = "descr",
-            //         Index= 0,
-            //         Type = QuestionType.Text
-            //     }}
-            // };
 
             return View(model);
         }

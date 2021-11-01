@@ -7,7 +7,7 @@
 })
 
 $('#create-text-question').click(function () {
-    var i = $('.thingRow').length;
+    var i = $('.question').length;
     $.ajax({
         url: 'AddQuestion?index=' + i,
         cache: false,
