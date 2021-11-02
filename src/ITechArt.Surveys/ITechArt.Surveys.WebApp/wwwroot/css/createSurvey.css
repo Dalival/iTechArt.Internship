@@ -59,3 +59,40 @@
 .questions-menu > * {
     margin-top: 10px;
 }
+
+
+/*/////////////// FROM TEXT QUESTION ///////////////*/
+
+
+.question {
+    margin: 20px;
+    padding: 20px;
+    background-color: #b1dfbb;
+    border: 1px solid red;
+}
+
+.question-edit-mode,
+.question-view-mode {
+    display: flex;
+    flex-direction: column;
+}
+
+.question-edit-mode > .question-title {
+    outline: none;
+    border: none;
+    font-size: 24px;
+    border-bottom: 1px solid rgb(196, 196, 196);
+    margin-bottom: 10px;
+}
+
+.question-title::placeholder{
+    color: rgb(196, 196, 196);
+}
+
+.question-view-mode {
+    display: none;
+}
+
+.question {
+    width: 100%;
+}
