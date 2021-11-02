@@ -45,6 +45,7 @@
     flex-direction: column;
     align-items: center;
     margin-top: 20px;
+    padding: 20px;
 }
 
 .questions-menu {

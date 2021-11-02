@@ -26,3 +26,7 @@
 .question-view-mode {
     display: none;
 }
+
+.question {
+    width: 100%;
+}

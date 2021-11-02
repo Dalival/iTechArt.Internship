@@ -1,6 +1,6 @@
 ﻿@model QuestionViewModel
 
-<link rel="stylesheet" href="~/css/textQuestion.css"/>
+<link rel="stylesheet" href="~/css/textQuestion.css" asp-append-version="true"/>
 
 <div class="question" id="question-@Model.Index">
 
@@ -9,7 +9,7 @@
            name="Questions[@(Model.Index)].Index"
            value="@Model.Index"/>
 
-    <div class="question-edit-mode">
+    <div class="question-edit-mode" id="question-@Model.Index-edit-mode">
         <input class="question-title"
                id="Questions_@(Model.Index)__Title"
                name="Questions[@(Model.Index)].Title"
@@ -17,9 +17,9 @@
                placeholder="Title"/>
     </div>
 
-    <div class="question-view-mode">
-        <div class="question-title" id="question-@(Model.Index)-title">
-            Question @Model.Index
+    <div class="question-view-mode" id="question-@Model.Index-view-mode">
+        <div class="question-title" id="question-@Model.Index-title">
+            Question @(Model.Index + 1)
         </div>
         <span class="material-icons-outlined" id="edit-question-@(Model.Index)">edit</span>
     </div>
