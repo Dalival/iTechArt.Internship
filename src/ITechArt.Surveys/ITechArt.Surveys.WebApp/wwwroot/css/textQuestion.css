@@ -19,14 +19,7 @@
     margin-bottom: 10px;
 }
 
-.question-edit-mode > .question-description {
-    outline: none;
-    border: none;
-    border-bottom: 1px solid rgb(196, 196, 196);
-}
-
-.question-title::placeholder,
-.question-description::placeholder {
+.question-title::placeholder{
     color: rgb(196, 196, 196);
 }
 

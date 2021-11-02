@@ -39,7 +39,6 @@ namespace ITechArt.Surveys.WebApp.Controllers
             var questions = model.Questions.Select(q => new Question
                 {
                     Title = q.Title,
-                    Description = q.Description,
                     Index = q.Index
                 })
                 .ToList();

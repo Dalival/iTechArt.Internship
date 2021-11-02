@@ -11,10 +11,6 @@ namespace ITechArt.Surveys.WebApp.Models
         [DisplayName("Title")]
         public string Title { get; set; }
 
-        [MaxLength(5000, ErrorMessage = "Description max length is 5000 characters")]
-        [DisplayName("Description")]
-        public string Description { get; set; }
-
         [Range(0, 500)]
         public int Index { get; set; }
     }

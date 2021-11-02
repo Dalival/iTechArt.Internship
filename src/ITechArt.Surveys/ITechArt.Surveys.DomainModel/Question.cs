@@ -6,8 +6,6 @@
 
         public string Title { get; set; }
 
-        public string Description { get; set; }
-
         public int Index { get; set; }
 
         public Survey Survey { get; set; }

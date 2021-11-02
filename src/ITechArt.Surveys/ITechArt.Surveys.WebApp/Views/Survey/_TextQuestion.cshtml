@@ -15,10 +15,6 @@
                name="Questions[@(Model.Index)].Title"
                type="text"
                placeholder="Title"/>
-        <textarea class="question-description"
-               id="Questions_@(Model.Index)__Description"
-               name="Questions[@(Model.Index)].Description"
-               placeholder="Enter the description if needed..."></textarea>
     </div>
 
     <div class="question-view-mode">
@@ -26,8 +22,6 @@
             Question @Model.Index
         </div>
         <span class="material-icons-outlined" id="edit-question-@(Model.Index)">edit</span>
-        <div class="question-description" id="question-@(Model.Index)-description">
-        </div>
     </div>
 </div>
 

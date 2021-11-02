@@ -28,11 +28,3 @@ $('input[id^=Questions_][id$=__Title]').change(function () {
     }
     $('#question-' + index + '-title').html(enteredText);
 })
-
-$('textarea[id^=Questions_][id$=__Description]').change(function () {
-    const enteredText = $(this).val();
-    const id = $(this).attr('id');
-    const collection = id.split('_');
-    const index = collection[1];
-    $('#question-' + index + '-description').html(enteredText);
-})

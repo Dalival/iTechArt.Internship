@@ -131,7 +131,6 @@ namespace ITechArt.Surveys.Repositories
                 b.ToTable("Questions");
 
                 b.Property(q => q.Title).HasMaxLength(MaxStringLength).IsRequired();
-                b.Property(q => q.Description).HasMaxLength(MaxTextLength);
 
                 b.HasOne(q => q.Survey).WithMany(s => s.Questions);
             });
