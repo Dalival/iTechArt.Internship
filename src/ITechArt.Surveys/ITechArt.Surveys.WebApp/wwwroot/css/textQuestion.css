@@ -29,3 +29,7 @@
 .question-description::placeholder {
     color: rgb(196, 196, 196);
 }
+
+.question-view-mode {
+    display: none;
+}

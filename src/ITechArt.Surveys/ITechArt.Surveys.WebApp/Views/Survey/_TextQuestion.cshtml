@@ -2,7 +2,7 @@
 
 <link rel="stylesheet" href="~/css/textQuestion.css"/>
 
-<div class="question">
+<div class="question" id="question-@Model.Index">
 
     <input type="hidden"
            id="Questions_@(Model.Index)__Index"
@@ -22,13 +22,11 @@
     </div>
 
     <div class="question-view-mode">
-        <div class="question-title"
-             id="question-@(Model.Index)-title">
-            Here will be title
+        <div class="question-title" id="question-@(Model.Index)-title">
+            Question @Model.Index
         </div>
-        <div class="question-description"
-             id="question-@(Model.Index)-description">
-            Here will be description
+        <span class="material-icons-outlined" id="edit-question-@(Model.Index)">edit</span>
+        <div class="question-description" id="question-@(Model.Index)-description">
         </div>
     </div>
 </div>

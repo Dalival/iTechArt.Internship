@@ -1,6 +1,6 @@
 ﻿// Prevent submitting form on Enter
 $('#survey-form').on('keyup keypress', function(e) {
-    var keyCode = e.keyCode || e.which;
+    const keyCode = e.keyCode || e.which;
     if (keyCode === 13 && !$(e.target).is('textarea')) {
         e.preventDefault();
         return false;
@@ -18,7 +18,7 @@ $('#questions-menu').children().each(function () {
 
 // Insert new question html code on click creating new question
 $('#create-text-question').click(function () {
-    var i = $('.question').length;
+    const i = $('.question').length;
     $.ajax({
         url: 'AddQuestion?index=' + i,
         cache: false,
