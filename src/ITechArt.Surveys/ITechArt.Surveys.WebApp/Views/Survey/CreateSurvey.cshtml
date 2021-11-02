@@ -11,7 +11,7 @@
 
 <link rel="stylesheet" href="~/css/createSurvey.css"/>
 
-<form asp-controller="Survey" asp-action="CreateSurvey" method="post">
+<form asp-controller="Survey" asp-action="CreateSurvey" method="post" id="survey-form">
     <div class="survey-info">
         <div class="name">
             @Html.TextBoxFor(m => m.Name, new { placeholder = "Survey name" })

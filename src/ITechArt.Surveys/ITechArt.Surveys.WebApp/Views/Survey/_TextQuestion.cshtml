@@ -3,10 +3,12 @@
 <link rel="stylesheet" href="~/css/textQuestion.css"/>
 
 <div class="question">
+
     <input type="hidden"
            id="Questions_@(Model.Index)__Index"
            name="Questions[@(Model.Index)].Index"
            value="@Model.Index"/>
+
     <div class="question-edit-mode">
         <input class="question-title"
                id="Questions_@(Model.Index)__Title"
@@ -20,8 +22,15 @@
     </div>
 
     <div class="question-view-mode">
-        <div class="question-title">
-
+        <div class="question-title"
+             id="question-@(Model.Index)-title">
+            Here will be title
+        </div>
+        <div class="question-description"
+             id="question-@(Model.Index)-description">
+            Here will be description
         </div>
     </div>
 </div>
+
+<script src="~/js/textQuestion.js" asp-append-version="true"></script>
