@@ -6,13 +6,13 @@
 
     <input type="hidden"
            id="Questions_@(Model.Index)__Index"
-           name="Questions[@(Model.Index)].Index"
+           name="Questions[@Model.Index].Index"
            value="@Model.Index"/>
 
     <div class="question-edit-mode" id="question-@Model.Index-edit-mode">
         <input class="question-title"
                id="Questions_@(Model.Index)__Title"
-               name="Questions[@(Model.Index)].Title"
+               name="Questions[@Model.Index].Title"
                type="text"
                placeholder="Title"/>
     </div>
@@ -21,7 +21,8 @@
         <div class="question-title" id="question-@Model.Index-title">
             Question @(Model.Index + 1)
         </div>
-        <span class="material-icons-outlined" id="edit-question-@(Model.Index)">edit</span>
+        <span class="material-icons-outlined" id="edit-question-@Model.Index">edit</span>
+        <span class="material-icons-outlined" id="delete-question-@Model.Index">delete</span>
     </div>
 </div>
 

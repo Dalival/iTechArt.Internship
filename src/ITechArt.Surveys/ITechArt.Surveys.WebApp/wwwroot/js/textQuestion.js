@@ -11,7 +11,7 @@ $(document).click(function (e) {
     }
 });
 
-// View edit-mode on click on edit button
+// View edit-mode on click edit button
 $('span[id^=edit-question-]').click(function () {
     const id = $(this).attr('id');
     const index = id.substring(id.lastIndexOf('-') + 1);
@@ -31,3 +31,12 @@ $('input[id^=Questions_][id$=__Title]').change(function () {
     }
     $('#question-' + index + '-title').html(enteredText);
 })
+
+// Delete question on click delete button
+$('span[id^=delete-question-]').click(function () {
+    const id = $(this).attr('id');
+    const index = id.substring(id.lastIndexOf('-') + 1);
+    $('#question-' + index).remove();
+    // decrement questions counter
+    $('#questions-counter').html($('.question').length);
+});
