@@ -16,7 +16,6 @@ namespace ITechArt.Surveys.Repositories
         private const string UserRoleId = "76e401a9-1e91-4dff-adb7-c455cefe6fa9";
 
         private const int MaxStringLength = 256;
-        private const int MaxTextLength = 5000;
 
 
         public SurveysDbContext(DbContextOptions options)
@@ -42,7 +41,7 @@ namespace ITechArt.Surveys.Repositories
                 b.Property(u => u.NormalizedEmail).HasMaxLength(MaxStringLength);
 
                 b.HasMany(u => u.UserRoles).WithOne(ur => ur.User).HasForeignKey(ur => ur.UserId).IsRequired();
-                b.HasMany(u => u.Surveys).WithOne(s => s.Owner).HasForeignKey(x => x.OwnerId);
+                b.HasMany(u => u.Surveys).WithOne(s => s.CreatedBy).HasForeignKey(x => x.CreatedById);
 
                 b.HasData(new User
                 {
@@ -120,7 +119,7 @@ namespace ITechArt.Surveys.Repositories
 
                 b.Property(s => s.Name).HasMaxLength(MaxStringLength).IsRequired();
 
-                b.HasOne(s => s.Owner).WithMany(u => u.Surveys).HasForeignKey(x => x.OwnerId);
+                b.HasOne(s => s.CreatedBy).WithMany(u => u.Surveys).HasForeignKey(x => x.CreatedById);
                 b.HasMany(s => s.Questions).WithOne(q => q.Survey);
             });
 

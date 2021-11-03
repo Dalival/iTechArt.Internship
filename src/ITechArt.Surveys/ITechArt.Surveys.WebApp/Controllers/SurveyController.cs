@@ -47,7 +47,7 @@ namespace ITechArt.Surveys.WebApp.Controllers
             var survey = new Survey
             {
                 Name = model.Name,
-                OwnerId = currentUserId,
+                CreatedById = currentUserId,
                 CreationDate = DateTime.Now,
                 Questions = questions
             };

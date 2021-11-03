@@ -1,9 +1,9 @@
-﻿namespace ITechArt.Surveys.DomainModel
-{
-    public class Question
-    {
-        public string Id { get; set; }
+﻿using ITechArt.Surveys.DomainModel.Interfaces;
 
+namespace ITechArt.Surveys.DomainModel
+{
+    public class Question : Entity
+    {
         public string Title { get; set; }
 
         public int Index { get; set; }
