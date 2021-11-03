@@ -51,14 +51,22 @@ $('#create-text-question').click(function () {
 
 // On click somewhere else view view-mode
 $(document).click(function (e) {
-    const target = e.target;
+    let target = e.target;
     const questionsCount = $(document.getElementsByClassName('question')).length; // THIS WORKS!!!! DO EVERYWHERE LIKE HERE!!!
+    alert('Now amount of questions is ' + questionsCount);
+    //TODO 1. Delete redundant stuff connected with ajax
+    //TODO 2. Use hacks for making jQuery able to see appended elements
     for (let i = 0; i < questionsCount; i++) {
-        if (!$(target).is(`#question-${i}`) &&
-            !$(target).parents().is(`#question-${i}`)) {
-            $(`#question-${i}-edit-mode`).hide();
-            $(`#question-${i}-view-mode`).show();
-        }
+        do {
+            if (target === document.getElementById(`question-${i}`)) {
+                alert('clicked inside question ' + i);
+                return;
+            }
+            target = target.parentNode;
+        } while (target);
+        alert('click outside question ' + i);
+        $(document.getElementById(`question-${i}-edit-mode`)).hide();
+        $(document.getElementById(`question-${i}-view-mode`)).show();
     }
 });
 
