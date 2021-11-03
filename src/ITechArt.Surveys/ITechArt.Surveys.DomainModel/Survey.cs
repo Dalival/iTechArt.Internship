@@ -8,8 +8,6 @@ namespace ITechArt.Surveys.DomainModel
     {
         public string Name { get; set; }
 
-        public DateTime CreationDate { get; set; }
-
         public ICollection<Question> Questions { get; set; }
     }
 }
