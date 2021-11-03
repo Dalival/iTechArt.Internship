@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using ITechArt.Surveys.DomainModel.Interfaces;
+using ITechArt.Surveys.DomainModel.Base;
 
 namespace ITechArt.Surveys.DomainModel
 {

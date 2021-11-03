@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ITechArt.Surveys.DomainModel.Interfaces
+namespace ITechArt.Surveys.DomainModel.Base
 {
     public abstract class CreatableEntity : Entity
     {
