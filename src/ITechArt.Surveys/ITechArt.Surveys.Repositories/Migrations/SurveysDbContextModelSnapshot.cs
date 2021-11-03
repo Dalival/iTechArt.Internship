@@ -19,34 +19,9 @@ namespace ITechArt.Surveys.Repositories.Migrations
                 .HasAnnotation("ProductVersion", "5.0.9")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("ITechArt.Surveys.DomainModel.Question", b =>
-                {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("Order")
-                        .HasColumnType("int");
-
-                    b.Property<string>("SurveyId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("SurveyId");
-
-                    b.ToTable("Questions");
-                });
-
             modelBuilder.Entity("ITechArt.Surveys.DomainModel.Role", b =>
                 {
                     b.Property<string>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ConcurrencyStamp")
@@ -87,34 +62,9 @@ namespace ITechArt.Surveys.Repositories.Migrations
                         });
                 });
 
-            modelBuilder.Entity("ITechArt.Surveys.DomainModel.Survey", b =>
-                {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("CreationDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("OwnerId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("OwnerId");
-
-                    b.ToTable("Surveys");
-                });
-
             modelBuilder.Entity("ITechArt.Surveys.DomainModel.User", b =>
                 {
                     b.Property<string>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("AccessFailedCount")
@@ -228,24 +178,6 @@ namespace ITechArt.Surveys.Repositories.Migrations
                         });
                 });
 
-            modelBuilder.Entity("ITechArt.Surveys.DomainModel.Question", b =>
-                {
-                    b.HasOne("ITechArt.Surveys.DomainModel.Survey", "Survey")
-                        .WithMany("Questions")
-                        .HasForeignKey("SurveyId");
-
-                    b.Navigation("Survey");
-                });
-
-            modelBuilder.Entity("ITechArt.Surveys.DomainModel.Survey", b =>
-                {
-                    b.HasOne("ITechArt.Surveys.DomainModel.User", "Owner")
-                        .WithMany("Surveys")
-                        .HasForeignKey("OwnerId");
-
-                    b.Navigation("Owner");
-                });
-
             modelBuilder.Entity("ITechArt.Surveys.DomainModel.UserRole", b =>
                 {
                     b.HasOne("ITechArt.Surveys.DomainModel.Role", "Role")
@@ -270,15 +202,8 @@ namespace ITechArt.Surveys.Repositories.Migrations
                     b.Navigation("UserRoles");
                 });
 
-            modelBuilder.Entity("ITechArt.Surveys.DomainModel.Survey", b =>
-                {
-                    b.Navigation("Questions");
-                });
-
             modelBuilder.Entity("ITechArt.Surveys.DomainModel.User", b =>
                 {
-                    b.Navigation("Surveys");
-
                     b.Navigation("UserRoles");
                 });
 #pragma warning restore 612, 618
