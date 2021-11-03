@@ -25,7 +25,7 @@ namespace ITechArt.Surveys.Repositories.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("Index")
+                    b.Property<int>("Order")
                         .HasColumnType("int");
 
                     b.Property<string>("SurveyId")

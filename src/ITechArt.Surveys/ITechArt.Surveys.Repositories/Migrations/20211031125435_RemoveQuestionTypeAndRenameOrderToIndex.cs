@@ -13,13 +13,13 @@ namespace ITechArt.Surveys.Repositories.Migrations
             migrationBuilder.RenameColumn(
                 name: "Type",
                 table: "Questions",
-                newName: "Index");
+                newName: "Order");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.RenameColumn(
-                name: "Index",
+                name: "Order",
                 table: "Questions",
                 newName: "Type");
 

@@ -6,7 +6,7 @@ namespace ITechArt.Surveys.DomainModel
     {
         public string Title { get; set; }
 
-        public int Index { get; set; }
+        public int Order { get; set; }
 
         public string SurveyId { get; set; }
 
