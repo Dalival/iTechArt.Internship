@@ -15,6 +15,6 @@ namespace ITechArt.Surveys.DomainModel
 
         public User Owner { get; set; }
 
-        public List<Question> Questions { get; set; }
+        public ICollection<Question> Questions { get; set; }
     }
 }
