@@ -120,7 +120,7 @@ namespace ITechArt.Surveys.Repositories
                 b.Property(s => s.Name).HasMaxLength(MaxStringLength).IsRequired();
 
                 b.HasOne(s => s.CreatedBy).WithMany(u => u.Surveys).HasForeignKey(x => x.CreatedById);
-                b.HasMany(s => s.Questions).WithOne(q => q.Survey);
+                b.HasMany(s => s.Questions).WithOne(q => q.Survey).HasForeignKey(q => q.SurveyId);
             });
 
             modelBuilder.Entity<Question>(b =>
@@ -131,7 +131,7 @@ namespace ITechArt.Surveys.Repositories
 
                 b.Property(q => q.Title).HasMaxLength(MaxStringLength).IsRequired();
 
-                b.HasOne(q => q.Survey).WithMany(s => s.Questions);
+                b.HasOne(q => q.Survey).WithMany(s => s.Questions).HasForeignKey(q => q.SurveyId);
             });
         }
     }

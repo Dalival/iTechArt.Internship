@@ -8,6 +8,8 @@ namespace ITechArt.Surveys.DomainModel
 
         public int Index { get; set; }
 
+        public string SurveyId { get; set; }
+
         public Survey Survey { get; set; }
     }
 }
