@@ -56,15 +56,5 @@ namespace ITechArt.Surveys.WebApp.Controllers
 
             return RedirectToAction("Index", "Home");
         }
-
-        public IActionResult AddQuestion(int index)
-        {
-            var model = new QuestionViewModel
-            {
-                Index = index
-            };
-
-            return PartialView("_TextQuestion", model);
-        }
     }
 }
