@@ -42,6 +42,7 @@ namespace ITechArt.Surveys.WebApp
             services.AddScoped<ICustomLogger, CustomLogger>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IAccountService, AccountService>();
+            services.AddScoped<ISurveyService, SurveyService>();
 
             services.AddControllersWithViews();
 
@@ -89,7 +90,7 @@ namespace ITechArt.Surveys.WebApp
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=Home}/{action=Order}/{id?}");
             });
         }
     }

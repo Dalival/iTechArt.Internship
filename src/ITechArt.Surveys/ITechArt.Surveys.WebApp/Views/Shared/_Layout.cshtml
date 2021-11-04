@@ -36,12 +36,13 @@
     </nav>
 </header>
 <div class="container">
-    @if (_contextAccessor.HttpContext != null && _contextAccessor.HttpContext.User.IsInRole("Admin"))
-    {
-        <div class="sidenav">
+    <div class="sidenav">
+        @if (_contextAccessor.HttpContext != null && _contextAccessor.HttpContext.User.IsInRole("Admin"))
+        {
             <a href="/User/UserTable">Users</a>
-        </div>
-    }
+        }
+        <a href="/Survey/CreateSurvey">New survey</a>
+    </div>
     <main role="main">
         @RenderBody()
     </main>

@@ -29,10 +29,11 @@ namespace ITechArt.Surveys.Repositories
             modelBuilder.Entity<User>(b =>
             {
                 b.HasKey(u => u.Id);
+                b.Property(u => u.Id).ValueGeneratedOnAdd();
                 b.HasIndex(u => u.NormalizedUserName).HasDatabaseName("UserNameIndex").IsUnique();
                 b.HasIndex(u => u.NormalizedEmail).HasDatabaseName("EmailIndex").IsUnique();
-                b.ToTable("Users");
                 b.Property(u => u.ConcurrencyStamp).IsConcurrencyToken();
+                b.ToTable("Users");
 
                 b.Property(u => u.UserName).HasMaxLength(MaxStringLength);
                 b.Property(u => u.NormalizedUserName).HasMaxLength(MaxStringLength);
@@ -40,6 +41,8 @@ namespace ITechArt.Surveys.Repositories
                 b.Property(u => u.NormalizedEmail).HasMaxLength(MaxStringLength);
 
                 b.HasMany(u => u.UserRoles).WithOne(ur => ur.User).HasForeignKey(ur => ur.UserId).IsRequired();
+                b.HasMany(u => u.Surveys).WithOne(s => s.CreatedBy).HasForeignKey(x => x.CreatedById);
+
                 b.HasData(new User
                 {
                     Id = AdminId,
@@ -64,9 +67,10 @@ namespace ITechArt.Surveys.Repositories
             modelBuilder.Entity<Role>(b =>
             {
                 b.HasKey(r => r.Id);
+                b.Property(r => r.Id).ValueGeneratedOnAdd();
                 b.HasIndex(r => r.NormalizedName).HasDatabaseName("RoleNameIndex").IsUnique();
-                b.ToTable("Roles");
                 b.Property(r => r.ConcurrencyStamp).IsConcurrencyToken();
+                b.ToTable("Roles");
 
                 b.Property(r => r.Name).HasMaxLength(MaxStringLength);
                 b.Property(r => r.NormalizedName).HasMaxLength(MaxStringLength);
@@ -93,6 +97,7 @@ namespace ITechArt.Surveys.Repositories
             {
                 b.HasKey(r => new { r.UserId, r.RoleId });
                 b.ToTable("UserRoles");
+
                 b.HasData(
                     new UserRole
                     {
@@ -104,6 +109,29 @@ namespace ITechArt.Surveys.Repositories
                         UserId = AdminId,
                         RoleId = UserRoleId
                     });
+            });
+
+            modelBuilder.Entity<Survey>(b =>
+            {
+                b.HasKey(s => s.Id);
+                b.Property(s => s.Id).ValueGeneratedOnAdd();
+                b.ToTable("Surveys");
+
+                b.Property(s => s.Name).HasMaxLength(MaxStringLength).IsRequired();
+
+                b.HasOne(s => s.CreatedBy).WithMany(u => u.Surveys).HasForeignKey(x => x.CreatedById);
+                b.HasMany(s => s.Questions).WithOne(q => q.Survey).HasForeignKey(q => q.SurveyId);
+            });
+
+            modelBuilder.Entity<Question>(b =>
+            {
+                b.HasKey(q => q.Id);
+                b.Property(q => q.Id).ValueGeneratedOnAdd();
+                b.ToTable("Questions");
+
+                b.Property(q => q.Title).HasMaxLength(MaxStringLength).IsRequired();
+
+                b.HasOne(q => q.Survey).WithMany(s => s.Questions).HasForeignKey(q => q.SurveyId);
             });
         }
     }

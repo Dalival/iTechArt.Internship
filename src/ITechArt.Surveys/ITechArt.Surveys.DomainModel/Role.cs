@@ -5,6 +5,6 @@ namespace ITechArt.Surveys.DomainModel
 {
     public class Role : IdentityRole
     {
-        public List<UserRole> UserRoles { get; set; }
+        public ICollection<UserRole> UserRoles { get; set; }
     }
 }
